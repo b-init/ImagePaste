@@ -6,7 +6,9 @@ Works with blender 2.80 and above.
 
 Installation
 --
-Go to `Edit > Preferences > Addons > Install` and select the downloaded zip file.
+* Download the latest release from [releases](https://github.com/Yeetus3141/ImagePaste/releases/)
+* Go to `Edit > Preferences > Addons > Install` and select the downloaded zip file.
+* Set the directory for saving images to avoid errors.
 
 Usage
 --
