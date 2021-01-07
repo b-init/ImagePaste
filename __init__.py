@@ -33,9 +33,9 @@ from .PIL import ImageGrab
 import os
 
 #todo
-#copy to clipboard
-#error handling
-#path handling
+#copy to clipboard - not viable
+#error handling - improved
+#path handling - improved
 
 
 times_executed = 0
