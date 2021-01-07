@@ -18,12 +18,12 @@ Usage
 Changelog
 --
 **v1.0.0 (4th Jan, 20)** 
-	* Initial release.
+* Initial release.
 
 **v1.1.0 (6th Jan, 20)** 
-	* Improved error management.
-	* The images are now saved in the same folder as the .blend file, in a newly created subfolder. If the blend file is not saved, it uses the directory set in preferences or the default temp directory, which might raise permission error. This feature is toggleable via addon preferences.
-	* Improved the UI in preferences.
+* Improved error management.
+* The images are now saved in the same folder as the .blend file, in a newly created subfolder. If the blend file is not saved, it uses the directory set in preferences or the default temp directory, which might raise permission error. This feature is toggleable via addon preferences.
+* Improved the UI in preferences.
 
 Notes
 --
