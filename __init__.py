@@ -1,4 +1,4 @@
-#ImagePaste addon for Blender 2.80+ to paste images from your clipboard into your blender workflow
+#ImagePaste addon for Blender 2.80+ to paste image from your clipboard into your blender workflow
 #Managed by: Binit (aka Yeetus)
 
 
@@ -20,8 +20,8 @@ bl_info = {
     "author" : "Binit",
     "description" : "Paste image from you clipboard as a Reference or into the Image Editor",
     "blender" : (2, 80, 0),
-    "version" : (1, 0, 0),
-    "location" : "Object Mode > Toolbar > Add > Image > Paste From Clipboard, Image Editor > Toolbar > Image > Paste From Clipboard",
+    "version" : (1, 1, 0),
+    "location" : "Object Mode > Toolbar > Add > Image, Image Editor > Toolbar > Image",
     "warning" : "",
     "category" : "Import"
 }
@@ -30,6 +30,13 @@ import bpy
 from bpy.types import Operator, AddonPreferences
 from bpy.props import StringProperty
 from .PIL import ImageGrab
+import os
+
+#todo
+#copy to clipboard
+#error handling
+#path handling
+
 
 times_executed = 0
 
@@ -37,43 +44,56 @@ def grabImage():
     global times_executed
 
     img = ImageGrab.grabclipboard()
+
+    if img == None:
+        return 0
+
     img_name = 'PastedImage' + str(times_executed) + '.png'
-    Directory = bpy.context.preferences.addons[__name__].preferences.Directory
+
+    if bpy.data.filepath and bpy.context.preferences.addons[__name__].preferences.force_default_dir == False: 
+        # save image in the place where the blendfile is saved, in a newly created subfolder (if saved and force_default_directory is set to false)
+        Directory = os.path.join(os.path.split(bpy.data.filepath)[0], 'ImagePaste')
+        
+        if os.path.isdir(Directory) == False:
+            os.mkdir(Directory)
+
+    else:  
+        # just use the default location otherwise
+        Directory = bpy.context.preferences.addons[__name__].preferences.default_img_dir
+
     img_dir = Directory + '\\' + img_name
-    img.save(img_dir)
+
+    try:
+        img.save(img_dir) 
+    except:
+        return 1
 
     times_executed += 1
 
     return img_dir, img_name
 
 
-def loadImage(reference=False):
-
-    img_dir, img_name = grabImage()
-
-    if reference:
-        bpy.ops.object.load_reference_image(filepath=img_dir)
-    else:
-        bpy.data.images.load(img_dir)
-        current_img = bpy.data.images[img_name]
-
-        #set current image as active in image editor
-        for area in bpy.context.screen.areas :
-            if area.type == 'IMAGE_EDITOR' :
-                area.spaces.active.image = current_img
-
-
 
 class ImagePastePreferences(AddonPreferences):
     bl_idname = __name__
 
-    Directory = bpy.props.StringProperty(default= bpy.context.preferences.filepaths.temporary_directory)
+    default_img_dir: bpy.props.StringProperty(
+        name= "Default directory",
+        subtype= 'DIR_PATH',
+        default= bpy.context.preferences.filepaths.temporary_directory,
+        )
+
+    force_default_dir: bpy.props.BoolProperty(
+        name= "Always use default directory",
+        default=False,
+        )
 
     def draw(self, context):
         layout = self.layout
-        layout.label(text="Set Directory for saving the images. Set this to non-primary drive location to avoid permission errors (e.g. Local Disk (D:), D:\\Images)")
-        layout.prop(self, "Directory")
-
+        layout.label(text="Default directory for saving image files. This directory will be used if")
+        layout.label(text="The blend file is not saved, or Always use default directory' is checked.")
+        layout.prop(self, "default_img_dir")
+        layout.prop(self, "force_default_dir")
 
 
 class PasteImageToImageEditor(bpy.types.Operator):
@@ -83,9 +103,28 @@ class PasteImageToImageEditor(bpy.types.Operator):
 
 
     def execute(self, context):
-        loadImage(reference=False)
+        #loadImage(reference=False)
+        img_data = grabImage()
+
+        if img_data == 0:
+            self.report({'ERROR'}, 'No image data on clipboard')
+            return {'CANCELLED'}
+        elif img_data == 1:
+            self.report({'ERROR'}, 'Unable to save image')
+            return {'CANCELLED'}
+        else:
+            img_dir, img_name = img_data
+
+        bpy.data.images.load(img_dir)
+        current_img = bpy.data.images[img_name]
+
+        #set current image as active in image editor
+        for area in bpy.context.screen.areas :
+            if area.type == 'IMAGE_EDITOR' :
+                area.spaces.active.image = current_img
 
         return {'FINISHED'}
+
 
 class PasteImageToReference(bpy.types.Operator):
     """Load reference image from clipboard"""
@@ -93,7 +132,19 @@ class PasteImageToReference(bpy.types.Operator):
     bl_label = "Paste From Clipboard"
 
     def execute(self, context):
-        loadImage(reference=True)
+        #loadImage(reference=True)
+        img_data = grabImage()
+
+        if img_data == 0:
+            self.report({'ERROR'}, 'No image data on clipboard')
+            return {'CANCELLED'}
+        elif img_data == 1:
+            self.report({'ERROR'}, 'Unable to save image')
+            return {'CANCELLED'}
+        else:
+            img_dir, img_name = img_data
+
+        bpy.ops.object.load_reference_image(filepath=img_dir)
 
         return {'FINISHED'}
 
