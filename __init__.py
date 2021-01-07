@@ -1,4 +1,4 @@
-#ImagePaste addon for Blender 2.80+ to paste image from your clipboard into your blender workflow
+#ImagePaste addon for Blender 2.80+ to paste images from your clipboard into your blender workflow
 #Managed by: Binit (aka Yeetus)
 
 
