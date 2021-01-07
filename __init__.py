@@ -28,7 +28,7 @@ bl_info = {
 
 import bpy
 from bpy.types import Operator, AddonPreferences
-from bpy.props import StringProperty
+from bpy.props import StringProperty, BoolProperty
 from .PIL import ImageGrab
 import os
 
