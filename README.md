@@ -32,4 +32,6 @@ Notes
 
 Additional Info
 --
-For any questions, suggestions or bug reports, contact me via twitter **@YeetusBlenditus** or e-mail me at **binitnew@gmail.com**
+* For a tutorial and demo, visit [Youtube](https://www.youtube.com/watch?v=I58e2FRHJXA&t)
+* If you want to donate, you can go to my [Gumroad](https://gumroad.com/yeetusblenditus)
+* For any questions, suggestions or bug reports, contact me via twitter **@YeetusBlenditus** or e-mail me at **binitnew@gmail.com**
