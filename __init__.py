@@ -258,7 +258,7 @@ class CopyImageToClipboard(Operator):
                 Directory = bpy.context.preferences.addons[__name__].preferences.default_img_dir
 
             img_dir = Directory + '\\' + active_img.name + '.png'
-            active_img.save_render(filepath = img_dir)
+            bpy.ops.image.save_as(save_as_render=True, copy=True, filepath = img_dir)
 
             CopyImage(img_dir)
 
