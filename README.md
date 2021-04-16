@@ -40,13 +40,18 @@ Changelog
 	* Image(s) can be pasted directly into the Node Editor as Image Texture Node(s), using `Node Editor > Context Menu (Right Click) > Paste Images From Clipboard` or `Ctrl+Shift+V`
 	* Images can now be copied to clipboard. In the `Image Editor > Image > Copy To Clipboard`, or `Ctrl+Shift+C`. These images are also saved along with other images in the set directory.
 
-**v1.3.1 (13th Mar, 21)**
+**v1.3.1 (14th Mar, 21)**
 	* Fixed issue with the copy to clipboard feature where it didn't work as intended for certain cases.
+
+**v1.3.2 (16th Apr, 21)**
+	* Updated image naming scheme, now with timestamps, preventing overwriting of saved images.
+	* Merged seperate build versions of ImagePaste for Blender version below 2.93a and above into one. 
 
 Notes
 --
 * Running Blender as adminstrator might fix some errors.
-* Only works on Windows for now, not on MacOS or Linux 
+* Only works on Windows, not on MacOS or Linux 
+* A material must be created (if not exists already) before using 'Paste Image As Node' feature.
 
 Additional Info
 --
