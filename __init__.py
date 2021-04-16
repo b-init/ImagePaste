@@ -20,10 +20,10 @@ bl_info = {
     "author" : "Binit",
     "description" : "Paste image from you clipboard as a Reference or into the Image Editor",
     "blender" : (2, 80, 0),
-    "version" : (1, 3, 0),
+    "version" : (1, 3, 2),
     "location" : "Object Mode > Toolbar > Add > Image, Image Editor > Toolbar > Image, Node Editor > Context Menu",
     "warning" : "",
-    "category" : "Import"
+    "category" : "Import-Export"
 }
 
 import bpy
@@ -32,19 +32,20 @@ from bpy.props import StringProperty, BoolProperty
 import addon_utils
 
 from io import BytesIO
-from .win32 import win32clipboard
 from .PIL import ImageGrab, Image
 import os
-import random
+import time
+
+try:
+	from .win32_py37 import win32clipboard
+except:
+	from .win32_py39 import win32clipboard
+
 
 addon_utils.enable("io_import_images_as_planes") #enable the "Import Images as Planes" addon to be used here
 
-times_executed = 0 #counter to count the number of times an image has been grabbed from clipboard during the current session to name the file accordingly
-randstr = 'abcdefghijklmnopqrstuvwxyz' #string of alphabets to select from for the random part of the filename
-
 # function to grab image(s) from clipboard, save them and return their names and paths
 def GrabImage():
-    global times_executed
 
     img = ImageGrab.grabclipboard()
 
@@ -56,8 +57,9 @@ def GrabImage():
         img_name = [os.path.basename(current) for current in img_dir]
         return img_dir, img_name
 
-    #generate the name of the image with random characters to make sure it doesn't load images from different sessions if saved in the same directory
-    img_name = 'PastedImage' + str(times_executed) + random.choice(randstr) + random.choice(randstr) + '.png' 
+    #generate the name of the image with timestamp to prevent overwriting
+    timestamp = time.strftime("%y%m%d-%H%M%S")
+    img_name = 'PastedImage' + timestamp + '.png'
 
     if bpy.data.filepath and bpy.context.preferences.addons[__name__].preferences.force_default_dir == False: 
         # save image in the place where the blendfile is saved, in a newly created subfolder (if saved and force_default_directory is set to false)
@@ -76,8 +78,6 @@ def GrabImage():
         img.save(img_dir) 
     except:
         return 1
-
-    times_executed += 1
 
     return [img_dir], [img_name]
 
