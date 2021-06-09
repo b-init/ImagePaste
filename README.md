@@ -46,11 +46,13 @@ Changelog
 **v1.3.2 (16th Apr, 21)**
 	* Updated image naming scheme, now with timestamps, preventing overwriting of saved images.
 	* Merged seperate build versions of ImagePaste for Blender version below 2.93a and above into one. 
+**v1.4.0 (10th May, 21)**
+	* Now Supports X11 Clipboard on Linux platform, all thanks to [@thanhph111](https://github.com/thanhph111) 
 
 Notes
 --
 * Running Blender as adminstrator might fix some errors.
-* Only works on Windows, not on MacOS or Linux 
+* Works on Windows and Linux (X11 Clipboard) (by [@thanhph111](https://github.com/thanhph111)) , does not work on MacOS (not yet, atleast) 
 * A material must be created (if not exists already) before using 'Paste Image As Node' feature.
 
 Additional Info
