@@ -20,7 +20,7 @@ bl_info = {
     "author" : "Binit",
     "description" : "Paste image from you clipboard as a Reference or into the Image Editor",
     "blender" : (2, 80, 0),
-    "version" : (1, 3, 2),
+    "version" : (1, 4, 0),
     "location" : "Object Mode > Toolbar > Add > Image, Image Editor > Toolbar > Image, Node Editor > Context Menu",
     "warning" : "",
     "category" : "Import-Export"
@@ -173,7 +173,7 @@ class PasteImageToNodeEditor(Operator):
         for directory in img_dir:
             node = tree.nodes.new("ShaderNodeTexImage")
             node.location = locX, locY
-            locY += 200 # offset location for next node
+            locY += 250 # offset location for next node
 
             node_img = bpy.data.images.load(filepath = directory)
             node.image = node_img
