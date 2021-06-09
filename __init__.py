@@ -26,75 +26,24 @@ bl_info = {
     "category" : "Import-Export"
 }
 
+
+import os
+import platform
 import bpy
 from bpy.types import Operator, AddonPreferences
 from bpy.props import StringProperty, BoolProperty
 import addon_utils
 
-from io import BytesIO
-from .PIL import ImageGrab, Image
-import os
-import time
 
-try:
-	from .win32_py37 import win32clipboard
-except:
-	from .win32_py39 import win32clipboard
+if platform.system() == "Windows":
+    from .windows import GrabImage, CopyImage
+elif platform.system() == "Linux":
+    from .linux import GrabImage, CopyImage
+else:
+    raise("Unsupported current platform")
 
 
 addon_utils.enable("io_import_images_as_planes") #enable the "Import Images as Planes" addon to be used here
-
-# function to grab image(s) from clipboard, save them and return their names and paths
-def GrabImage():
-
-    img = ImageGrab.grabclipboard()
-
-    if img == None:
-        return 0
-
-    if type(img) == list:
-        img_dir = img
-        img_name = [os.path.basename(current) for current in img_dir]
-        return img_dir, img_name
-
-    #generate the name of the image with timestamp to prevent overwriting
-    timestamp = time.strftime("%y%m%d-%H%M%S")
-    img_name = 'PastedImage' + timestamp + '.png'
-
-    if bpy.data.filepath and bpy.context.preferences.addons[__name__].preferences.force_default_dir == False: 
-        # save image in the place where the blendfile is saved, in a newly created subfolder (if saved and force_default_directory is set to false)
-        Directory = os.path.join(os.path.split(bpy.data.filepath)[0], 'ImagePaste')
-        
-        if os.path.isdir(Directory) == False:
-            os.mkdir(Directory)
-
-    else:  
-        # just use the default location otherwise
-        Directory = bpy.context.preferences.addons[__name__].preferences.default_img_dir
-
-    img_dir = Directory + '\\' + img_name
-
-    try:
-        img.save(img_dir) 
-    except:
-        return 1
-
-    return [img_dir], [img_name]
-
-
-# function to copy image from given path to clipboard 
-def CopyImage(img_path):
-    image = Image.open(img_path)
-
-    img_out = BytesIO()
-    image.convert('RGB').save(img_out, 'BMP')
-    data = img_out.getvalue()[14:]
-    img_out.close()
-
-    win32clipboard.OpenClipboard()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
-    win32clipboard.CloseClipboard()
 
 
 class ImagePastePreferences(AddonPreferences):
@@ -193,7 +142,7 @@ class PasteImageAsPlane(Operator):
 
         for directory in img_dir:
             name = os.path.basename(directory)
-            path = os.path.dirname(directory) + '\\'
+            path = os.path.dirname(directory)
 
             bpy.ops.import_image.to_plane(files=[{"name":name, "name":name}], directory=path, relative = False)
 
@@ -246,24 +195,24 @@ class CopyImageToClipboard(Operator):
             CopyImage(active_img.filepath)
 
         else:
-            if bpy.data.filepath and bpy.context.preferences.addons[__name__].preferences.force_default_dir == False: 
+            if bpy.data.filepath and bpy.context.preferences.addons[__name__].preferences.force_default_dir == False:
                 # save image in the place where the blendfile is saved, in a newly created subfolder (if saved and force_default_directory is set to false)
                 Directory = os.path.join(os.path.split(bpy.data.filepath)[0], 'ImagePaste')
-        
+
                 if os.path.isdir(Directory) == False:
                     os.mkdir(Directory)
 
-            else:  
+            else:
                 # just use the default location otherwise
                 Directory = bpy.context.preferences.addons[__name__].preferences.default_img_dir
 
-            img_dir = Directory + '\\' + active_img.name + '.png'
+            img_dir = os.path.join(Directory, active_img.name + '.png')
             bpy.ops.image.save_as(save_as_render=True, copy=True, filepath = img_dir)
 
             CopyImage(img_dir)
 
         return {'FINISHED'}
-        
+
 
 # menu functions
 def menu_func_ie(self, context):
@@ -334,7 +283,7 @@ def unregister():
     bpy.types.VIEW3D_MT_image_add.remove(menu_func_ref)
     bpy.types.VIEW3D_MT_image_add.remove(menu_func_asplane)
     bpy.types.NODE_MT_context_menu.remove(menu_func_asnode)
-    bpy.types.IMAGE_MT_image.remvoe(menu_func_toclipboard)
+    bpy.types.IMAGE_MT_image.remove(menu_func_toclipboard)
 
     # unregister keymaps
     for km,kmi in addon_keymaps:
