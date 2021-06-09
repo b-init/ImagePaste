@@ -46,6 +46,7 @@ Changelog
 **v1.3.2 (16th Apr, 21)**
 	* Updated image naming scheme, now with timestamps, preventing overwriting of saved images.
 	* Merged seperate build versions of ImagePaste for Blender version below 2.93a and above into one. 
+	
 **v1.4.0 (10th May, 21)**
 	* Now Supports X11 Clipboard on Linux platform, all thanks to [@thanhph111](https://github.com/thanhph111) 
 
