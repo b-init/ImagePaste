@@ -1,0 +1,27 @@
+{
+    // Python language settings
+    "python.pythonPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+
+    "[python]": {
+        "editor.rulers": [88],
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 88
+    },
+
+    // Flake 8 settings
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--ignore=E203, W503, F821, F722",
+        "--verbose",
+        "--max-line-length=88"
+    ],
+
+    // Black settings
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "88"],
+
+    // Miscelaneous
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+}
