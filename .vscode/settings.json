@@ -21,6 +21,13 @@
     "python.formatting.provider": "black",
     "python.formatting.blackArgs": ["--line-length", "88"],
 
+    // Spell dictionary
+    "cSpell.words": [
+        "binit",
+        "popen",
+        "xclip"
+    ],
+
     // Miscelaneous
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
