@@ -134,7 +134,7 @@ ipython_config.py
 #   However, in case of collaboration, if having platform-specific dependencies or dependencies
 #   having no cross-platform support, pipenv may install dependencies that don't work, or not
 #   install all needed dependencies.
-#Pipfile.lock
+Pipfile.lock
 
 # poetry
 #poetry.lock
@@ -216,7 +216,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# User preferences
+### VisualStudioCode ###
+.vscode/*
+*.code-workspace
+
+### User preferences ###
 # Blender files
 *.blend
 *.blend1

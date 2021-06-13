@@ -30,17 +30,34 @@ Works with blender 2.80 and above.
 
 ## Setup environment for development
 
-I am using:
-- Editor: **Visual Studio Code**.
-- Linter: **Flake8**.
-- Formatter: **Black**.
-- Environment manager: **pipenv**.
+[Recommended style guide for Blender add-ons](https://wiki.blender.org/wiki/Style_Guide/Python) is followed by this repository with these tool:
+- Linter: **Flake8** (latest, configured in [.flake8](.flake8)).
+- Formatter: **Black** (latest, default settings).
+- Environment manager: **pipenv** (configured in [Pipfile](Pipfile)).
 
 These steps will show how to set up a python virtual environment that fits my workflow.
 1. Open CLI in the project directory.
-1. Run following command `python -m venv .venv`. A **.venv** folder will appear in the project folder.
-1. Then run this `pipenv install --dev` to install packages for development.
+1. Run following command `pipenv install --dev` to install packages for development.
 1. After that, a virtual environment has been setup. You can get in using `pipenv shell` and get out with `exit`. Once activated, you will have all packages you need.
+
+Some editor configurations are also defined in [.editorconfig](.editorconfig).
+
+I am personally using Visual Studio Code as editor. If you also use it, you should have these workspace settings:
+
+```json
+{
+    // Python language configuration
+    "[python]": {
+        "editor.rulers": [88],
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 88
+    },
+    // Overwrite flake8 user settings (if any) to be accepted in .flake8
+    "python.linting.flake8Args": [],
+    // Set default Python formatter
+    "python.formatting.provider": "black"
+}
+```
 
 
 ## Additional Info
