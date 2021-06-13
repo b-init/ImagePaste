@@ -27,9 +27,9 @@ bl_info = {
 
 # Platform router
 if platform.system() == "Windows":
-    from .windows import GrabImage, CopyImage
+    from .windows.windows import GrabImage, CopyImage
 elif platform.system() == "Linux":
-    from .linux import GrabImage, CopyImage
+    from .linux.linux import GrabImage, CopyImage
 else:
     raise ("Unsupported current platform")
 
