@@ -20,6 +20,8 @@ Works with blender 2.80 and above.
 - `Ctrl + Shift + C` or `Image Editor > Image > Copy To Clipboard` in the Image Editor to copy active image to clipboard.
 - It is recommended to save the blend file before using this add-on to prevent the misplacement of image files.
 
+![demo](assets/demo.gif)
+
 
 ## Notes
 
