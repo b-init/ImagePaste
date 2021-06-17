@@ -1,5 +1,6 @@
 import os
 import subprocess
+import time
 from enum import Enum
 
 import bpy
@@ -34,9 +35,12 @@ def xclip_out(target: ClipBoardTarget = ClipBoardTarget.ALL.value, path=None):
 
 def GrabImage():
     if ClipBoardTarget.IMAGE.value in xclip_out(target=ClipBoardTarget.ALL.value):
-        file_name = "ImagePaste.png"
+        timestamp = time.strftime("%y%m%d-%H%M%S")
+        file_name = "PastedImage" + timestamp + ".png"
         file_path = (
-            bpy.context.preferences.addons["ImagePaste"].preferences.default_img_dir
+            bpy.context.preferences.addons[
+                __package__.split(".")[0]
+            ].preferences.default_img_dir
             + file_name
         )
         xclip_out(target=ClipBoardTarget.IMAGE.value, path=file_path)

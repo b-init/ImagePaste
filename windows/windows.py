@@ -28,7 +28,9 @@ def GrabImage():
     timestamp = time.strftime("%y%m%d-%H%M%S")
     img_name = "PastedImage" + timestamp + ".png"
     file_path = (
-        bpy.context.preferences.addons["ImagePaste"].preferences.default_img_dir
+        bpy.context.preferences.addons[
+            __package__.split(".")[0]
+        ].preferences.default_img_dir
         + img_name
     )
 
