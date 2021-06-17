@@ -31,7 +31,7 @@ if platform.system() == "Windows":
 elif platform.system() == "Linux":
     from .linux import GrabImage, CopyImage
 else:
-    raise ("Unsupported current platform")
+    raise Exception("Unsupported current platform")
 
 
 # Enable the "Import Images as Planes" addon to be used here
