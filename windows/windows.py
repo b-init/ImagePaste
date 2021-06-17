@@ -52,5 +52,10 @@ def GrabImage():
 
 
 def CopyImage(img_path):
-    command = f'Set-Clipboard -Path "{img_path}"'
+    command = (
+        "Add-Type -Assembly System.Windows.Forms\n"
+        "Add-Type -Assembly System.Drawing\n"
+        f'$image = [Drawing.Image]::FromFile("{img_path}")\n'
+        "[Windows.Forms.Clipboard]::SetImage($image)"
+    )
     request(command)
