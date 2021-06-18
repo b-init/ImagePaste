@@ -53,7 +53,7 @@ def GrabImage():
         return paths, [os.path.basename(path) for path in paths]
 
 
-# function to copy image from given path to clipboard
+# Function to copy image from given path to clipboard
 def CopyImage(img_path):
     script_file = os.path.realpath(__file__)
     directory = os.path.dirname(script_file)
