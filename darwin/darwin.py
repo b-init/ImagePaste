@@ -40,7 +40,9 @@ def GrabImage():
     timestamp = time.strftime("%y%m%d-%H%M%S")
     img_name = f"PastedImage{timestamp}.png"
 
-    bpy_addon_prefs = bpy.context.preferences.addons[__package__].preferences
+    bpy_addon_prefs = bpy.context.preferences.addons[
+        __package__.split(".")[0]
+    ].preferences
 
     if bpy.data.filepath and bpy_addon_prefs.force_default_dir is False:
         Directory = os.path.join(os.path.split(bpy.data.filepath)[0], "ImagePaste")
