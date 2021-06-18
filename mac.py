@@ -17,7 +17,7 @@ def no_furls():
         '((clipboard info) as string does not contain "«class furl»") as string',
     ]
     popen = subprocess.Popen(script, stdout=subprocess.PIPE)
-    return popen.communicate()[0].decode("utf-8").strip()
+    return popen.communicate()[0].decode("utf-8").strip() == "true"
 
 
 # Save image data directly from clipboard
