@@ -30,6 +30,8 @@ if platform.system() == "Windows":
     from .windows.windows import GrabImage, CopyImage
 elif platform.system() == "Linux":
     from .linux.linux import GrabImage, CopyImage
+elif platform.system() == "Darwin":
+    from .darwin.darwin import GrabImage, CopyImage
 else:
     raise Exception("Unsupported current platform")
 

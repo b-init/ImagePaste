@@ -51,6 +51,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Darwin pasteboard modules
+!_native.cpython-37m-darwin.so
+!_native.cpython-39-darwin.so
+
 # Distribution / packaging
 .Python
 build/
