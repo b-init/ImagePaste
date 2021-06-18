@@ -41,6 +41,8 @@ elif platform.system() == "Linux":
     from .linux import GrabImage, CopyImage
 elif platform.system() == "Darwin":
     from .mac import GrabImage, CopyImage
+else:
+    raise("Unsupported current platform")
 
 
 addon_utils.enable("io_import_images_as_planes") #enable the "Import Images as Planes" addon to be used here
