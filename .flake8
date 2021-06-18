@@ -1,0 +1,11 @@
+[flake8]
+ignore =
+    E203,
+    W503,
+    F821,
+    F722
+
+exclude =
+    bin/
+
+max-line-length = 88
