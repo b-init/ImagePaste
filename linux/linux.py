@@ -6,6 +6,11 @@ from enum import Enum
 import bpy
 
 
+script_file = os.path.realpath(__file__)
+directory = os.path.dirname(script_file)
+subprocess.run([f'chmod +x "{directory}/bin/xclip"'], shell=True)
+
+
 class ClipBoardTarget(Enum):
     ALL = "TARGETS"
     IMAGE = "image/png"
@@ -13,8 +18,6 @@ class ClipBoardTarget(Enum):
 
 
 def xclip_out(target: ClipBoardTarget = ClipBoardTarget.ALL.value, path=None):
-    script_file = os.path.realpath(__file__)
-    directory = os.path.dirname(script_file)
     args = (
         f"{directory}/bin/xclip",
         "-selection",
