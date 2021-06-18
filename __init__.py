@@ -29,7 +29,7 @@ bl_info = {
 if platform.system() == "Windows":
     from .windows.windows import GrabImage, CopyImage
 elif platform.system() == "Linux":
-    from .linux import GrabImage, CopyImage
+    from .linux.linux import GrabImage, CopyImage
 elif platform.system() == "Darwin":
     from .darwin.darwin import GrabImage, CopyImage
 else:
