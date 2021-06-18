@@ -69,8 +69,9 @@ def GrabImage():
     else:
         if no_furls():
             save_clipboard(img_dir)
+            return [img_dir], [img_name]
 
-    return [img_dir], [img_name]
+    return 1
 
 
 # Function to copy image from given path to clipboard
