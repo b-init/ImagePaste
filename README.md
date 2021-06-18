@@ -39,7 +39,7 @@ Works with blender 2.80 and above.
 
 These steps will show how to set up a python virtual environment that fits my workflow.
 1. Open CLI in the project directory.
-1. Run following command `pipenv install --dev` to install packages for development.
+1. Run following command `pipenv install --dev --skip-lock` to install packages for development.
 1. After that, a virtual environment has been setup. You can get in using `pipenv shell` and get out with `exit`. Once activated, you will have all packages you need.
 
 Some editor configurations are also defined in [.editorconfig](.editorconfig).
@@ -54,7 +54,8 @@ I am personally using Visual Studio Code as editor. If you also use it, you shou
         "editor.wordWrap": "wordWrapColumn",
         "editor.wordWrapColumn": 88
     },
-    // Overwrite flake8 user settings (if any) to be accepted in .flake8
+    // Enable and overwrite flake8 user settings (if any) to be accepted in .flake8
+    "python.linting.flake8Enabled": true,
     "python.linting.flake8Args": [],
     // Set default Python formatter and reset it to default settings
     "python.formatting.provider": "black",
