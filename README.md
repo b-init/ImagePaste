@@ -56,8 +56,9 @@ I am personally using Visual Studio Code as editor. If you also use it, you shou
     },
     // Overwrite flake8 user settings (if any) to be accepted in .flake8
     "python.linting.flake8Args": [],
-    // Set default Python formatter
-    "python.formatting.provider": "black"
+    // Set default Python formatter and reset it to default settings
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": []
 }
 ```
 
