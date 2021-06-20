@@ -3,11 +3,7 @@ import time
 import os
 import subprocess
 
-try:
-    from . import pasteboard_py37 as pasteboard
-except ImportError:
-    from . import pasteboard_py39 as pasteboard
-
+from .pasteboard import _native as pasteboard
 
 # Check if clipboard doesn't contain any file paths
 def no_furls():
