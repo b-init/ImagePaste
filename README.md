@@ -46,7 +46,7 @@ Some editor configurations are also defined in [.editorconfig](.editorconfig).
 
 I am personally using Visual Studio Code as editor. If you also use it, you should have these workspace settings:
 
-```json
+```jsonc
 {
     // Python language configuration
     "[python]": {
