@@ -26,7 +26,7 @@ Works with blender 2.80 and above.
 ## Notes
 
 - Running Blender as administrator might fix some errors.
-- Works on Windows and Linux (X11 server) (by [@thanhph111](https://github.com/thanhph111)), does not work on MacOS (not yet, at least).
+- Works on Windows, Linux (X11 server) (Thanks to [@thanhph111](https://github.com/thanhph111)), and MacOS(Thanks to [@celestialmaze](https://twitter.com/cmzw_))
 - A material must be created (if not exists already) before using **Paste Image As Node** feature.
 
 
@@ -62,6 +62,11 @@ I am personally using Visual Studio Code as editor. If you also use it, you shou
     "python.formatting.blackArgs": []
 }
 ```
+
+## Contributors
+
+- [@thanhph111](https://github.com/thanhph111)
+- [@celestialmaze](https://twitter.com/cmzw_)
 
 
 ## Additional Info

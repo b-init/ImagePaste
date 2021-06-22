@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.4.0...v1.5.0) (2021-06-22)
+- Now Works on MacOS (by [@celestialmaze](https://twitter.com/cmzw_))
+- Standardized Github Repository (by [@thanhph111](https://github.com/thanhph111))
+- Excluded the use of Pillow module for Windows, now works natively (by [@thanhph111](https://github.com/thanhph111))
+- Minor fixes and improvements
+
 ## [1.4.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.3.2...v1.4.0) (2021-06-10)
 - Now Supports X11 Clipboard on Linux platform, all thanks to [@thanhph111](https://github.com/thanhph111) 
 

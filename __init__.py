@@ -14,7 +14,7 @@ bl_info = {
         "Paste image from you clipboard as a Reference or into the Image Editor"
     ),
     "blender": (2, 80, 0),
-    "version": (1, 4, 0),
+    "version": (1, 5, 0),
     "location": (
         "View3D > Add > Image, "
         "Image Editor > Toolbar > Image, "
@@ -177,7 +177,7 @@ class PasteImageToNodeEditor(Operator):
             node = tree.nodes.new("ShaderNodeTexImage")
             node.location = locX, locY
             # Offset location for next node
-            locY += 250
+            locY += 300
 
             node_img = bpy.data.images.load(filepath=directory)
             node.image = node_img
