@@ -12,3 +12,7 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+# Configuration for YAML and Markdown
+[**.{yml,md}]
+indent_size = 2

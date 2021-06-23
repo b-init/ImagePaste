@@ -1,0 +1,21 @@
+{
+    "overrides": [
+        {
+            "files": "**",
+            "options": {
+                "requirePragma": true,
+                "insertPragma": true
+            }
+        },
+        {
+            "files": [
+                "**.yml",
+                "**.md"
+            ],
+            "options": {
+                "tabWidth": 2,
+                "embeddedLanguageFormatting": "off"
+            }
+        }
+    ]
+}
