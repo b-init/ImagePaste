@@ -14,7 +14,7 @@ bl_info = {
         "Paste image from you clipboard as a Reference or into the Image Editor"
     ),
     "blender": (2, 80, 0),
-    "version": (1, 5, 0),
+    "version": (1, 5, 1),
     "location": (
         "View3D > Add > Image, "
         "Image Editor > Toolbar > Image, "

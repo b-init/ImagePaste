@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.5.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.5.0...v1.5.1) (2021-06-30)
+- Fix the crash occurred when undoing after inserting an image ([#13](https://github.com/Yeetus3141/ImagePaste/issues/13)) ([@thanhph111](https://github.com/thanhph111)).
+
 ## [1.5.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.4.0...v1.5.0) (2021-06-22)
 - Now Works on MacOS (by [@celestialmaze](https://twitter.com/cmzw_))
 - Standardized Github Repository (by [@thanhph111](https://github.com/thanhph111))
@@ -7,11 +10,11 @@
 - Minor fixes and improvements
 
 ## [1.4.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.3.2...v1.4.0) (2021-06-10)
-- Now Supports X11 Clipboard on Linux platform, all thanks to [@thanhph111](https://github.com/thanhph111) 
+- Now Supports X11 Clipboard on Linux platform, all thanks to [@thanhph111](https://github.com/thanhph111)
 
 ## [1.3.2](https://github.com/Yeetus3141/ImagePaste/compare/v1.3.1...v1.3.2) (2021-04-16)
 - Updated image naming scheme, now with timestamps, preventing overwriting of saved images.
-- Merged separate build versions of ImagePaste for Blender version below 2.93a and above into one. 
+- Merged separate build versions of ImagePaste for Blender version below 2.93a and above into one.
 
 ## [1.3.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.3.0...v1.3.1) (2021-03-14)
 - Fixed issue with the copy to clipboard feature where it didn't work as intended for certain cases.
@@ -27,7 +30,7 @@
 - Fixed an issue where images where saved with the same name in the default directory even with different blender sessions and led to different images being loaded from what was pasted
 - Added icons for the buttons
 
-## [1.1.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.0.0...v1.1.0) (2021-01-06) 
+## [1.1.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.0.0...v1.1.0) (2021-01-06)
 - Improved error management.
 - The images are now saved in the same folder as the .blend file, in a newly created subfolder. If the blend file is not saved, it uses the directory set in preferences or the default temp directory, which might raise permission error. This feature can be toggled via addon preferences.
 - Improved the UI in preferences.
