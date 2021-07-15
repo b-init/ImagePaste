@@ -1,9 +1,11 @@
-import bpy
-import time
 import os
 import subprocess
+import time
+
+import bpy
 
 from .pasteboard import _native as pasteboard
+
 
 # Check if clipboard doesn't contain any file paths
 def no_furls():

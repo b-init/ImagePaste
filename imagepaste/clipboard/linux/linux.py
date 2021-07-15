@@ -40,6 +40,7 @@ def GrabImage():
     if ClipBoardTarget.IMAGE.value in xclip_out(target=ClipBoardTarget.ALL.value):
         timestamp = time.strftime("%y%m%d-%H%M%S")
         file_name = "PastedImage" + timestamp + ".png"
+        print(__package__.split(".")[0])
         file_path = (
             bpy.context.preferences.addons[
                 __package__.split(".")[0]

@@ -9,3 +9,6 @@ exclude =
     bin/
 
 max-line-length = 88
+
+per-file-ignores =
+    __init__.py:E402
