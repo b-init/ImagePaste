@@ -1,82 +1,107 @@
-import os
-import subprocess
-import time
+from __future__ import annotations
+from os.path import join
 
-import bpy
-
-from .pasteboard import _native as pasteboard
-
-
-# Check if clipboard doesn't contain any file paths
-def no_furls():
-    script = [
-        "osascript",
-        "-e",
-        '((clipboard info) as string does not contain "«class furl»") as string',
-    ]
-    popen = subprocess.Popen(script, stdout=subprocess.PIPE)
-    return popen.communicate()[0].decode("utf-8").strip() == "true"
+from .pasteboard._native import Pasteboard
+from ..clipboard import Clipboard
+from ...image import Image
+from ...report import Report
+from ...process import Process
 
 
-# Save image data directly from clipboard
-def save_clipboard(fullpath):
-    commands = [
-        f'set pastedImage to (open for access POSIX file "{fullpath}" with write permission)',
-        "try",
-        "    write (the clipboard as «class PNGf») to pastedImage",
-        "end try",
-        "close access pastedImage",
-    ]
-    script = ["osascript"]
-    for command in commands:
-        script += ["-e", command]
-    subprocess.Popen(script).wait()
+class DarwinClipboard(Clipboard):
+    """A Clipboard implementation for macOS."""
 
+    def __init__(self, report: Report, images: list[Image] = None) -> None:
+        """Initialize the Darwin Clipboard.
 
-def GrabImage():
+        Args:
+            report (Report): A Report object to hold operation results.
+            images (list[Image], optional): A list of Image objects. Default: None.
+        """
+        super().__init__(report, images)
 
-    timestamp = time.strftime("%y%m%d-%H%M%S")
-    img_name = f"PastedImage{timestamp}.png"
+    @classmethod
+    def push(cls, save_directory: str) -> DarwinClipboard:
+        """Push the current image information from the clipboard.
 
-    bpy_addon_prefs = bpy.context.preferences.addons[
-        __package__.split(".")[0]
-    ].preferences
+        Args:
+            save_directory (str): A path to a directory to save the image.
 
-    if bpy.data.filepath and bpy_addon_prefs.force_default_dir is False:
-        Directory = os.path.join(os.path.split(bpy.data.filepath)[0], "ImagePaste")
+        Returns:
+            DarwinClipboard: A new instance of the DarwinClipboard, with a Report
+                object containing the operation results and a list of Image objects
+                holding the images information.
+        """
+        # Use Pasteboard to get file URLs from the clipboard
+        pasteboard = Pasteboard()
+        urls = pasteboard.get_file_urls()
+        if urls is not None:
+            filepaths = list(urls)
+            images = [Image(filepath) for filepath in filepaths]
+            return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
 
-        if os.path.isdir(Directory) is False:
-            os.mkdir(Directory)
+        # If no images are found, return a report with no images
+        contents = pasteboard.get_contents()
+        if contents == "":
+            return cls(Report(2))
 
-    else:
-        Directory = bpy_addon_prefs.default_img_dir
+        # Check if clipboard doesn't contain any filepaths
+        # (e.g. if the clipboard contains just a single image)
+        commands = [
+            '((clipboard info) as string does not contain "«class furl»") as string'
+        ]
+        process = Process(cls.get_osascript_args(commands))
+        if process.stdout == "true":
+            filename = cls.get_timestamp_filename()
+            filepath = join(save_directory, filename)
+            image = Image(filepath, filename)
+            commands = [
+                "set pastedImage to "
+                f'(open for access POSIX file "{filepath}" with write permission)',
+                "try",
+                "    write (the clipboard as «class PNGf») to pastedImage",
+                "end try",
+                "close access pastedImage",
+            ]
+            process = Process.execute(cls.get_osascript_args(commands))
+            if process.stderr:
+                return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
+            return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
+        return cls(Report(3))
 
-    img_dir = os.path.join(Directory, img_name)
+    @classmethod
+    def pull(cls, image_path: str) -> DarwinClipboard:
+        """Pull the image to the clipboard from its path.
 
-    pb = pasteboard.Pasteboard()
-    urls = pb.get_file_urls()
-    contents = pb.get_contents()
+        Args:
+            image_path (str): A path to an image to be pulled to the clipboard.
 
-    if urls is not None:
-        urls = list(urls)
-        img_dir = urls
-        img_name = [os.path.basename(current) for current in img_dir]
-        return img_dir, img_name
-    elif contents == "":
-        return 0
-    else:
-        if no_furls():
-            save_clipboard(img_dir)
-            return [img_dir], [img_name]
+        Returns:
+            DarwinClipboard: A new instance of the DarwinClipboard, with a Report
+                object containing the operation results and a list of one Image object
+                holding information of the pulled image we put its path to the input.
+        """
+        commands = [
+            "set the clipboard to "
+            f'(read file POSIX file "{image_path}" as «class PNGf»)'
+        ]
+        process = Process(cls.get_osascript_args(commands))
+        if process.stderr:
+            return cls(Report(4, f"Process failed ({process.stderr})"))
+        image = Image(image_path)
+        return cls(Report(5, f"Copied 1 image: {image}"), [image])
 
-    return 1
+    @staticmethod
+    def get_osascript_args(commands: list[str]) -> list[str]:
+        """Get the arguments for osascript command.
 
+        Args:
+            commands (list[str]): A list of commands to be executed.
 
-# Function to copy image from given path to clipboard
-def CopyImage(img_path):
-    script = [
-        "osascript",
-        "-e",
-        f'set the clipboard to (read file POSIX file "{img_path}" as «class PNGf»)',
-    ]
-    subprocess.Popen(script).wait()
+        Returns:
+            list[str]: A list of arguments for osascript command ready to be executed.
+        """
+        args = ["osascript"]
+        for command in commands:
+            args += ["-e", command]
+        return args

@@ -10,7 +10,7 @@ if platform.system() == "Windows":
 elif platform.system() == "Linux":
     from .clipboard.linux.linux import LinuxClipboard as Clipboard
 elif platform.system() == "Darwin":
-    raise Exception("Unsupported current platform")
+    from .clipboard.darwin.darwin import DarwinClipboard as Clipboard
 else:
     raise Exception("Unsupported current platform")
 
