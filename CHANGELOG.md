@@ -2,6 +2,10 @@
 
 # Changelog
 
+## [1.5.2](https://github.com/Yeetus3141/ImagePaste/compare/v1.5.1...v1.5.2) (2021-07-19)
+
+- Fixed bug where image was saved into the default directory instead of with the blend file.
+
 ## [1.5.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.5.0...v1.5.1) (2021-06-30)
 
 - Fix the crash occurred when undoing after inserting an image ([#13](https://github.com/Yeetus3141/ImagePaste/issues/13)) ([@thanhph111](https://github.com/thanhph111)).
