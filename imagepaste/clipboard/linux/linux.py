@@ -69,7 +69,7 @@ class LinuxClipboard(Clipboard):
             )
             if process.stderr:
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
-            return cls(Report(6, "Saved and pasted 1 image: {image}"), [image])
+            return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
 
         # If copying from files, just send their paths
         if XclipTarget.URI.value in process.stdout:

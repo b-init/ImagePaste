@@ -6,7 +6,7 @@ import bpy
 
 # Platform router
 if platform.system() == "Windows":
-    raise Exception("Unsupported current platform")
+    from .clipboard.windows.windows import WindowsClipboard as Clipboard
 elif platform.system() == "Linux":
     from .clipboard.linux.linux import LinuxClipboard as Clipboard
 elif platform.system() == "Darwin":
@@ -24,7 +24,7 @@ def get_save_directory():
 
 
 class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
-    """An operator to copy image from the Image Editor to the clipboard."""
+    """Copy image from the Image Editor to the clipboard."""
 
     bl_idname = "imagepaste.copy_imageeditor"
     bl_label = "Copy to Clipboard"
@@ -48,13 +48,11 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
 
     @classmethod
     def poll(_cls, context):
-        return (
-            context.area.ui_type == "IMAGE_EDITOR" and context.area.spaces.active.image
-        )
+        return context.area.type == "IMAGE_EDITOR" and context.area.spaces.active.image
 
 
 class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
-    """An operator to paste images from the clipboard to the Image Editor."""
+    """Paste images from the clipboard to the Image Editor."""
 
     bl_idname = "imagepaste.paste_imageeditor"
     bl_label = "Paste from Clipboard"
@@ -74,13 +72,11 @@ class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
 
     @classmethod
     def poll(_cls, context):
-        return context.area.ui_type == "IMAGE_EDITOR"
+        return context.area.type == "IMAGE_EDITOR"
 
 
 class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
-    """An operator to paste images from the clipboard to the Shader Editor as image
-    texture nodes.
-    """
+    """Paste images from the clipboard to the Shader Editor as image texture nodes."""
 
     bl_idname = "imagepaste.paste_shadereditor"
     bl_label = "Paste from Clipboard"
@@ -105,11 +101,14 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
 
     @classmethod
     def poll(_cls, context):
-        return context.area.ui_type == "ShaderNodeTree"
+        return (
+            context.area.type == "NODE_EDITOR"
+            and context.area.ui_type == "ShaderNodeTree"
+        )
 
 
 class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
-    """An operator to paste images from the clipboard to the 3D View as planes."""
+    """Paste images from the clipboard to the 3D View as planes."""
 
     bl_idname = "imagepaste.paste_view3d_plane"
     bl_label = "Paste from Clipboard as Plane"
@@ -127,11 +126,15 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
 
     @classmethod
     def poll(_cls, context):
-        return context.area.ui_type == "VIEW_3D" and context.mode == "OBJECT"
+        return (
+            context.area.type == "VIEW_3D"
+            and context.area.ui_type == "VIEW_3D"
+            and context.mode == "OBJECT"
+        )
 
 
 class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
-    """An operator to paste images from the clipboard to the 3D View as references."""
+    """Paste images from the clipboard to the 3D View as references."""
 
     bl_idname = "imagepaste.paste_view3d_reference"
     bl_label = "Paste from Clipboard as Reference"
@@ -150,7 +153,11 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
 
     @classmethod
     def poll(_cls, context):
-        return context.area.ui_type == "VIEW_3D" and context.mode == "OBJECT"
+        return (
+            context.area.type == "VIEW_3D"
+            and context.area.ui_type == "VIEW_3D"
+            and context.mode == "OBJECT"
+        )
 
 
 classes = (

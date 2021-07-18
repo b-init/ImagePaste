@@ -22,6 +22,7 @@ class Process:
         args: list[str],
         shell: bool = False,
         capture_output: bool = True,
+        split: bool = True,
         outpath: str = None,
     ) -> Process:
         """Execute a command line process.
@@ -34,6 +35,8 @@ class Process:
                 line. Defaults to True.
             outpath (str, optional): The path to write the output to. If not provided,
                 the output will be returned as a string. Defaults to None.
+            split (bool, optional): If True, split the output into a list of lines. If
+                False, the output will be returned as a single string. Defaults to True.
 
         Returns:
             Process: A Process instance with the output of the command line.
@@ -62,7 +65,8 @@ class Process:
 
         # Postprocess output
         if capture_output:
-            process.stdout = stdout.strip().split("\n") if not outpath else None
+            if not outpath:
+                process.stdout = stdout.strip().split("\n") if split else stdout.strip()
             process.stderr = stderr.strip()
         process.returncode = popen.returncode
         return process

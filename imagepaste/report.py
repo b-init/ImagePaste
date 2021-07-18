@@ -27,7 +27,7 @@ class Report:
         """Log the report to the console."""
         print(f"ImagePaste: {self.verbose}")
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         """Return the string representation of the report
 
         Returns:

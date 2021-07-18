@@ -1,4 +1,5 @@
-import os
+from os.path import basename
+from os.path import dirname
 
 
 class Image:
@@ -12,8 +13,8 @@ class Image:
             filename (str, optional): The name of the image file.
         """
         self.filepath = filepath
-        self.filename = filename or os.path.basename(filepath)
-        self.filebase = os.path.dirname(filepath)
+        self.filename = filename or basename(filepath)
+        self.filebase = dirname(filepath)
 
     def __repr__(self) -> str:
         """Return a string representation of the Image class.
