@@ -20,12 +20,17 @@ else:
 addon_utils.enable("io_import_images_as_planes")
 
 
-def get_save_directory():
+def get_save_directory() -> str:
+    """Get the path to the directory where the images are saved.
+
+    Returns:
+        str: The path to the directory where the images are saved.
+    """
     return bpy.data.filepath or bpy.app.tempdir
 
 
 class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
-    """Copy image from the Image Editor to the clipboard."""
+    """Copy image to the clipboard"""
 
     bl_idname = "imagepaste.copy_imageeditor"
     bl_label = "Copy to Clipboard"
@@ -53,7 +58,7 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
 
 
 class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
-    """Paste images from the clipboard to the Image Editor."""
+    """Paste images from the clipboard"""
 
     bl_idname = "imagepaste.paste_imageeditor"
     bl_label = "Paste from Clipboard"
@@ -77,7 +82,7 @@ class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
 
 
 class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
-    """Paste images from the clipboard to the Shader Editor as image texture nodes."""
+    """Paste images from the clipboard as image texture nodes"""
 
     bl_idname = "imagepaste.paste_shadereditor"
     bl_label = "Paste from Clipboard"
@@ -109,7 +114,7 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
 
 
 class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
-    """Paste images from the clipboard to the 3D View as planes."""
+    """Paste images from the clipboard as planes"""
 
     bl_idname = "imagepaste.paste_view3d_plane"
     bl_label = "Paste from Clipboard as Plane"
@@ -135,7 +140,7 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
 
 
 class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
-    """Paste images from the clipboard to the 3D View as references."""
+    """Paste images from the clipboard as references"""
 
     bl_idname = "imagepaste.paste_view3d_reference"
     bl_label = "Paste from Clipboard as Reference"

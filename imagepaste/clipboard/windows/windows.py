@@ -9,6 +9,8 @@ from ...process import Process
 
 
 class WindowsClipboard(Clipboard):
+    """A concrete implementation of Clipboard for Windows."""
+
     def __init__(self, report: Report, images: list[Image] = None) -> None:
         """A concreate implementation of Clipboard for Windows.
 
@@ -59,7 +61,7 @@ class WindowsClipboard(Clipboard):
         """A class method for pulling images to the Windows Clipboard.
 
         Args:
-            image_path (str): A path to an image to be pulled to the Windows Clipboard.
+            image_path (str): A path to an image to be pulled to the clipboard.
 
         Returns:
             WindowsClipboard: A WindowsClipboard instance, which contains status of

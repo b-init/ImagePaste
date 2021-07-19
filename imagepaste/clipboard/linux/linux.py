@@ -31,7 +31,7 @@ class XclipTarget(Enum):
 
 
 class LinuxClipboard(Clipboard):
-    """Linux clipboard implementation."""
+    """A Clipboard implementation for Linux."""
 
     def __init__(self, report: Report, images: list[Image] = None) -> None:
         """Initialize LinuxClipboard instance.
@@ -43,11 +43,11 @@ class LinuxClipboard(Clipboard):
         super().__init__(report, images)
 
     @classmethod
-    def push(cls, save_directory) -> LinuxClipboard:
+    def push(cls, save_directory: str) -> LinuxClipboard:
         """Clipboard pushes images information.
 
         Args:
-            save_directory ([type]): a directory to save images.
+            save_directory (str): a directory to save images.
 
         Returns:
             LinuxClipboard: a LinuxClipboard instance, which contains a Report object
