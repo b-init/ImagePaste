@@ -54,7 +54,11 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
 
     @classmethod
     def poll(_cls, context):
-        return context.area.type == "IMAGE_EDITOR" and context.area.spaces.active.image
+        return (
+            context.area.type == "IMAGE_EDITOR"
+            and context.area.spaces.active.image is not None
+            and context.area.spaces.active.image.has_data is True
+        )
 
 
 class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
@@ -110,6 +114,7 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
         return (
             context.area.type == "NODE_EDITOR"
             and context.area.ui_type == "ShaderNodeTree"
+            and context.space_data.edit_tree is not None
         )
 
 
