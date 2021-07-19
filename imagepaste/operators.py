@@ -1,18 +1,19 @@
 import os
-import platform
+import sys
 
 import addon_utils
 import bpy
 
-# Platform router
-if platform.system() == "Windows":
+
+# Platform-specific import
+if sys.platform == "win32":
     from .clipboard.windows.windows import WindowsClipboard as Clipboard
-elif platform.system() == "Linux":
+elif sys.platform == "linux":
     from .clipboard.linux.linux import LinuxClipboard as Clipboard
-elif platform.system() == "Darwin":
+elif sys.platform == "darwin":
     from .clipboard.darwin.darwin import DarwinClipboard as Clipboard
 else:
-    raise Exception("Unsupported current platform")
+    raise RuntimeError(f"Unsupported platform '{sys.platform}'.")
 
 
 # Enable the "Import Images as Planes" add-on to be used here
