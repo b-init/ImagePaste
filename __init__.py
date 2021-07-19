@@ -14,7 +14,7 @@ bl_info = {
         "Paste image from you clipboard as a Reference or into the Image Editor"
     ),
     "blender": (2, 80, 0),
-    "version": (1, 4, 0),
+    "version": (1, 5, 1),
     "location": (
         "View3D > Add > Image, "
         "Image Editor > Toolbar > Image, "
@@ -73,6 +73,7 @@ class PasteImageToImageEditor(Operator):
 
     bl_idname = "impaste.paste_ie"
     bl_label = "Paste From Clipboard"
+    bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
         img_data = GrabImage()
@@ -104,6 +105,7 @@ class PasteImageToReference(Operator):
 
     bl_idname = "impaste.paste_ref"
     bl_label = "Paste From Clipboard"
+    bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
         img_data = GrabImage()
@@ -128,6 +130,7 @@ class PasteImageAsPlane(Operator):
 
     bl_idname = "impaste.paste_as_plane"
     bl_label = "Paste From Clipboard as Plane"
+    bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
         img_data = GrabImage()
@@ -157,6 +160,7 @@ class PasteImageToNodeEditor(Operator):
 
     bl_idname = "impaste.paste_as_node"
     bl_label = "Paste Images From Clipboard"
+    bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
         img_data = GrabImage()
@@ -177,7 +181,7 @@ class PasteImageToNodeEditor(Operator):
             node = tree.nodes.new("ShaderNodeTexImage")
             node.location = locX, locY
             # Offset location for next node
-            locY += 250
+            locY += 300
 
             node_img = bpy.data.images.load(filepath=directory)
             node.image = node_img
@@ -190,6 +194,7 @@ class CopyImageToClipboard(Operator):
 
     bl_idname = "impaste.copy_img"
     bl_label = "Copy To Clipboard"
+    bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
         for area in context.screen.areas:

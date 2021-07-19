@@ -27,12 +27,26 @@ def request(command):
 def GrabImage():
     timestamp = time.strftime("%y%m%d-%H%M%S")
     img_name = "PastedImage" + timestamp + ".png"
-    file_path = (
+
+    if bpy.data.filepath and bpy.context.preferences.addons[
+            __package__.split(".")[0]
+        ].preferences.force_default_dir == False: 
+        # save image in the place where the blendfile is saved, in a newly created 
+        # subfolder (if saved and force_default_directory is set to false)
+        file_path = os.path.join(os.path.split(bpy.data.filepath)[0], 'ImagePaste')
+        
+        if not os.path.isdir(file_path):
+            os.mkdir(file_path)
+
+    else:  
+        # just use the default location otherwise
+        file_path = (
         bpy.context.preferences.addons[
             __package__.split(".")[0]
         ].preferences.default_img_dir
-        + img_name
-    )
+        )
+
+    file_path = os.path.join(file_path, img_name)
 
     image_command = (
         "$image = Get-Clipboard -Format Image\n"

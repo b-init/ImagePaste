@@ -1,69 +1,36 @@
+<!-- @format -->
+
 # ImagePaste
 
-A simple Blender addon to grab images from your clipboard and paste as a reference image in viewport or onto the image editor, or even copy images from blender to clipboard.
-Works with blender 2.80 and above.
-
+A simple _Blender_ addon to grab images from your clipboard and paste as a reference image in viewport or onto the image editor, or even copy images from _Blender_ to clipboard.
+Works with _Blender_ 2.80 and above.
 
 ## Installation
 
-1. Download the latest release from [releases page](https://github.com/Yeetus3141/ImagePaste/releases/) (you can view the changelog [here](CHANGELOG.md)).
-1. Go to `Edit > Preferences > Addons > Install` and select the downloaded zip file, then tick the box beside the add-on name.
-1. Set the directory for saving images to avoid errors.
-
+1. Download [the latest release](https://github.com/Yeetus3141/ImagePaste/releases/latest) (you can view the changelog in the [release page](https://github.com/Yeetus3141/ImagePaste/releases)).
+2. Go to `Edit > Preferences`, on tab **Addons** choose **Install** and select the downloaded `.zip` file, then tick the box beside the add-on name.
+3. Set the directory for saving images to avoid errors.
 
 ## Usage
 
-- `Ctrl + Shift + V` or `Object Mode > Add > Image > Paste From Clipboard` in Object Mode to paste as a reference image.
-- `Ctrl + Shift + Alt + V` or `Object Mode > Add > Image > Paste From Clipboard as Plane` in Object Mode to paste image as a plane.
-- `Ctrl + Shift + V` or `Image Editor > Image > Paste From Clipboard` in the Image Editor to paste as image.
-- `Ctrl + Shift + V` or `Node Editor > Context Menu (Right Click) > Paste Images From Clipboard` in the Node Editor to paste image(s) as Image Texture Node(s).
-- `Ctrl + Shift + C` or `Image Editor > Image > Copy To Clipboard` in the Image Editor to copy active image to clipboard.
-- It is recommended to save the blend file before using this add-on to prevent the misplacement of image files.
-
 ![demo](assets/demo.gif)
 
+| Operator                     | Editor type               | Key shortcut             | UI                                                         |
+| ---------------------------- | ------------------------- | ------------------------ | ---------------------------------------------------------- |
+| Paste as reference images    | 3D Viewport (Object Mode) | `Ctrl + Shift + V`       | `Add > Image > Paste From Clipboard`                       |
+| Paste as planes              | 3D Viewport (Object Mode) | `Ctrl + Shift + Alt + V` | `Add > Image > Paste From Clipboard as Plane`              |
+| Paste as image texture nodes | Shader Editor             | `Ctrl + Shift + V`       | `Context Menu (right click) > Paste Images From Clipboard` |
+| Paste as images              | Image Editor              | `Ctrl + Shift + V`       | `Image > Paste From Clipboard`                             |
+| Copy image to clipboard      | Image Editor              | `Ctrl + Shift + C`       | `Image > Copy To Clipboard`                                |
 
-## Notes
+**Note**:
 
-- Running Blender as administrator might fix some errors.
-- Works on Windows and Linux (X11 server) (by [@thanhph111](https://github.com/thanhph111)), does not work on MacOS (not yet, at least).
+- It is recommended to save the `.blend` file before using this add-on to prevent the misplacement of image files.
+- Running _Blender_ as administrator might fix some errors.
 - A material must be created (if not exists already) before using **Paste Image As Node** feature.
 
+## Contributing and getting support
 
-## Setup environment for development
+This is only a small project and we're happy to know it helped some of you. I just want to say that all this wouldn't have been possible without these [great contributors](https://github.com/Yeetus3141/ImagePaste/graphs/contributors) and everybody who comes with new ideas and feature requests! So thank you all!
 
-[Recommended style guide for Blender add-ons](https://wiki.blender.org/wiki/Style_Guide/Python) is followed by this repository with these tool:
-- Linter: **Flake8** (latest, configured in [.flake8](.flake8)).
-- Formatter: **Black** (latest, default settings).
-- Environment manager: **pipenv** (configured in [Pipfile](Pipfile)).
-
-These steps will show how to set up a python virtual environment that fits my workflow.
-1. Open CLI in the project directory.
-1. Run following command `pipenv install --dev --skip-lock` to install packages for development.
-1. After that, a virtual environment has been setup. You can get in using `pipenv shell` and get out with `exit`. Once activated, you will have all packages you need.
-
-Some editor configurations are also defined in [.editorconfig](.editorconfig).
-
-I am personally using Visual Studio Code as editor. If you also use it, you should have these workspace settings:
-
-```jsonc
-{
-    // Python language configuration
-    "[python]": {
-        "editor.rulers": [88],
-        "editor.wordWrap": "wordWrapColumn",
-        "editor.wordWrapColumn": 88
-    },
-    // Enable and overwrite flake8 user settings (if any) to be accepted in .flake8
-    "python.linting.flake8Enabled": true,
-    "python.linting.flake8Args": [],
-    // Set default Python formatter and reset it to default settings
-    "python.formatting.provider": "black",
-    "python.formatting.blackArgs": []
-}
-```
-
-
-## Additional Info
-
-For any questions, suggestions or bug reports, join [my discord server](https://discord.gg/G8ajxwQuYT) contact me via twitter **@YeetusBlenditus** or e-mail me at **binitnew@gmail.com**.
+It will be great if you have an idea and turn it into visible. Tell us how amazing they are by [suggest a feature](https://github.com/Yeetus3141/ImagePaste/issues/new/choose), or you can make it yourself by creating [a pull request](https://github.com/Yeetus3141/ImagePaste/compare). And if you encounter an problem, let us know by [opening an issue](https://github.com/Yeetus3141/ImagePaste/issues/new/choose). But before doing anything, let's take a look at [our contributing guide](.github/CONTRIBUTING.md), it will shows you how to start with all of that.

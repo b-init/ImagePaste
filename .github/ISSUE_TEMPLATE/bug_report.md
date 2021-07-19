@@ -13,11 +13,11 @@ assignees: thanhph111, Yeetus3141
 
 ## To Reproduce
 <!-- How we make the bug reveals? -->
-<!-- 1. Go to ... -->
-<!-- 1. Click on .... -->
-<!-- 1. Get a Kit Kat -->
-<!-- 1. Scroll down to .... -->
-<!-- 1. See error -->
+1. <!-- Go to … -->
+1. <!-- Click on … -->
+1. <!-- Get a Kit Kat -->
+1. <!-- Scroll down to … -->
+1. <!-- See error -->
 
 
 ## Expected behavior
