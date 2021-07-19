@@ -4,7 +4,9 @@ bl_info = {
     "blender": (2, 80, 0),
     "version": (1, 5, 1),
     "category": "Import-Export",
+    "support": "COMMUNITY",
     "doc_url": "https://github.com/Yeetus3141/ImagePaste#readme",
+    "tracker_url": "https://github.com/Yeetus3141/ImagePaste/issues",
     "description": (
         "Paste images from your clipboard to "
         "Image Editor, Shader Editor, 3D Viewport"
