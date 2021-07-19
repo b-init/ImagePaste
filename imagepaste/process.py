@@ -10,7 +10,6 @@ class Process:
         self.parameters = {
             "encoding": "utf-8",
             "text": True,
-            "universal_newlines": True,
         }
         self.stdout = None
         self.stderr = None

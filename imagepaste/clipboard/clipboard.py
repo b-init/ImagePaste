@@ -1,5 +1,4 @@
 from __future__ import annotations
-import time
 from abc import ABC
 from abc import abstractmethod
 from abc import abstractclassmethod
@@ -63,7 +62,9 @@ class Clipboard(ABC):
         Returns:
             str: a string representing the current time in the file name format.
         """
-        return f"ImagePaste-{time.strftime('%y%m%d-%H%M%S')}.png"
+        from time import strftime
+
+        return f"ImagePaste-{strftime('%y%m%d-%H%M%S')}.png"
 
     def __repr__(self) -> str:
         """Representation of the object.

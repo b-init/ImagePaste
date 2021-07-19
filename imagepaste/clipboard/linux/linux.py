@@ -1,25 +1,10 @@
 from __future__ import annotations
 from enum import Enum
-from mimetypes import guess_type
-from os import chmod
-from os.path import (
-    dirname,
-    join,
-    realpath,
-)
-from stat import S_IXUSR
-from urllib.parse import urlparse
-from urllib.request import url2pathname
 
 from ...image import Image
 from ...process import Process
 from ...report import Report
 from ..clipboard import Clipboard
-
-
-XCLIP_PATH = f"{dirname(realpath(__file__))}/bin/xclip"
-# TODO: Move to higher level
-chmod(XCLIP_PATH, S_IXUSR)
 
 
 class XclipTarget(Enum):
@@ -54,6 +39,10 @@ class LinuxClipboard(Clipboard):
                 showing the status of the operation and a list of Image objects that
                 holds information of images were copied in the clipboard.
         """
+        from os.path import join
+        from urllib.parse import urlparse
+        from urllib.request import url2pathname
+
         # Get all available targets
         process = Process.execute(cls.get_xclip_args())
         if process.stderr:
@@ -92,13 +81,15 @@ class LinuxClipboard(Clipboard):
                 showing the status of the operation and a list of one Image object that
                 holds information of the image we put its path to the input.
         """
+        from mimetypes import guess_type
+
         mime_type = guess_type(image_path)[0]
         if not mime_type:
             return Report(4, f"Cannot guess MIME type from {image_path}")
         args = LinuxClipboard.get_xclip_args(mime_type, image_path, out=False)
         # If capture stdout/stderr, popen will hang as xclip runs in the background
         process = Process.execute(args, capture_output=False)
-        if process.returncode:
+        if process.returncode != 0:
             return cls(Report(4, f"Popen failed with code {process.returncode}"))
         image = Image(image_path)
         return cls(Report(5, f"Copied 1 image: {image}"), [image])
@@ -120,6 +111,14 @@ class LinuxClipboard(Clipboard):
         Returns:
             list[str]: a list of arguments for xclip command.
         """
+        from os import chmod
+        from os.path import dirname
+        from os.path import realpath
+        from stat import S_IXUSR
+
+        XCLIP_PATH = f"{dirname(realpath(__file__))}/bin/xclip"
+        # TODO: Move to higher level
+        chmod(XCLIP_PATH, S_IXUSR)
         args = [
             XCLIP_PATH,
             "-rmlastnl",

@@ -1,7 +1,5 @@
 from __future__ import annotations
-from os.path import join
 
-from .pasteboard._native import Pasteboard
 from ..clipboard import Clipboard
 from ...image import Image
 from ...report import Report
@@ -32,6 +30,9 @@ class DarwinClipboard(Clipboard):
                 object containing the operation results and a list of Image objects
                 holding the images information.
         """
+        from os.path import join
+        from .pasteboard._native import Pasteboard
+
         # Use Pasteboard to get file URLs from the clipboard
         pasteboard = Pasteboard()
         urls = pasteboard.get_file_urls()

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from os.path import join
-
 from ..clipboard import Clipboard
 from ...report import Report
 from ...image import Image
@@ -32,6 +30,8 @@ class WindowsClipboard(Clipboard):
                 operations under Report object and a list of Image objects holding
                 pushed images information.
         """
+        from os.path import join
+
         filename = cls.get_timestamp_filename()
         filepath = join(save_directory, filename)
         image = Image(filepath, filename)

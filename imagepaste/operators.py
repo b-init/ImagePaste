@@ -1,9 +1,4 @@
-import os
 import sys
-
-import addon_utils
-import bpy
-
 
 # Platform-specific import
 if sys.platform == "win32":
@@ -16,8 +11,7 @@ else:
     raise RuntimeError(f"Unsupported platform '{sys.platform}'.")
 
 
-# Enable the "Import Images as Planes" add-on to be used here
-addon_utils.enable("io_import_images_as_planes")
+import bpy
 
 
 def get_save_directory() -> str:
@@ -37,12 +31,14 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
+        from os.path import join
+
         active_image = context.area.spaces.active.image
         # If active image is render result, save it first
-        if active_image.filepath:
+        if active_image.filepath != "":
             image_path = active_image.filepath
         else:
-            image_path = os.path.join(get_save_directory(), active_image.name + ".png")
+            image_path = join(get_save_directory(), active_image.name + ".png")
             bpy.ops.image.save_as(save_as_render=True, copy=True, filepath=image_path)
         # Report and log the result
         clipboard = Clipboard.pull(image_path)
@@ -126,6 +122,11 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def execute(self, _context):
+        from addon_utils import enable
+
+        # Enable the "Import Images as Planes" add-on to be used here
+        enable("io_import_images_as_planes")
+
         clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log()
         self.report({clipboard.report.type}, clipboard.report.message)
@@ -157,7 +158,6 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
         self.report({clipboard.report.type}, clipboard.report.message)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
-        print("")
         for image in clipboard.images:
             bpy.ops.object.load_reference_image(filepath=image.filepath)
         return {"FINISHED"}
