@@ -25,7 +25,11 @@ class Report:
 
     def log(self) -> None:
         """Log the report to the console."""
-        print(f"ImagePaste: {self.verbose}")
+        from .helper import get_addon_preferences
+
+        preferences = get_addon_preferences()
+        if not preferences.is_disable_debug:
+            print(f"ImagePaste: {self.verbose}")
 
     def __repr__(self) -> str:
         """Return the string representation of the report
