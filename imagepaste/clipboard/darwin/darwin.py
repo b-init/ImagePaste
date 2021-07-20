@@ -51,8 +51,8 @@ class DarwinClipboard(Clipboard):
         commands = [
             '((clipboard info) as string does not contain "«class furl»") as string'
         ]
-        process = Process(cls.get_osascript_args(commands))
-        if process.stdout == "true":
+        process = Process.execute(cls.get_osascript_args(commands))
+        if process.stdout[0] == "true":
             filename = cls.get_timestamp_filename()
             filepath = join(save_directory, filename)
             image = Image(filepath, filename)
