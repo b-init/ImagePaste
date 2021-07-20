@@ -49,11 +49,7 @@ class DarwinClipboard(Clipboard):
 
         # Check if clipboard doesn't contain any filepaths
         # (e.g. if the clipboard contains just a single image)
-        commands = [
-            '((clipboard info) as string does not contain "«class furl»") as string'
-        ]
-        process = Process.execute(cls.get_osascript_args(commands))
-        if process.stdout[0] == "true":
+        if urls is None:
             filename = cls.get_timestamp_filename()
             filepath = join(save_directory, filename)
             image = Image(filepath, filename)
@@ -69,9 +65,6 @@ class DarwinClipboard(Clipboard):
 
             if not isfile(filepath):
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
-            if process.stderr:
-                report = Report(6, f"Saved 1 image: {image} (WARN: {process.stderr})")
-                return cls(report, [image])
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
         return cls(Report(3))
 
