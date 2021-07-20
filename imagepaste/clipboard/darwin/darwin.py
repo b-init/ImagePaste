@@ -31,6 +31,7 @@ class DarwinClipboard(Clipboard):
                 holding the images information.
         """
         from os.path import join
+        from os.path import isfile
         from .pasteboard._native import Pasteboard
 
         # Use Pasteboard to get file URLs from the clipboard
@@ -65,7 +66,8 @@ class DarwinClipboard(Clipboard):
                 "close access pastedImage",
             ]
             process = Process.execute(cls.get_osascript_args(commands))
-            if process.stderr:
+
+            if not isfile(filepath):
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
         return cls(Report(3))
