@@ -69,6 +69,9 @@ class DarwinClipboard(Clipboard):
 
             if not isfile(filepath):
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
+            if process.stderr:
+                report = Report(6, f"Saved 1 image: {image} (WARN: {process.stderr})")
+                return cls(report, [image])
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
         return cls(Report(3))
 
