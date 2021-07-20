@@ -30,7 +30,7 @@ class IMAGEPASTE_AddonPreferences(AddonPreferences):
         layout.label(
             text=(
                 "This directory will be used if"
-                "the blend file is not saved, "
+                " the blend file is not saved, "
                 "or always use default directory if it is checked."
             )
         )

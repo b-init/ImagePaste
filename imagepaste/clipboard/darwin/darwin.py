@@ -86,7 +86,7 @@ class DarwinClipboard(Clipboard):
             "set the clipboard to "
             f'(read file POSIX file "{image_path}" as «class PNGf»)'
         ]
-        process = Process(cls.get_osascript_args(commands))
+        process = Process.execute(cls.get_osascript_args(commands))
         if process.stderr:
             return cls(Report(4, f"Process failed ({process.stderr})"))
         image = Image(image_path)
