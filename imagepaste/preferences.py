@@ -3,6 +3,7 @@ from bpy.props import BoolProperty
 from bpy.props import StringProperty
 from bpy.types import AddonPreferences
 
+from .helper import ADDON_NAME
 from .operators import (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
@@ -13,29 +14,111 @@ from .operators import (
 
 
 class IMAGEPASTE_AddonPreferences(AddonPreferences):
-    bl_idname = __package__.split(".")[0]
-    default_img_dir: StringProperty(
-        name="Default directory",
-        subtype="DIR_PATH",
-        default=bpy.context.preferences.filepaths.temporary_directory,
+    """Add-on preferences for ImagePaste"""
+
+    bl_idname = ADDON_NAME
+    is_use_another_directory: BoolProperty(
+        name="Use a directory",
+        description=(
+            "Save images to another directory instead of temporary directory"
+            " when the file is not saved"
+        ),
+        default=False,
     )
-    force_default_dir: BoolProperty(
-        name="Always use default directory",
+    another_directory: StringProperty(
+        name="Saving directory",
+        description="A path to directory where images saved to",
+        subtype="DIR_PATH",
+    )
+    is_force_use_another_directory: BoolProperty(
+        name="Force use another directory",
+        description="Save images to above directory even when the file is saved or not",
+        default=False,
+    )
+    is_use_subdirectory: BoolProperty(
+        name="Use subdirectory",
+        description="Save images to a subdirectory where the file is saved",
+        default=True,
+    )
+    subdirectory_name: StringProperty(
+        name="Sub directory name",
+        description="A name for subdirectory",
+        default="ImagePaste",
+    )
+    is_disable_debug: BoolProperty(
+        name="Disable debug message",
+        description="Debug message will not printed in console",
         default=False,
     )
 
     def draw(self, _context):
+        split_ratio = 0.3
         layout = self.layout
-        layout.label(text="Default directory for saving image files.")
-        layout.label(
-            text=(
-                "This directory will be used if"
-                " the blend file is not saved, "
-                "or always use default directory if it is checked."
-            )
+
+        # New box
+        box = layout.box().column()
+        box.label(
+            text="Specify a different directory for images when the file is not saved"
         )
-        layout.prop(self, "default_img_dir")
-        layout.prop(self, "force_default_dir")
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Use a directory")
+        # Second column
+        column_2 = split.column().row(align=True)
+        column_2.prop(self, "is_use_another_directory", text="")
+        column_2_sub = column_2.column()
+        column_2_sub.active = self.is_use_another_directory
+        column_2_sub.prop(self, "another_directory", text="")
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        split.column()
+        # Second column
+        column_2 = split.column().row(align=True)
+        column_2.active = self.is_use_another_directory
+        column_2.prop(self, "is_force_use_another_directory", text="Force use")
+
+        # New box
+        box = layout.box().column()
+        box.label(text="Specify a subdirectory for images when the file is saved")
+
+        # New property
+        prop = box.row(align=True)
+        prop.active = not (
+            self.is_force_use_another_directory and self.is_use_another_directory
+        )
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Use subdirectory")
+        # Second column
+        column_2 = split.column().row(align=True)
+        column_2.prop(self, "is_use_subdirectory", text="")
+        column_2_sub = column_2.column()
+        column_2_sub.prop(self, "subdirectory_name", text="")
+
+        # New box
+        box = layout.box().column()
+        box.label(text="Miscellaneous")
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Disable debug message")
+        # Second column
+        column_2 = split.column()
+        column_2.prop(self, "is_disable_debug", text="")
 
 
 def imageeditor_copy_imagemenu_draw(self, _context):
