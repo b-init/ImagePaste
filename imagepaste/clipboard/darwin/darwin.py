@@ -31,28 +31,21 @@ class DarwinClipboard(Clipboard):
                 holding the images information.
         """
         from os.path import join
-        from .pasteboard._native import Pasteboard
+        from os.path import isfile
+        from .pasteboard import _native as pasteboard
+
+        pb = pasteboard.Pasteboard()
 
         # Use Pasteboard to get file URLs from the clipboard
-        pasteboard = Pasteboard()
-        urls = pasteboard.get_file_urls()
+        urls = pb.get_file_urls()
         if urls is not None:
             filepaths = list(urls)
             images = [Image(filepath) for filepath in filepaths]
             return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
 
-        # If no images are found, return a report with no images
-        contents = pasteboard.get_contents()
-        if contents == "":
-            return cls(Report(2))
-
-        # Check if clipboard doesn't contain any filepaths
-        # (e.g. if the clipboard contains just a single image)
-        commands = [
-            '((clipboard info) as string does not contain "«class furl»") as string'
-        ]
-        process = Process(cls.get_osascript_args(commands))
-        if process.stdout == "true":
+        # Save an image if it is in the clipboard
+        contents = pb.get_contents(type=pasteboard.TIFF)
+        if contents is not None:
             filename = cls.get_timestamp_filename()
             filepath = join(save_directory, filename)
             image = Image(filepath, filename)
@@ -65,10 +58,13 @@ class DarwinClipboard(Clipboard):
                 "close access pastedImage",
             ]
             process = Process.execute(cls.get_osascript_args(commands))
-            if process.stderr:
+            if not isfile(filepath):
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
+            if process.stderr:
+                report = Report(6, f"Saved 1 image: {image} (WARN: {process.stderr})")
+                return cls(report, [image])
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
-        return cls(Report(3))
+        return cls(Report(2))
 
     @classmethod
     def pull(cls, image_path: str) -> DarwinClipboard:
@@ -86,7 +82,7 @@ class DarwinClipboard(Clipboard):
             "set the clipboard to "
             f'(read file POSIX file "{image_path}" as «class PNGf»)'
         ]
-        process = Process(cls.get_osascript_args(commands))
+        process = Process.execute(cls.get_osascript_args(commands))
         if process.stderr:
             return cls(Report(4, f"Process failed ({process.stderr})"))
         image = Image(image_path)
