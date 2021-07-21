@@ -32,20 +32,19 @@ class DarwinClipboard(Clipboard):
         """
         from os.path import join
         from os.path import isfile
-        from .pasteboard._native import Pasteboard
-        from .pasteboard._native import TIFF
+        from .pasteboard import _native as pasteboard
 
-        pasteboard = Pasteboard()
+        pb = pasteboard.Pasteboard()
 
         # Use Pasteboard to get file URLs from the clipboard
-        urls = pasteboard.get_file_urls()
+        urls = pb.get_file_urls()
         if urls is not None:
             filepaths = list(urls)
             images = [Image(filepath) for filepath in filepaths]
             return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
 
         # Save an image if it is in the clipboard
-        contents = pasteboard.get_contents(type=TIFF)
+        contents = pb.get_contents(type=pasteboard.TIFF)
         if contents is not None:
             filename = cls.get_timestamp_filename()
             filepath = join(save_directory, filename)
@@ -58,7 +57,6 @@ class DarwinClipboard(Clipboard):
                 "end try",
                 "close access pastedImage",
             ]
-
             process = Process.execute(cls.get_osascript_args(commands))
             if not isfile(filepath):
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
