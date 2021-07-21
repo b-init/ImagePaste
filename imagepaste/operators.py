@@ -16,7 +16,7 @@ import bpy
 class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
     """Copy image to the clipboard"""
 
-    bl_idname = "imagepaste.copy_imageeditor"
+    bl_idname = "imagepaste.imageeditor_copy"
     bl_label = "Copy to Clipboard"
     bl_options = {"UNDO_GROUPED"}
 
@@ -51,7 +51,7 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
 class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
     """Paste images from the clipboard"""
 
-    bl_idname = "imagepaste.paste_imageeditor"
+    bl_idname = "imagepaste.imageeditor_paste"
     bl_label = "Paste from Clipboard"
     bl_options = {"UNDO_GROUPED"}
 
@@ -74,10 +74,44 @@ class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
         return context.area.type == "IMAGE_EDITOR"
 
 
+class IMAGEPASTE_OT_sequenceeditor_paste(bpy.types.Operator):
+    """Paste images from the clipboard"""
+
+    bl_idname = "imagepaste.sequenceeditor_paste"
+    bl_label = "Paste from Clipboard"
+    bl_options = {"UNDO_GROUPED"}
+
+    def execute(self, context):
+        from .helper import get_save_directory
+
+        clipboard = Clipboard.push(get_save_directory())
+        clipboard.report.log()
+        self.report({clipboard.report.type}, clipboard.report.message)
+        if clipboard.report.type != "INFO":
+            return {"CANCELLED"}
+        sequences = context.scene.sequence_editor.sequences
+        current_frame = context.scene.frame_current
+        for image in clipboard.images:
+            image_strip = sequences.new_image(
+                name=image.filename,
+                filepath=image.filepath,
+                channel=1,
+                frame_start=current_frame,
+                fit_method="FIT",
+            )
+            image_strip.frame_final_end = current_frame + 50
+        return {"FINISHED"}
+
+    @classmethod
+    def poll(_cls, context):
+        return True
+        return context.area.type == "SEQUENCE_EDITOR"
+
+
 class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
     """Paste images from the clipboard as image texture nodes"""
 
-    bl_idname = "imagepaste.paste_shadereditor"
+    bl_idname = "imagepaste.shadereditor_paste"
     bl_label = "Paste from Clipboard"
     bl_options = {"UNDO_GROUPED"}
 
@@ -112,7 +146,7 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
 class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
     """Paste images from the clipboard as planes"""
 
-    bl_idname = "imagepaste.paste_view3d_plane"
+    bl_idname = "imagepaste.view3d_paste_plane"
     bl_label = "Paste from Clipboard as Plane"
     bl_options = {"UNDO_GROUPED"}
 
@@ -144,7 +178,7 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
 class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
     """Paste images from the clipboard as references"""
 
-    bl_idname = "imagepaste.paste_view3d_reference"
+    bl_idname = "imagepaste.view3d_paste_reference"
     bl_label = "Paste from Clipboard as Reference"
     bl_options = {"UNDO_GROUPED"}
 
@@ -172,6 +206,7 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
 classes = (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
+    IMAGEPASTE_OT_sequenceeditor_paste,
     IMAGEPASTE_OT_shadereditor_paste,
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
