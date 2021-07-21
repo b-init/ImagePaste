@@ -33,23 +33,20 @@ class DarwinClipboard(Clipboard):
         from os.path import join
         from os.path import isfile
         from .pasteboard._native import Pasteboard
+        from .pasteboard._native import TIFF
+
+        pasteboard = Pasteboard()
 
         # Use Pasteboard to get file URLs from the clipboard
-        pasteboard = Pasteboard()
         urls = pasteboard.get_file_urls()
         if urls is not None:
             filepaths = list(urls)
             images = [Image(filepath) for filepath in filepaths]
             return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
 
-        # If no images are found, return a report with no images
-        contents = pasteboard.get_contents()
-        if contents == "":
-            return cls(Report(2))
-
-        # Check if clipboard doesn't contain any filepaths
-        # (e.g. if the clipboard contains just a single image)
-        if urls is None:
+        # Save an image if it is in the clipboard
+        contents = pasteboard.get_contents(type=TIFF)
+        if contents is not None:
             filename = cls.get_timestamp_filename()
             filepath = join(save_directory, filename)
             image = Image(filepath, filename)
@@ -61,12 +58,15 @@ class DarwinClipboard(Clipboard):
                 "end try",
                 "close access pastedImage",
             ]
-            process = Process.execute(cls.get_osascript_args(commands))
 
+            process = Process.execute(cls.get_osascript_args(commands))
             if not isfile(filepath):
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
+            if process.stderr:
+                report = Report(6, f"Saved 1 image: {image} (WARN: {process.stderr})")
+                return cls(report, [image])
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
-        return cls(Report(3))
+        return cls(Report(2))
 
     @classmethod
     def pull(cls, image_path: str) -> DarwinClipboard:
