@@ -34,8 +34,9 @@ class Process:
                 line. Defaults to True.
             outpath (str, optional): The path to write the output to. If not provided,
                 the output will be returned as a string. Defaults to None.
-            split (bool, optional): If True, split the output into a list of lines. If
-                False, the output will be returned as a single string. Defaults to True.
+            split (bool, optional): If True, split the output `stderr` into a list of
+                lines. If False, it will be returned as a single string. The `stderr`
+                is passed without any modifications. Defaults to True.
 
         Returns:
             Process: A Process instance with the output of the command line.

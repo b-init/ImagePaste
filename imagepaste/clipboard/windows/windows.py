@@ -51,7 +51,7 @@ class WindowsClipboard(Clipboard):
             "if ($files) { $files.fullname }"
         )
         process = Process.execute(cls.get_powershell_args(file_script))
-        if process.stdout != "":
+        if process.stdout[0] != "":
             images = [Image(filepath) for filepath in process.stdout]
             return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
         return cls(Report(2))
