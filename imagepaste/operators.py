@@ -97,14 +97,12 @@ class IMAGEPASTE_OT_sequenceeditor_paste(bpy.types.Operator):
                 filepath=image.filepath,
                 channel=1,
                 frame_start=current_frame,
-                fit_method="FIT",
             )
             image_strip.frame_final_end = current_frame + 50
         return {"FINISHED"}
 
     @classmethod
     def poll(_cls, context):
-        return True
         return context.area.type == "SEQUENCE_EDITOR"
 
 
