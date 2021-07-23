@@ -1,0 +1,38 @@
+# @format
+
+name: Release
+
+on:
+  push:
+    tags: v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: Get pushed tag
+        run: echo "TAG=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+      - name: Build and get file name
+        run: echo "ZIP_FILE=$(./script/build.sh $TAG)" >> $GITHUB_ENV
+      - name: Create a release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ImagePaste ${{ env.TAG }}
+          body: ImagePaste ${{ env.TAG }}
+          draft: true
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ZIP_FILE }}
+          asset_name: ${{ env.ZIP_FILE }}
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
