@@ -16,13 +16,26 @@ jobs:
         run: echo "TAG=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
       - name: Build and get file name
         run: echo "ZIP_FILE=$(./script/build.sh $TAG)" >> $GITHUB_ENV
+      - name: Get release body
+        id: get_release_body
+        run: |
+          IFS=$'\n'
+          URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}"
+          latest_tag=$(curl --url "${URL}/releases/latest" | jq -r '.tag_name')
+          commits=($(curl --url "${URL}/compare/${latest_tag}...${GITHUB_SHA}" |
+            jq -r '.commits[] | [.commit.message, .sha, .author.login] | @tsv' |
+            while IFS=$'\t' read -r message sha author; do
+              echo "- ${message%\\n\\n*} (${sha} by @${author})"
+            done))
+          body=$(echo "${commits[*]:0:${#commits[@]}-1}" | sed ':a; N; $!ba; s/\n/%0A/g')
+          echo "::set-output name=body::$body"
       - name: Create a release
         id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref }}
           release_name: ImagePaste ${{ env.TAG }}
-          body: ImagePaste ${{ env.TAG }}
+          body: ${{ steps.get_release_body.outputs.body }}
           draft: true
           prerelease: false
         env:
