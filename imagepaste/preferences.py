@@ -7,6 +7,7 @@ from .helper import ADDON_NAME
 from .operators import (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
+    IMAGEPASTE_OT_sequenceeditor_paste,
     IMAGEPASTE_OT_shadereditor_paste,
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
@@ -135,6 +136,14 @@ def imageeditor_paste_imagemenu_draw(self, _context):
     )
 
 
+def sequenceeditor_paste_contextmenu_draw(self, _context):
+    self.layout.separator()
+    self.layout.operator(
+        IMAGEPASTE_OT_sequenceeditor_paste.bl_idname,
+        icon="IMAGE_PLANE",
+    )
+
+
 def shadereditor_paste_contextmenu_draw(self, _context):
     self.layout.operator(
         IMAGEPASTE_OT_shadereditor_paste.bl_idname,
@@ -164,11 +173,23 @@ def register():
 
     bpy.types.IMAGE_MT_image.append(imageeditor_copy_imagemenu_draw)
     bpy.types.IMAGE_MT_image.append(imageeditor_paste_imagemenu_draw)
+    bpy.types.SEQUENCER_MT_context_menu.append(sequenceeditor_paste_contextmenu_draw)
     bpy.types.NODE_MT_context_menu.append(shadereditor_paste_contextmenu_draw)
     bpy.types.VIEW3D_MT_image_add.append(view3d_paste_plane_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.append(view3d_paste_reference_imageaddmenu_draw)
 
     kc = bpy.context.window_manager.keyconfigs.addon
+
+    km = kc.keymaps.new(name="Image Generic", space_type="IMAGE_EDITOR")
+    kmi = km.keymap_items.new(
+        IMAGEPASTE_OT_imageeditor_copy.bl_idname,
+        type="C",
+        value="PRESS",
+        ctrl=True,
+        shift=True,
+    )
+    addon_keymaps.append((km, kmi))
+
     km = kc.keymaps.new(name="Image Generic", space_type="IMAGE_EDITOR")
     kmi = km.keymap_items.new(
         IMAGEPASTE_OT_imageeditor_paste.bl_idname,
@@ -179,19 +200,9 @@ def register():
     )
     addon_keymaps.append((km, kmi))
 
-    km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+    km = kc.keymaps.new(name="Sequencer", space_type="SEQUENCE_EDITOR")
     kmi = km.keymap_items.new(
-        IMAGEPASTE_OT_view3d_paste_reference.bl_idname,
-        type="V",
-        value="PRESS",
-        ctrl=True,
-        shift=True,
-    )
-    addon_keymaps.append((km, kmi))
-
-    km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
-    kmi = km.keymap_items.new(
-        IMAGEPASTE_OT_view3d_paste_plane.bl_idname,
+        IMAGEPASTE_OT_sequenceeditor_paste.bl_idname,
         type="V",
         value="PRESS",
         ctrl=True,
@@ -210,10 +221,21 @@ def register():
     )
     addon_keymaps.append((km, kmi))
 
-    km = kc.keymaps.new(name="Image Generic", space_type="IMAGE_EDITOR")
+    km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
     kmi = km.keymap_items.new(
-        IMAGEPASTE_OT_imageeditor_copy.bl_idname,
-        type="C",
+        IMAGEPASTE_OT_view3d_paste_plane.bl_idname,
+        type="V",
+        value="PRESS",
+        ctrl=True,
+        shift=True,
+        alt=True,
+    )
+    addon_keymaps.append((km, kmi))
+
+    km = kc.keymaps.new(name="3D View", space_type="VIEW_3D")
+    kmi = km.keymap_items.new(
+        IMAGEPASTE_OT_view3d_paste_reference.bl_idname,
+        type="V",
         value="PRESS",
         ctrl=True,
         shift=True,
@@ -229,6 +251,7 @@ def unregister():
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_reference_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_plane_imageaddmenu_draw)
     bpy.types.NODE_MT_context_menu.remove(shadereditor_paste_contextmenu_draw)
+    bpy.types.SEQUENCER_MT_context_menu.remove(sequenceeditor_paste_contextmenu_draw)
     bpy.types.IMAGE_MT_image.remove(imageeditor_paste_imagemenu_draw)
     bpy.types.IMAGE_MT_image.remove(imageeditor_copy_imagemenu_draw)
 
