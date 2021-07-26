@@ -40,4 +40,4 @@ assignees: thanhph111, Yeetus3141
 
 
 ## Additional context
-<!-- Any thing you haven't tell us above. -->
+<!-- Any information that might be useful to resolve the bug. -->

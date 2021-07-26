@@ -13,6 +13,6 @@
 
 
 ## Further comments
-<!-- Is there anything else you didn't tell us (the story about how the idea came to you, why you chose this method or anything you still cannot overcome…)? -->
+<!-- Is there anything else you didn't tell us (the story about how the idea came to you, why you chose this method, or anything you still cannot overcome…)? -->
 
 <!-- 💗 Thank you! -->

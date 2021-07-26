@@ -2,7 +2,7 @@
 
 blank_issues_enabled: true
 contact_links:
-  - name: 📥 Download latest version
+  - name: 📥 Download the latest version
     url: https://github.com/Yeetus3141/ImagePaste/releases/latest
     about: Make sure you're running the latest version, your bugs may already be fixed.
   - name: 📢 Open a new discussion

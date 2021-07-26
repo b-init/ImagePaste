@@ -16,7 +16,7 @@ assignees: thanhph111, Yeetus3141
 
 
 ## Screenshot/Screencast
-<!-- We know the feature's not presented but if you have any images to help us imagine, please paste it here. -->
+<!-- We know the feature's not presented yet but if you have any images to help us imagine, please paste them here. -->
 
 
 ## Additional context
