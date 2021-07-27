@@ -15,6 +15,7 @@
 set version=%1
 set components=__init__.py imagepaste LICENSE
 set addon_name=ImagePaste
+set temp=temp
 if "%version%"=="" (
     set zip_file=%addon_name%.zip
 ) else (
@@ -23,19 +24,15 @@ if "%version%"=="" (
 
 @REM Move to the root and make directories
 cd %~dp0..
-if exist temp rm temp
-mkdir temp
-cd temp
+if exist %temp% rm -rd %temp%
+mkdir %temp%\%addon_name%
 
 @REM Copy the files
-mkdir %addon_name%
-for %%G in (%components%) do cp -r ..\%%G %addon_name%\
+for %%G in (%components%) do cp -r %%G %temp%\%addon_name%\
 
 @REM Create the ZIP file
-tar -cf %zip_file% %addon_name% && rm -rd %addon_name%
+tar -C %temp% -acf %zip_file% %addon_name%
 
 @REM Remove the temporary directory and return the ZIP file name
-mv %zip_file% ..
-cd ..
-rmdir temp
-echo %zip_file%
+rm -rd %temp%
+if exist %zip_file% echo %zip_file%
