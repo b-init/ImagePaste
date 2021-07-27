@@ -2,6 +2,14 @@
 
 # Changelog
 
+## [1.6.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.5.1...v1.6.0) (2021-07-27)
+
+- Now you can paste your image to the _Video Sequence Editor_ as an image strip with a button in the context menu, thanks to [@tin2tin](https://github.com/tin2tin) (read more at [#16](https://github.com/Yeetus3141/ImagePaste/pull/16)).
+- The add-on now stores the pasted images in a temporary folder by default, they will be deleted after _Blender_ is closed, but from the time you save your session, they will be saved under the `ImagePaste` folder in the same directory as the `.blend` file ([#14](https://github.com/Yeetus3141/ImagePaste/pull/14) by [@thanhph111](https://github.com/thanhph111)).
+- Redesigned preferences UI with an option to change the name of the default folder and another option to force the add-on to use a different folder for your temporary images ([#14](https://github.com/Yeetus3141/ImagePaste/pull/14) by [@thanhph111](https://github.com/thanhph111)).
+- All operators now only run if they are in their context so you never have to worry about annoying errors (even they're now more friendly) ([#14](https://github.com/Yeetus3141/ImagePaste/pull/14) by [@thanhph111](https://github.com/thanhph111)).
+- We also want to thank [@williamchange](https://github.com/williamchange) for helping us to implement new code architecture on _macOS_.
+
 ## [1.5.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.5.0...v1.5.1) (2021-06-30)
 
 - Fix the crash that occurred when undoing after inserting an image ([#13](https://github.com/Yeetus3141/ImagePaste/issues/13) by [@thanhph111](https://github.com/thanhph111)).
@@ -30,7 +38,6 @@
 
 - Images can be pasted directly into the **Node Editor** as **Image Texture Nodes**, using <kbd><kbd>Context Menu</kbd>|<kbd>Paste Images from Clipboard</kbd></kbd> or <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>.
 - Images can now be copied to the clipboard in the **Image Editor**: <kbd><kbd>Image</kbd>|<kbd>Copy To Clipboard</kbd></kbd> or <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></kbd>. These images are also saved along with other images in the set directory.
-
 
 ## 1.2.0 (2021-02-06)
 
