@@ -1,3 +1,4 @@
+from __future__ import annotations
 import sys
 
 if sys.platform == "win32":
@@ -201,6 +202,72 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
         )
 
 
+class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
+    """Move images to a target directory"""
+
+    bl_idname = "imagepaste.move_to_saved_directory"
+    bl_label = "Move to Target Directory"
+    bl_options = {"UNDO_GROUPED"}
+
+    is_move_only_pasted_images = bpy.props.BoolProperty(
+        name="Move only pasted images",
+        description="Move only pasted images to the target directory",
+        default=True,
+    )
+
+    def execute(self, _context):
+        from .helper import get_save_directory
+
+        saved_directory = get_save_directory()
+        orphaned_images = self.get_orphaned_images(saved_directory)
+        for orphaned_image in orphaned_images:
+            self.change_image_directory(orphaned_image, saved_directory)
+        return {"FINISHED"}
+
+    def get_orphaned_images(self, saved_directory: str) -> list[bpy.types.Image]:
+        """Get images that are not in the target directory
+
+        Args:
+            saved_directory (str): The target directory
+
+        Returns:
+            list[bpy.types.Image]: A list of orphaned images
+        """
+        import os
+        from .image import Image
+
+        pasted_image_paths = [image.filepath for image in Image.pasted_image]
+        existing_images = bpy.data.images
+        if not self.is_move_only_pasted_images:
+            return existing_images
+        return [
+            image
+            for image in existing_images
+            if os.path.abspath(bpy.path.abspath(image.filepath)) in pasted_image_paths
+            and os.path.dirname(image.filepath) != saved_directory
+        ]
+
+    def change_image_directory(
+        self, orphaned_image: bpy.types.Image, saved_directory: str
+    ) -> None:
+        """Change the directory of an orphaned image
+
+        Args:
+            orphaned_image (bpy.types.Image): An orphaned image
+            saved_directory (str): The target directory
+        """
+        from os.path import join
+        from shutil import copyfile
+
+        new_filepath = join(saved_directory, bpy.path.basename(orphaned_image.filepath))
+        copyfile(bpy.path.abspath(orphaned_image.filepath), new_filepath)
+        orphaned_image.filepath = new_filepath
+
+    @classmethod
+    def poll(_cls, _context):
+        return bool(bpy.data.filepath)
+
+
 classes = (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
@@ -208,6 +275,7 @@ classes = (
     IMAGEPASTE_OT_shadereditor_paste,
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
+    IMAGEPASTE_OT_move_to_saved_directory,
 )
 
 
