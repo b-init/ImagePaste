@@ -219,7 +219,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
     def execute(self, _context):
         from .image import Image
 
-        filepath_to_image = Image.filepath_to_image
+        pasted_images = Image.pasted_images
         orphaned_image_filepaths = []
         # Change the paths the images refers to with the new one
         for orphaned_image in self.orphaned_images:
@@ -227,13 +227,13 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
             self.change_image_directory(orphaned_image, self.saved_directory)
             new_filepath = self.get_abspath(orphaned_image.filepath)
             # Also change in the dictionary
-            if old_filepath in filepath_to_image:
-                filepath_to_image[new_filepath] = filepath_to_image.pop(old_filepath)
+            if old_filepath in pasted_images:
+                pasted_images[new_filepath] = pasted_images.pop(old_filepath)
             orphaned_image_filepaths.append(old_filepath)
         # Remove pasted images which are not in `.blend` file (pasted but then undone)
-        for filepath in list(filepath_to_image.keys()):
+        for filepath in list(pasted_images.keys()):
             if filepath in orphaned_image_filepaths:
-                del filepath_to_image[filepath]
+                del pasted_images[filepath]
         return {"FINISHED"}
 
     def invoke(self, context, _event):
@@ -274,7 +274,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         preferences = get_addon_preferences()
         if preferences.image_type_to_move == "no_moving":
             return []
-        filepath_to_image = Image.filepath_to_image
+        pasted_images = Image.pasted_images
         existing_images = bpy.data.images
         orphaned_images = []
         for image in existing_images:
@@ -287,7 +287,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
             if preferences.image_type_to_move == "all_images":
                 orphaned_images.append(image)
                 continue
-            if filepath in filepath_to_image:
+            if filepath in pasted_images:
                 orphaned_images.append(image)
         return orphaned_images
 

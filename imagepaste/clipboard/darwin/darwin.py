@@ -40,7 +40,7 @@ class DarwinClipboard(Clipboard):
         urls = pb.get_file_urls()
         if urls is not None:
             filepaths = list(urls)
-            images = [Image(filepath) for filepath in filepaths]
+            images = [Image(filepath, is_pasted=True) for filepath in filepaths]
             return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
 
         # Save an image if it is in the clipboard
@@ -48,7 +48,6 @@ class DarwinClipboard(Clipboard):
         if contents is not None:
             filename = cls.get_timestamp_filename()
             filepath = join(save_directory, filename)
-            image = Image(filepath, filename)
             commands = [
                 "set pastedImage to "
                 f'(open for access POSIX file "{filepath}" with write permission)',
@@ -59,7 +58,9 @@ class DarwinClipboard(Clipboard):
             ]
             process = Process.execute(cls.get_osascript_args(commands))
             if not isfile(filepath):
+                image = Image(filepath, filename)
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
+            image = Image(filepath, filename, is_pasted=True)
             if process.stderr:
                 report = Report(6, f"Saved 1 image: {image} (WARN: {process.stderr})")
                 return cls(report, [image])
