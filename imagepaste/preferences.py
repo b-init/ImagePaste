@@ -1,7 +1,4 @@
 import bpy
-from bpy.props import BoolProperty
-from bpy.props import StringProperty
-from bpy.types import AddonPreferences
 
 from .helper import ADDON_NAME
 from .operators import (
@@ -14,11 +11,12 @@ from .operators import (
 )
 
 
-class IMAGEPASTE_AddonPreferences(AddonPreferences):
+class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     """Add-on preferences for ImagePaste"""
 
     bl_idname = ADDON_NAME
-    is_use_another_directory: BoolProperty(
+
+    is_use_another_directory: bpy.props.BoolProperty(
         name="Use a directory",
         description=(
             "Save images to another directory instead of temporary directory"
@@ -26,27 +24,37 @@ class IMAGEPASTE_AddonPreferences(AddonPreferences):
         ),
         default=False,
     )
-    another_directory: StringProperty(
+    another_directory: bpy.props.StringProperty(
         name="Saving directory",
         description="A path to directory where images saved to",
         subtype="DIR_PATH",
     )
-    is_force_use_another_directory: BoolProperty(
+    is_force_use_another_directory: bpy.props.BoolProperty(
         name="Force use another directory",
         description="Save images to above directory even when the file is saved or not",
         default=False,
     )
-    is_use_subdirectory: BoolProperty(
+    is_use_subdirectory: bpy.props.BoolProperty(
         name="Use subdirectory",
         description="Save images to a subdirectory where the file is saved",
         default=True,
     )
-    subdirectory_name: StringProperty(
+    subdirectory_name: bpy.props.StringProperty(
         name="Sub directory name",
         description="A name for subdirectory",
         default="ImagePaste",
     )
-    is_disable_debug: BoolProperty(
+    image_type_to_move: bpy.props.EnumProperty(
+        name="Image type to move",
+        description="Which type of image will be moved",
+        items=[
+            ("pasted_images", "Pasted images", "Only pasted images will be moved"),
+            ("all_images", "All images", "All images will be moved"),
+            ("no_moving", "No moving", "Don't move anything when saving"),
+        ],
+        default="pasted_images",
+    )
+    is_disable_debug: bpy.props.BoolProperty(
         name="Disable debug message",
         description="Debug message will not printed in console",
         default=False,
@@ -108,6 +116,23 @@ class IMAGEPASTE_AddonPreferences(AddonPreferences):
 
         # New box
         box = layout.box().column()
+        box.label(
+            text=("Choose the type of images that will be moved when saving the file")
+        )
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Image type to move")
+        # Second column
+        column_2 = split.row()
+        column_2.prop(self, "image_type_to_move", expand=True)
+
+        # New box
+        box = layout.box().column()
         box.label(text="Miscellaneous")
 
         # New property
@@ -118,7 +143,7 @@ class IMAGEPASTE_AddonPreferences(AddonPreferences):
         column_1.alignment = "RIGHT"
         column_1.label(text="Disable debug message")
         # Second column
-        column_2 = split.column()
+        column_2 = split.row()
         column_2.prop(self, "is_disable_debug", text="")
 
 
@@ -165,6 +190,11 @@ def view3d_paste_reference_imageaddmenu_draw(self, _context):
     )
 
 
+@bpy.app.handlers.persistent
+def move_to_saved_directory_handler(self, _context):
+    bpy.ops.imagepaste.move_to_saved_directory("INVOKE_DEFAULT")
+
+
 addon_keymaps = []
 
 
@@ -177,6 +207,7 @@ def register():
     bpy.types.NODE_MT_context_menu.append(shadereditor_paste_contextmenu_draw)
     bpy.types.VIEW3D_MT_image_add.append(view3d_paste_plane_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.append(view3d_paste_reference_imageaddmenu_draw)
+    bpy.app.handlers.save_post.append(move_to_saved_directory_handler)
 
     kc = bpy.context.window_manager.keyconfigs.addon
 
@@ -248,6 +279,7 @@ def unregister():
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
+    bpy.app.handlers.save_post.remove(move_to_saved_directory_handler)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_reference_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_plane_imageaddmenu_draw)
     bpy.types.NODE_MT_context_menu.remove(shadereditor_paste_contextmenu_draw)

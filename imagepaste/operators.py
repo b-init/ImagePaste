@@ -209,23 +209,57 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
     bl_label = "Move to Target Directory"
     bl_options = {"UNDO_GROUPED"}
 
-    is_move_only_pasted_images = bpy.props.BoolProperty(
-        name="Move only pasted images",
-        description="Move only pasted images to the target directory",
-        default=True,
-    )
-
-    def execute(self, _context):
+    def __init__(self) -> None:
         from .helper import get_save_directory
 
-        saved_directory = get_save_directory()
-        orphaned_images = self.get_orphaned_images(saved_directory)
-        for orphaned_image in orphaned_images:
-            self.change_image_directory(orphaned_image, saved_directory)
+        super().__init__()
+        self.saved_directory = get_save_directory()
+        self.orphaned_images = self.get_orphaned_images(self.saved_directory)
+
+    def execute(self, _context):
+        from .image import Image
+
+        filepath_to_image = Image.filepath_to_image
+        orphaned_image_filepaths = []
+        # Change the paths the images refers to with the new one
+        for orphaned_image in self.orphaned_images:
+            old_filepath = self.get_abspath(orphaned_image.filepath)
+            self.change_image_directory(orphaned_image, self.saved_directory)
+            new_filepath = self.get_abspath(orphaned_image.filepath)
+            # Also change in the dictionary
+            if old_filepath in filepath_to_image:
+                filepath_to_image[new_filepath] = filepath_to_image.pop(old_filepath)
+            orphaned_image_filepaths.append(old_filepath)
+        # Remove pasted images which are not in `.blend` file (pasted but then undone)
+        for filepath in list(filepath_to_image.keys()):
+            if filepath in orphaned_image_filepaths:
+                del filepath_to_image[filepath]
         return {"FINISHED"}
 
-    def get_orphaned_images(self, saved_directory: str) -> list[bpy.types.Image]:
-        """Get images that are not in the target directory
+    def invoke(self, context, _event):
+        if self.orphaned_images:
+            self.execute(context)
+        return {"CANCELLED"}
+
+    @classmethod
+    def poll(_cls, _context):
+        return bool(bpy.data.filepath)
+
+    def get_abspath(self, path: str) -> str:
+        """Get the absolute path of a file or directory.
+
+        Args:
+            path (str): The path to get the absolute path of
+
+        Returns:
+            str: The absolute path of the file or directory
+        """
+        import os
+
+        return os.path.abspath(bpy.path.abspath(path))
+
+    def get_orphaned_images(self, saved_directory) -> list[bpy.types.Image]:
+        """Get images that are not in the target directory.
 
         Args:
             saved_directory (str): The target directory
@@ -233,24 +267,34 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         Returns:
             list[bpy.types.Image]: A list of orphaned images
         """
-        import os
+        from os.path import dirname
         from .image import Image
+        from .helper import get_addon_preferences
 
-        pasted_image_paths = [image.filepath for image in Image.pasted_image]
+        preferences = get_addon_preferences()
+        if preferences.image_type_to_move == "no_moving":
+            return []
+        filepath_to_image = Image.filepath_to_image
         existing_images = bpy.data.images
-        if not self.is_move_only_pasted_images:
-            return existing_images
-        return [
-            image
-            for image in existing_images
-            if os.path.abspath(bpy.path.abspath(image.filepath)) in pasted_image_paths
-            and os.path.dirname(image.filepath) != saved_directory
-        ]
+        orphaned_images = []
+        for image in existing_images:
+            # Example: 'Render Result'
+            if not image.filepath:
+                continue
+            filepath = self.get_abspath(image.filepath)
+            if dirname(filepath) == saved_directory:
+                continue
+            if preferences.image_type_to_move == "all_images":
+                orphaned_images.append(image)
+                continue
+            if filepath in filepath_to_image:
+                orphaned_images.append(image)
+        return orphaned_images
 
     def change_image_directory(
         self, orphaned_image: bpy.types.Image, saved_directory: str
     ) -> None:
-        """Change the directory of an orphaned image
+        """Change the directory of an orphaned image.
 
         Args:
             orphaned_image (bpy.types.Image): An orphaned image
@@ -262,10 +306,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         new_filepath = join(saved_directory, bpy.path.basename(orphaned_image.filepath))
         copyfile(bpy.path.abspath(orphaned_image.filepath), new_filepath)
         orphaned_image.filepath = new_filepath
-
-    @classmethod
-    def poll(_cls, _context):
-        return bool(bpy.data.filepath)
+        orphaned_image.reload()
 
 
 classes = (
