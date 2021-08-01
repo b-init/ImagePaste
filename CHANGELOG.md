@@ -2,6 +2,10 @@
 
 # Changelog
 
+## [1.6.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.6.0...v1.6.1) (2021-08-01)
+
+- Fix the logic of getting the save directory.
+
 ## [1.6.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.5.1...v1.6.0) (2021-07-27)
 
 - Now you can paste your image to the _Video Sequence Editor_ as an image strip with a button in the context menu, thanks to [@tin2tin](https://github.com/tin2tin) (read more at [#16](https://github.com/Yeetus3141/ImagePaste/pull/16)).
