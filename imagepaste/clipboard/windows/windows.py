@@ -41,10 +41,10 @@ class WindowsClipboard(Clipboard):
         )
         process = Process.execute(cls.get_powershell_args(image_script), split=False)
         if process.stderr:
-            image = Image(filepath, filename)
+            image = Image(filepath)
             return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
         if process.stdout == "0":
-            image = Image(filepath, filename, is_pasted=True)
+            image = Image(filepath, is_pasted=True)
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
 
         file_script = (
