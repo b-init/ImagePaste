@@ -58,7 +58,7 @@ class LinuxClipboard(Clipboard):
             if process.stderr:
                 image = Image(filepath)
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
-            image = Image(filepath, is_pasted=True)
+            image = Image(filepath, pasted=True)
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
 
         # If copying from files, just send their paths
@@ -66,7 +66,7 @@ class LinuxClipboard(Clipboard):
             uris = Process.execute(cls.get_xclip_args(XclipTarget.URI.value)).stdout
             filepaths = [url2pathname((urlparse(uri).path)) for uri in uris]
             # TODO: Check if files are images
-            images = [Image(filepath, is_pasted=True) for filepath in filepaths]
+            images = [Image(filepath, pasted=True) for filepath in filepaths]
             return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
         return cls(Report(2))
 

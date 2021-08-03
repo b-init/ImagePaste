@@ -44,7 +44,7 @@ class WindowsClipboard(Clipboard):
             image = Image(filepath)
             return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
         if process.stdout == "0":
-            image = Image(filepath, is_pasted=True)
+            image = Image(filepath, pasted=True)
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
 
         file_script = (

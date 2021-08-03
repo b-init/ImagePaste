@@ -3,16 +3,16 @@ class Image:
 
     pasted_images = {}
 
-    def __init__(self, filepath: str, is_pasted: bool = False) -> None:
+    def __init__(self, filepath: str, pasted: bool = False) -> None:
         """Constructor for the Image class.
 
         Args:
             filepath (str): The path to the image file.
             filename (str, optional): The name of the image file.
-            is_pasted (bool, optional): Whether the image is pasted.
+            pasted (bool, optional): Whether the image is pasted.
         """
         self.filepath = filepath
-        if is_pasted:
+        if pasted:
             Image.pasted_images[self.filepath] = self
 
     @property
