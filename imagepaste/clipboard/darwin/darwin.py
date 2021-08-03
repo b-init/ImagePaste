@@ -58,9 +58,9 @@ class DarwinClipboard(Clipboard):
             ]
             process = Process.execute(cls.get_osascript_args(commands))
             if not isfile(filepath):
-                image = Image(filepath, filename)
+                image = Image(filepath)
                 return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
-            image = Image(filepath, filename, is_pasted=True)
+            image = Image(filepath, is_pasted=True)
             if process.stderr:
                 report = Report(6, f"Saved 1 image: {image} (WARN: {process.stderr})")
                 return cls(report, [image])
