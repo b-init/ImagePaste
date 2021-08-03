@@ -1,3 +1,6 @@
+import bpy
+
+
 class Report:
     """A class to hold information about a report."""
 
@@ -8,6 +11,7 @@ class Report:
         4: ["ERROR", "Unable to copy image"],
         5: ["INFO", "Copied image"],
         6: ["INFO", "Pasted image"],
+        7: ["INFO", "Moved images"],
     }
 
     def __init__(self, code: int, verbose: str = None) -> None:
@@ -23,18 +27,33 @@ class Report:
         self.message = Report.REPORT_TABLE[self.code][1]
         self.verbose = verbose or self.message
 
-    def log(self) -> None:
-        """Log the report to the console."""
+    def log(self, operator: bpy.types.Operator) -> None:
+        """Log the report to the Blender UI and console.
+
+        Args:
+            operator (bpy.types.Operator): The operator calling the report. If the
+                method is called from a Blender operator method, it is usually `self`.
+        """
+        operator.report({self.type}, self.message)
+        Report.console_log(self.verbose)
+
+    @staticmethod
+    def console_log(message: str) -> None:
+        """Log the message to the console.
+
+        Args:
+            message (str): The message to be printed to the console.
+        """
         from .helper import get_addon_preferences
 
         preferences = get_addon_preferences()
         if not preferences.is_disable_debug:
-            print(f"ImagePaste: {self.verbose}")
+            print(f"ImagePaste: {message}")
 
     def __repr__(self) -> str:
-        """Return the string representation of the report
+        """Return the string representation of the report.
 
         Returns:
-            str: The string representation of the report
+            str: The string representation of the report.
         """
         return f"({self.code}:{self.type})<{self.message}>"

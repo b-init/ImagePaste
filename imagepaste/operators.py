@@ -34,8 +34,7 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
             bpy.ops.image.save_as(save_as_render=True, copy=True, filepath=image_path)
         # Report and log the result
         clipboard = Clipboard.pull(image_path)
-        clipboard.report.log()
-        self.report({clipboard.report.type}, clipboard.report.message)
+        clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         return {"FINISHED"}
@@ -60,8 +59,7 @@ class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
         from .helper import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
-        clipboard.report.log()
-        self.report({clipboard.report.type}, clipboard.report.message)
+        clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         for image in clipboard.images:
@@ -86,8 +84,7 @@ class IMAGEPASTE_OT_sequenceeditor_paste(bpy.types.Operator):
         from .helper import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
-        clipboard.report.log()
-        self.report({clipboard.report.type}, clipboard.report.message)
+        clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         sequences = context.scene.sequence_editor.sequences
@@ -118,8 +115,7 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
         from .helper import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
-        clipboard.report.log()
-        self.report({clipboard.report.type}, clipboard.report.message)
+        clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         tree = context.space_data.edit_tree
@@ -157,8 +153,7 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
         enable("io_import_images_as_planes")
 
         clipboard = Clipboard.push(get_save_directory())
-        clipboard.report.log()
-        self.report({clipboard.report.type}, clipboard.report.message)
+        clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         for image in clipboard.images:
@@ -185,8 +180,7 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
         from .helper import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
-        clipboard.report.log()
-        self.report({clipboard.report.type}, clipboard.report.message)
+        clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         for image in clipboard.images:
@@ -218,6 +212,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
 
     def execute(self, _context):
         from .image import Image
+        from .report import Report
 
         pasted_images = Image.pasted_images
         orphaned_image_filepaths = []
@@ -229,11 +224,14 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
             # Also change in the dictionary
             if old_filepath in pasted_images:
                 pasted_images[new_filepath] = pasted_images.pop(old_filepath)
+                pasted_images[new_filepath].filepath = new_filepath
             orphaned_image_filepaths.append(old_filepath)
         # Remove pasted images which are not in `.blend` file (pasted but then undone)
         for filepath in list(pasted_images.keys()):
             if filepath in orphaned_image_filepaths:
                 del pasted_images[filepath]
+        Report(7, f"Pasted images after: {list(pasted_images.keys())}").log(self)
+        Report.console_log(f"Blend images after: {self.get_abspaths(bpy.data.images)}")
         return {"FINISHED"}
 
     def invoke(self, context, _event):
@@ -249,33 +247,47 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         """Get the absolute path of a file or directory.
 
         Args:
-            path (str): The path to get the absolute path of
+            path (str): The path to get the absolute path of.
 
         Returns:
-            str: The absolute path of the file or directory
+            str: The absolute path of the file or directory.
         """
         import os
 
         return os.path.abspath(bpy.path.abspath(path))
 
-    def get_orphaned_images(self, saved_directory) -> list[bpy.types.Image]:
+    def get_abspaths(self, images: list[bpy.types.Image]) -> list[str]:
+        """Get the absolute paths of a list of images.
+
+        Args:
+            images (list[bpy.types.Image]): A list of images to get the absolute paths.
+
+        Returns:
+            list[str]: The absolute paths of the images.
+        """
+        return [self.get_abspath(image.filepath) for image in images]
+
+    def get_orphaned_images(self, saved_directory: str) -> list[bpy.types.Image]:
         """Get images that are not in the target directory.
 
         Args:
-            saved_directory (str): The target directory
+            saved_directory (str): The target directory.
 
         Returns:
-            list[bpy.types.Image]: A list of orphaned images
+            list[bpy.types.Image]: A list of orphaned images.
         """
         from os.path import dirname
         from .image import Image
         from .helper import get_addon_preferences
+        from .report import Report
 
         preferences = get_addon_preferences()
         if preferences.image_type_to_move == "no_moving":
             return []
         pasted_images = Image.pasted_images
+        Report.console_log(f"Pasted images before: {list(pasted_images.keys())}")
         existing_images = bpy.data.images
+        Report.console_log(f"Blend images before: {self.get_abspaths(existing_images)}")
         orphaned_images = []
         for image in existing_images:
             # Example: 'Render Result'
@@ -289,6 +301,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
                 continue
             if filepath in pasted_images:
                 orphaned_images.append(image)
+        Report.console_log(f"Orphaned images: {self.get_abspaths(orphaned_images)}")
         return orphaned_images
 
     def change_image_directory(
@@ -297,8 +310,8 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         """Change the directory of an orphaned image.
 
         Args:
-            orphaned_image (bpy.types.Image): An orphaned image
-            saved_directory (str): The target directory
+            orphaned_image (bpy.types.Image): An orphaned image.
+            saved_directory (str): The target directory.
         """
         from os.path import join
         from shutil import copyfile
