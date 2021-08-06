@@ -44,6 +44,15 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         description="A name for subdirectory",
         default="ImagePaste",
     )
+    image_filename_pattern: bpy.props.StringProperty(
+        name="Image file name",
+        description=(
+            "A name for pasted images\n"
+            "%y: Year, %m: Month, %d: Day\n"
+            "%H: Hour, %M: Minute, %S: Second"
+        ),
+        default="ImagePaste-%y%m%d-%H%M%S",
+    )
     image_type_to_move: bpy.props.EnumProperty(
         name="Image type to move",
         description="Which type of image will be moved",
@@ -61,6 +70,8 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     )
 
     def draw(self, _context):
+        from .helper import is_valid_filename
+
         split_ratio = 0.3
         layout = self.layout
 
@@ -114,6 +125,22 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         column_2_sub = column_2.column()
         column_2_sub.active = self.is_use_subdirectory
         column_2_sub.prop(self, "subdirectory_name", text="")
+
+        # New box
+        box = layout.box().column()
+        box.label(text="Custom image file name")
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Image file name")
+        # Second column
+        column_2 = split.column().row(align=True)
+        column_2.prop(self, "image_filename_pattern", text="")
+        column_2.alert = is_valid_filename(self.image_filename_pattern)
 
         # New box
         box = layout.box().column()

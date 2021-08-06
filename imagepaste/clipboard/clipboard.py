@@ -62,8 +62,26 @@ class Clipboard(ABC):
         Returns:
             str: a string representing the current time in the file name format.
         """
-        from time import strftime
 
+        def populate_filename(pattern: str) -> str:
+            """Populate a filename with a pattern.
+
+            Args:
+                pattern (str): a string representing a pattern.
+
+            Returns:
+                str: a string representing a filename.
+            """
+            return pattern
+
+        from time import strftime
+        from ..helper import get_addon_preferences
+        from ..helper import is_valid_filename
+
+        preferences = get_addon_preferences()
+        filename = populate_filename(preferences.image_filename_pattern) + ".png"
+        if is_valid_filename(filename):
+            return filename
         return f"ImagePaste-{strftime('%y%m%d-%H%M%S')}.png"
 
     def __repr__(self) -> str:
