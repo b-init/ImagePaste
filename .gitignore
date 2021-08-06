@@ -45,7 +45,7 @@ Temporary Items
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[co]
+*.py[cod]
 *$py.class
 
 # C extensions
@@ -227,4 +227,6 @@ $RECYCLE.BIN/
 ### User preferences ###
 # Blender files
 *.blend
-*.blend1
+*.blend[0-9]
+*.blend[12][0-9]
+*.blend3[0-2]
