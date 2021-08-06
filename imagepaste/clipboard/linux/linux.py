@@ -50,7 +50,7 @@ class LinuxClipboard(Clipboard):
 
         # If there is an image in clipboard, save the image and send its path
         if XclipTarget.IMAGE.value in process.stdout:
-            filename = cls.get_timestamp_filename()
+            filename = cls.get_filename()
             filepath = join(save_directory, filename)
             process = Process.execute(
                 cls.get_xclip_args(XclipTarget.IMAGE.value), outpath=filepath

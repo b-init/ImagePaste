@@ -56,7 +56,7 @@ class Clipboard(ABC):
         pass
 
     @staticmethod
-    def get_timestamp_filename() -> str:
+    def get_filename() -> str:
         """Get a string representation of the current time in the file name format.
 
         Returns:

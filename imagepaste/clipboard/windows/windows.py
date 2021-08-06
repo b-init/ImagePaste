@@ -32,7 +32,7 @@ class WindowsClipboard(Clipboard):
         """
         from os.path import join
 
-        filename = cls.get_timestamp_filename()
+        filename = cls.get_filename()
         filepath = join(save_directory, filename)
 
         image_script = (
