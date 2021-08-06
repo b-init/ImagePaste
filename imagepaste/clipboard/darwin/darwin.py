@@ -46,7 +46,7 @@ class DarwinClipboard(Clipboard):
         # Save an image if it is in the clipboard
         contents = pb.get_contents(type=pasteboard.TIFF)
         if contents is not None:
-            filename = cls.get_timestamp_filename()
+            filename = cls.get_filename()
             filepath = join(save_directory, filename)
             commands = [
                 "set pastedImage to "
