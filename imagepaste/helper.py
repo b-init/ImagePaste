@@ -57,6 +57,23 @@ def is_valid_filename(filename: str) -> bool:
         bool: True if the filename is valid, False otherwise.
     """
 
+    def is_general_valid_filename(filename: str) -> bool:
+        """Check if the filename is valid.
+
+        Args:
+            filename (str): a string representing the file name.
+
+        Returns:
+            bool: True if the filename is valid, False otherwise.
+        """
+        if not filename:
+            return False
+        if len(filename) > 255:
+            return False
+        if filename in (".", ".."):
+            return False
+        return True
+
     def is_windows_valid_filename(filename: str) -> bool:
         """Check if the filename is valid on Windows.
 
@@ -66,7 +83,46 @@ def is_valid_filename(filename: str) -> bool:
         Returns:
             bool: True if the filename is valid on Windows, False otherwise.
         """
-        pass
+        # Check if the filename does not end with a dot or a space
+        if filename[-1] in (".", " "):
+            return False
+        # Check if the filename is a reserved name
+        windows_reserved_filenames = (
+            "CON",
+            "PRN",
+            "AUX",
+            "NUL",
+            "COM1",
+            "COM2",
+            "COM3",
+            "COM4",
+            "COM5",
+            "COM6",
+            "COM7",
+            "COM8",
+            "COM9",
+            "LPT1",
+            "LPT2",
+            "LPT3",
+            "LPT4",
+            "LPT5",
+            "LPT6",
+            "LPT7",
+            "LPT8",
+            "LPT9",
+        )
+        if filename.upper() in windows_reserved_filenames:
+            return False
+        # Check if the filename contains any invalid characters
+        windows_invalid_characters = ("/", "\\", ":", "*", "?", '"', "<", ">", "|")
+        for character in windows_invalid_characters:
+            if character in filename:
+                return False
+        # Check if the filename contains any unprintable characters
+        for index in range(31):
+            if chr(index) in filename:
+                return False
+        return True
 
     def is_linux_valid_filename(filename: str) -> bool:
         """Check if the filename is valid on Linux.
@@ -77,7 +133,12 @@ def is_valid_filename(filename: str) -> bool:
         Returns:
             bool: True if the filename is valid on Linux, False otherwise.
         """
-        pass
+        # The "\" character is valid in Linux but Blender does not support it
+        invalid_characters = ["/", "\\"]
+        for invalid_character in invalid_characters:
+            if invalid_character in filename:
+                return False
+        return True
 
     def is_darwin_valid_filename(filename: str) -> bool:
         """Check if the filename is valid on macOS.
@@ -88,10 +149,12 @@ def is_valid_filename(filename: str) -> bool:
         Returns:
             bool: True if the filename is valid on macOS, False otherwise.
         """
-        pass
+        return is_linux_valid_filename(filename)
 
     import sys
 
+    if not is_general_valid_filename(filename):
+        return False
     if sys.platform == "win32":
         return is_windows_valid_filename(filename)
     elif sys.platform == "linux":
