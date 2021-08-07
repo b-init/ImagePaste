@@ -72,6 +72,29 @@ class Clipboard(ABC):
             Returns:
                 str: a string representing a filename.
             """
+            from time import strftime
+            from ..image import Image
+            from ..helper import ADDON_NAME
+
+            VARIABLES_TABLE = [
+                ("${addonName}", ADDON_NAME),
+                ("${yearLong}", strftime("%Y")),
+                ("${yearShort}", strftime("%y")),
+                ("${monthNumber}", strftime("%m")),
+                ("${monthNameLong}", strftime("%B")),
+                ("${monthNameShort}", strftime("%b")),
+                ("${day}", strftime("%d")),
+                ("${weekdayNumber}", strftime("%w")),
+                ("${weekdayNameLong}", strftime("%A")),
+                ("${weekdayNameShort}", strftime("%a")),
+                ("${hour24}", strftime("%H")),
+                ("${hour12}", strftime("%I")),
+                ("${minute}", strftime("%M")),
+                ("${second}", strftime("%S")),
+                ("${index}", str(len(Image.pasted_images) + 1)),
+            ]
+            for pattern_key, pattern_value in VARIABLES_TABLE:
+                pattern = pattern.replace(pattern_key, pattern_value)
             return pattern
 
         from time import strftime
@@ -82,7 +105,7 @@ class Clipboard(ABC):
         filename = populate_filename(preferences.image_filename_pattern) + ".png"
         if is_valid_filename(filename):
             return filename
-        return f"ImagePaste-{strftime('%y%m%d-%H%M%S')}.png"
+        return strftime("ImagePaste-%y%m%d-%H%M%S.png")
 
     def __repr__(self) -> str:
         """Representation of the object.
