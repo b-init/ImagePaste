@@ -112,6 +112,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         column_2 = split.column().row(align=True)
         column_2.prop(self, "is_use_subdirectory", text="")
         column_2_sub = column_2.column()
+        column_2_sub.active = self.is_use_subdirectory
         column_2_sub.prop(self, "subdirectory_name", text="")
 
         # New box
