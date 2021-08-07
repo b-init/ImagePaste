@@ -48,10 +48,15 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         name="Image file name",
         description=(
             "A name for pasted images\n"
-            "%y: Year, %m: Month, %d: Day\n"
-            "%H: Hour, %M: Minute, %S: Second"
+            "Go to the Documentation to read more about the variables\n"
+            "Warning: Images can be overwritten if they have the same name"
         ),
-        default="ImagePaste-%y%m%d-%H%M%S",
+        default=(
+            "${addonName}"
+            "-${yearShort}${monthNumber}${day}"
+            "-${hour24}${minute}${second}"
+        ),
+        subtype="FILE_NAME",
     )
     image_type_to_move: bpy.props.EnumProperty(
         name="Image type to move",
@@ -138,8 +143,8 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         column_1.label(text="Image file name")
         # Second column
         column_2 = split.column().row(align=True)
+        column_2.alert = not is_valid_filename(self.image_filename_pattern + ".png")
         column_2.prop(self, "image_filename_pattern", text="")
-        column_2.alert = is_valid_filename(self.image_filename_pattern)
 
         # New box
         box = layout.box().column()
