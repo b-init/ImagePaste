@@ -58,6 +58,11 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         ),
         subtype="FILE_NAME",
     )
+    image_extension: bpy.props.StringProperty(
+        name="Image extension",
+        description="A file extension for pasted images",
+        get=lambda _: ".png",
+    )
     image_type_to_move: bpy.props.EnumProperty(
         name="Image type to move",
         description="Which type of image will be moved",
@@ -143,8 +148,13 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         column_1.label(text="Image file name")
         # Second column
         column_2 = split.column().row(align=True)
-        column_2.alert = not is_valid_filename(self.image_filename_pattern + ".png")
+        column_2.alert = not is_valid_filename(
+            self.image_filename_pattern + self.image_extension
+        )
         column_2.prop(self, "image_filename_pattern", text="")
+        column_2_sub = column_2.column(align=True)
+        column_2_sub.alignment = "RIGHT"
+        column_2_sub.prop(self, "image_extension", text="")
 
         # New box
         box = layout.box().column()
