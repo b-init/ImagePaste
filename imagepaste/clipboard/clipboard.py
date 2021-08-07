@@ -102,10 +102,13 @@ class Clipboard(ABC):
         from ..helper import is_valid_filename
 
         preferences = get_addon_preferences()
-        filename = populate_filename(preferences.image_filename_pattern) + ".png"
+        filename = (
+            populate_filename(preferences.image_filename_pattern)
+            + preferences.image_extension
+        )
         if is_valid_filename(filename):
             return filename
-        return strftime("ImagePaste-%y%m%d-%H%M%S.png")
+        return strftime(f"ImagePaste-%y%m%d-%H%M%S{preferences.image_extension}")
 
     def __repr__(self) -> str:
         """Representation of the object.
