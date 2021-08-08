@@ -162,3 +162,48 @@ def is_valid_filename(filename: str) -> bool:
     elif sys.platform == "darwin":
         return is_darwin_valid_filename(filename)
     return False
+
+
+def populate_filename(filename_pattern: str) -> str:
+    """Populate a filename with a pattern.
+
+    Args:
+        pattern (str): a string representing a pattern.
+
+    Returns:
+        str: a string representing a filename.
+    """
+    import re
+    from time import strftime
+    from .image import Image
+    from .helper import ADDON_NAME
+
+    image_index = str(len(Image.pasted_images) + 1)
+    # Replace normal variables
+    VARIABLES_TABLE = [
+        ("${addonName}", ADDON_NAME),
+        ("${yearLong}", strftime("%Y")),
+        ("${yearShort}", strftime("%y")),
+        ("${monthNumber}", strftime("%m")),
+        ("${monthNameLong}", strftime("%B")),
+        ("${monthNameShort}", strftime("%b")),
+        ("${day}", strftime("%d")),
+        ("${weekdayNumber}", strftime("%w")),
+        ("${weekdayNameLong}", strftime("%A")),
+        ("${weekdayNameShort}", strftime("%a")),
+        ("${hour24}", strftime("%H")),
+        ("${hour12}", strftime("%I")),
+        ("${minute}", strftime("%M")),
+        ("${second}", strftime("%S")),
+        ("${index}", image_index),
+    ]
+    for pattern_key, pattern_value in VARIABLES_TABLE:
+        filename_pattern = filename_pattern.replace(pattern_key, pattern_value)
+    # Replace dynamic variables ${index:N}
+    # Produce an N-digits-with-zeros-padded number
+    filename_pattern = re.sub(
+        r"\${index\:(\d+)}",
+        lambda match: image_index.zfill(int(match.group(1))),
+        filename_pattern,
+    )
+    return filename_pattern

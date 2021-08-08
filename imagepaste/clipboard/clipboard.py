@@ -62,43 +62,9 @@ class Clipboard(ABC):
         Returns:
             str: a string representing the current time in the file name format.
         """
-
-        def populate_filename(pattern: str) -> str:
-            """Populate a filename with a pattern.
-
-            Args:
-                pattern (str): a string representing a pattern.
-
-            Returns:
-                str: a string representing a filename.
-            """
-            from time import strftime
-            from ..image import Image
-            from ..helper import ADDON_NAME
-
-            VARIABLES_TABLE = [
-                ("${addonName}", ADDON_NAME),
-                ("${yearLong}", strftime("%Y")),
-                ("${yearShort}", strftime("%y")),
-                ("${monthNumber}", strftime("%m")),
-                ("${monthNameLong}", strftime("%B")),
-                ("${monthNameShort}", strftime("%b")),
-                ("${day}", strftime("%d")),
-                ("${weekdayNumber}", strftime("%w")),
-                ("${weekdayNameLong}", strftime("%A")),
-                ("${weekdayNameShort}", strftime("%a")),
-                ("${hour24}", strftime("%H")),
-                ("${hour12}", strftime("%I")),
-                ("${minute}", strftime("%M")),
-                ("${second}", strftime("%S")),
-                ("${index}", str(len(Image.pasted_images) + 1)),
-            ]
-            for pattern_key, pattern_value in VARIABLES_TABLE:
-                pattern = pattern.replace(pattern_key, pattern_value)
-            return pattern
-
         from time import strftime
         from ..helper import get_addon_preferences
+        from ..helper import populate_filename
         from ..helper import is_valid_filename
 
         preferences = get_addon_preferences()
