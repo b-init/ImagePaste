@@ -81,6 +81,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
 
     def draw(self, _context):
         from .helper import is_valid_filename
+        from .helper import populate_filename
 
         split_ratio = 0.3
         layout = self.layout
@@ -149,9 +150,8 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         column_1.label(text="Image file name")
         # Second column
         column_2 = split.column().row(align=True)
-        column_2.alert = not is_valid_filename(
-            self.image_filename_pattern + self.image_extension
-        )
+        filename = populate_filename(self.image_filename_pattern) + self.image_extension
+        column_2.alert = not is_valid_filename(filename)
         column_2.prop(self, "image_filename_pattern", text="")
         column_2_sub = column_2.column(align=True)
         column_2_sub.alignment = "RIGHT"
