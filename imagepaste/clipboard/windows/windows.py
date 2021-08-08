@@ -37,7 +37,7 @@ class WindowsClipboard(Clipboard):
 
         image_script = (
             "$image = Get-Clipboard -Format Image\n"
-            f'if ($image) {{ $image.Save("{filepath}"); Write-Output 0 }}'
+            f"if ($image) {{ $image.Save('{filepath}'); Write-Output 0 }}"
         )
         process = Process.execute(cls.get_powershell_args(image_script), split=False)
         if process.stderr:
