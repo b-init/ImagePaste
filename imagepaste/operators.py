@@ -198,10 +198,10 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
         )
 
 
-class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
+class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
     """Move images to a target directory"""
 
-    bl_idname = "imagepaste.move_to_saved_directory"
+    bl_idname = "imagepaste.move_to_save_directory"
     bl_label = "Move to Target Directory"
     bl_options = {"UNDO_GROUPED"}
 
@@ -209,8 +209,8 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         from .helper import get_save_directory
 
         super().__init__()
-        self.saved_directory = get_save_directory()
-        self.orphaned_images = self.get_orphaned_images(self.saved_directory)
+        self.save_directory = get_save_directory()
+        self.orphaned_images = self.get_orphaned_images(self.save_directory)
 
     def execute(self, _context):
         from .image import Image
@@ -221,7 +221,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         # Change the paths the images refers to with the new one
         for orphaned_image in self.orphaned_images:
             old_filepath = self.get_abspath(orphaned_image.filepath)
-            self.change_image_directory(orphaned_image, self.saved_directory)
+            self.change_image_directory(orphaned_image, self.save_directory)
             new_filepath = self.get_abspath(orphaned_image.filepath)
             # Also change in the dictionary
             if old_filepath in pasted_images:
@@ -269,11 +269,11 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         """
         return [self.get_abspath(image.filepath) for image in images]
 
-    def get_orphaned_images(self, saved_directory: str) -> list[bpy.types.Image]:
+    def get_orphaned_images(self, save_directory: str) -> list[bpy.types.Image]:
         """Get images that are not in the target directory.
 
         Args:
-            saved_directory (str): The target directory.
+            save_directory (str): The target directory.
 
         Returns:
             list[bpy.types.Image]: A list of orphaned images.
@@ -296,7 +296,7 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
             if not image.filepath:
                 continue
             filepath = self.get_abspath(image.filepath)
-            if dirname(filepath) == saved_directory:
+            if dirname(filepath) == save_directory:
                 continue
             if preferences.image_type_to_move == "all_images":
                 orphaned_images.append(image)
@@ -307,18 +307,18 @@ class IMAGEPASTE_OT_move_to_saved_directory(bpy.types.Operator):
         return orphaned_images
 
     def change_image_directory(
-        self, orphaned_image: bpy.types.Image, saved_directory: str
+        self, orphaned_image: bpy.types.Image, save_directory: str
     ) -> None:
         """Change the directory of an orphaned image.
 
         Args:
             orphaned_image (bpy.types.Image): An orphaned image.
-            saved_directory (str): The target directory.
+            save_directory (str): The target directory.
         """
         from os.path import join
         from shutil import copyfile
 
-        new_filepath = join(saved_directory, bpy.path.basename(orphaned_image.filepath))
+        new_filepath = join(save_directory, bpy.path.basename(orphaned_image.filepath))
         copyfile(bpy.path.abspath(orphaned_image.filepath), new_filepath)
         orphaned_image.filepath = new_filepath
         orphaned_image.reload()
@@ -331,7 +331,7 @@ classes = (
     IMAGEPASTE_OT_shadereditor_paste,
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
-    IMAGEPASTE_OT_move_to_saved_directory,
+    IMAGEPASTE_OT_move_to_save_directory,
 )
 
 
