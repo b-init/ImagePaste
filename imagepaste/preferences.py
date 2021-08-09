@@ -233,8 +233,8 @@ def view3d_paste_reference_imageaddmenu_draw(self, _context):
 
 
 @bpy.app.handlers.persistent
-def move_to_saved_directory_handler(self, _context):
-    bpy.ops.imagepaste.move_to_saved_directory("INVOKE_DEFAULT")
+def move_to_save_directory_handler(self, _context):
+    bpy.ops.imagepaste.move_to_save_directory("INVOKE_DEFAULT")
 
 
 addon_keymaps = []
@@ -249,7 +249,7 @@ def register():
     bpy.types.NODE_MT_context_menu.append(shadereditor_paste_contextmenu_draw)
     bpy.types.VIEW3D_MT_image_add.append(view3d_paste_plane_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.append(view3d_paste_reference_imageaddmenu_draw)
-    bpy.app.handlers.save_post.append(move_to_saved_directory_handler)
+    bpy.app.handlers.save_post.append(move_to_save_directory_handler)
 
     kc = bpy.context.window_manager.keyconfigs.addon
 
@@ -321,7 +321,7 @@ def unregister():
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
-    bpy.app.handlers.save_post.remove(move_to_saved_directory_handler)
+    bpy.app.handlers.save_post.remove(move_to_save_directory_handler)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_reference_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_plane_imageaddmenu_draw)
     bpy.types.NODE_MT_context_menu.remove(shadereditor_paste_contextmenu_draw)
