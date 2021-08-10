@@ -2,6 +2,7 @@ class Image:
     """A class to represent an image file."""
 
     pasted_images = {}
+    image_index = 0
 
     def __init__(self, filepath: str, pasted: bool = False) -> None:
         """Constructor for the Image class.
@@ -14,6 +15,7 @@ class Image:
         self.filepath = filepath
         if pasted:
             Image.pasted_images[self.filepath] = self
+            Image.image_index += 1
 
     @property
     def filepath(self) -> str:
