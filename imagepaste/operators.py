@@ -229,11 +229,16 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
                 pasted_images[new_filepath].filepath = new_filepath
             orphaned_image_filepaths.append(old_filepath)
         # Remove pasted images which are not in `.blend` file (pasted but then undone)
+        existing_images = [
+            self.get_abspath(image.filepath)
+            for image in bpy.data.images
+            if image.filepath
+        ]
         for filepath in list(pasted_images.keys()):
-            if filepath in orphaned_image_filepaths:
+            if filepath not in existing_images:
                 del pasted_images[filepath]
         Report(7, f"Pasted images after: {list(pasted_images.keys())}").log(self)
-        Report.console_log(f"Blend images after: {self.get_abspaths(bpy.data.images)}")
+        Report.console_log(f"Blend images after: {existing_images}")
         return {"FINISHED"}
 
     def invoke(self, context, _event):
@@ -258,17 +263,6 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
 
         return os.path.abspath(bpy.path.abspath(path))
 
-    def get_abspaths(self, images: list[bpy.types.Image]) -> list[str]:
-        """Get the absolute paths of a list of images.
-
-        Args:
-            images (list[bpy.types.Image]): A list of images to get the absolute paths.
-
-        Returns:
-            list[str]: The absolute paths of the images.
-        """
-        return [self.get_abspath(image.filepath) for image in images]
-
     def get_orphaned_images(self, save_directory: str) -> list[bpy.types.Image]:
         """Get images that are not in the target directory.
 
@@ -287,23 +281,27 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
         if preferences.image_type_to_move == "no_moving":
             return []
         pasted_images = Image.pasted_images
-        Report.console_log(f"Pasted images before: {list(pasted_images.keys())}")
-        existing_images = bpy.data.images
-        Report.console_log(f"Blend images before: {self.get_abspaths(existing_images)}")
         orphaned_images = []
-        for image in existing_images:
+        orphaned_image_paths = []
+        existing_images = []
+        for image in bpy.data.images:
             # Example: 'Render Result'
             if not image.filepath:
                 continue
             filepath = self.get_abspath(image.filepath)
+            existing_images.append(filepath)
             if dirname(filepath) == save_directory:
                 continue
             if preferences.image_type_to_move == "all_images":
                 orphaned_images.append(image)
+                orphaned_image_paths.append(filepath)
                 continue
             if filepath in pasted_images:
                 orphaned_images.append(image)
-        Report.console_log(f"Orphaned images: {self.get_abspaths(orphaned_images)}")
+                orphaned_image_paths.append(filepath)
+        Report.console_log(f"Pasted images before: {list(pasted_images.keys())}")
+        Report.console_log(f"Blend images before: {existing_images}")
+        Report.console_log(f"Orphaned images: {orphaned_image_paths}")
         return orphaned_images
 
     def change_image_directory(
