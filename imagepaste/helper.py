@@ -178,7 +178,7 @@ def populate_filename(filename_pattern: str) -> str:
     from .image import Image
     from .helper import ADDON_NAME
 
-    image_index = str(len(Image.pasted_images) + 1)
+    image_index = str(Image.image_index + 1)
     # Replace normal variables
     VARIABLES_TABLE = [
         ("${addonName}", ADDON_NAME),
