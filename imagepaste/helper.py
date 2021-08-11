@@ -51,7 +51,7 @@ def is_valid_filename(filename: str) -> bool:
     """Check if the filename is valid.
 
     Args:
-        filename (str): a string representing the file name.
+        filename (str): a string representing the filename.
 
     Returns:
         bool: True if the filename is valid, False otherwise.
@@ -61,7 +61,7 @@ def is_valid_filename(filename: str) -> bool:
         """Check if the filename is valid.
 
         Args:
-            filename (str): a string representing the file name.
+            filename (str): a string representing the filename.
 
         Returns:
             bool: True if the filename is valid, False otherwise.

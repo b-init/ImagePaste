@@ -57,10 +57,10 @@ class Clipboard(ABC):
 
     @staticmethod
     def get_filename() -> str:
-        """Get a string representation of the current time in the file name format.
+        """Get a string representation of the current time in the filename format.
 
         Returns:
-            str: a string representing the current time in the file name format.
+            str: a string representing the current time in the filename format.
         """
         from time import strftime
         from ..helper import get_addon_preferences
