@@ -45,7 +45,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         default="ImagePaste",
     )
     image_filename_pattern: bpy.props.StringProperty(
-        name="Image file name",
+        name="Image filename",
         description=(
             "A name for pasted images\n"
             "Go to the Documentation to read more about the variables\n"
@@ -139,7 +139,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
 
         # New box
         box = layout.box().column()
-        box.label(text="Custom image file name")
+        box.label(text="Customize image filename")
 
         # New property
         prop = box.row(align=True)
@@ -147,7 +147,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         # First column
         column_1 = split.column()
         column_1.alignment = "RIGHT"
-        column_1.label(text="Image file name")
+        column_1.label(text="Image filename")
         # Second column
         column_2 = split.column().row(align=True)
         filename = populate_filename(self.image_filename_pattern) + self.image_extension
