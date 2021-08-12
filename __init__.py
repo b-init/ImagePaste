@@ -7,15 +7,8 @@ bl_info = {
     "support": "COMMUNITY",
     "doc_url": "https://github.com/Yeetus3141/ImagePaste#readme",
     "tracker_url": "https://github.com/Yeetus3141/ImagePaste/issues",
-    "description": (
-        "Paste images from your clipboard to "
-        "Image Editor, Shader Editor, 3D Viewport"
-    ),
-    "location": (
-        "Image Editor: Image Menu, "
-        "View3D: Add Menu > Image, "
-        "Shader Editor: Context Menu"
-    ),
+    "description": "Copy and paste your images with the clipboard in various places",
+    "location": "Image Editor, Video Sequencer, Shader Editor, 3D Viewport",
 }
 
 from .imagepaste import preferences
