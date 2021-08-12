@@ -322,6 +322,49 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
         orphaned_image.reload()
 
 
+class IMAGEPASTE_OT_check_update(bpy.types.Operator):
+    """Check for add-on update"""
+
+    bl_idname = "imagepaste.check_update"
+    bl_label = "Check Update"
+    bl_options = {"UNDO_GROUPED"}
+
+    def execute(self, _context):
+        from .helper import get_bl_info
+
+        bl_info = get_bl_info()
+        local_version = bl_info.get("version", (0, 0, 0))
+        latest_version = self.get_latest_version()
+        if latest_version > local_version:
+            self.report({"INFO"}, f"New version: {latest_version}")
+        else:
+            self.report({"INFO"}, f"Your version: {local_version}")
+        return {"FINISHED"}
+
+    def get_latest_version(self) -> tuple:
+        """Get the latest version of the add-on.
+
+        Returns:
+            tuple: The latest version of the add-on.
+        """
+        import re
+        import requests
+
+        default_version = (-1, -1, -1)
+        url = "https://api.github.com/repos/Yeetus3141/ImagePaste/releases/latest"
+        response = requests.get(url)
+        if response.status_code != 200:
+            return default_version
+        data = response.json()
+        if "tag_name" not in data:
+            return default_version
+        tag_name = data["tag_name"]
+        if not re.match(r"v\d+\.\d+\.\d+", tag_name):
+            return default_version
+        version = tuple(int(number) for number in tag_name[1:].split("."))
+        return version
+
+
 classes = (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
@@ -330,6 +373,7 @@ classes = (
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
     IMAGEPASTE_OT_move_to_save_directory,
+    IMAGEPASTE_OT_check_update,
 )
 
 

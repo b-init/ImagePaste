@@ -207,3 +207,14 @@ def populate_filename(filename_pattern: str) -> str:
         filename_pattern,
     )
     return filename_pattern
+
+
+def get_bl_info() -> dict:
+    """Get add-on info.
+
+    Returns:
+        dict: a dictionary containing add-on info.
+    """
+    from importlib import import_module
+
+    return import_module(ADDON_NAME).bl_info
