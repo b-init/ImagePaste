@@ -338,16 +338,28 @@ class IMAGEPASTE_OT_check_update(bpy.types.Operator):
     )
 
     def execute(self, _context):
-        from .helper import get_bl_info
+        from .helper import get_addon_preferences
 
-        bl_info = get_bl_info()
-        local_version = bl_info.get("version", (0, 0, 0))
+        local_version = IMAGEPASTE_OT_check_update.get_current_version()
         latest_version = self.get_latest_version()
         if latest_version > local_version:
+            get_addon_preferences().latest_version = ".".join(map(str, latest_version))
             self.report({"INFO"}, f"New version: {latest_version}")
         else:
             self.report({"INFO"}, f"Your version: {local_version}")
         return {"FINISHED"}
+
+    @staticmethod
+    def get_current_version() -> str:
+        """Get the current version of the add-on.
+
+        Returns:
+            str: The current version of the add-on.
+        """
+        from .helper import get_bl_info
+
+        bl_info = get_bl_info()
+        return bl_info.get("version", (0, 0, 0))
 
     def get_latest_version(self) -> tuple:
         """Get the latest version of the add-on.

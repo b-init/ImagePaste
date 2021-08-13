@@ -8,6 +8,7 @@ from .operators import (
     IMAGEPASTE_OT_shadereditor_paste,
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
+    IMAGEPASTE_OT_check_update,
 )
 
 
@@ -72,6 +73,17 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
             ("no_moving", "No moving", "Don't move anything when saving"),
         ],
         default="pasted_images",
+    )
+    current_version: bpy.props.StringProperty(
+        name="Current version",
+        description="Current version of the add-on",
+        get=lambda _: ".".join(
+            map(str, IMAGEPASTE_OT_check_update.get_current_version())
+        ),
+    )
+    latest_version: bpy.props.StringProperty(
+        name="Latest version",
+        description="Latest version of the add-on",
     )
     is_disable_debug: bpy.props.BoolProperty(
         name="Disable debug message",
