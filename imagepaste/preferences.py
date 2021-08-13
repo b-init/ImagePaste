@@ -188,6 +188,40 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
 
         # New box
         box = layout.box().column()
+        box.label(text="Update the add-on")
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Latest version")
+        # Second column
+        column_2 = split.row(align=True)
+        column_2_sub_1 = column_2.column(align=True)
+        column_2_sub_1.prop(self, "latest_version", text="")
+        column_2_sub_1.enabled = False
+        column_2_sub_2 = column_2.column(align=True)
+        column_2_sub_2.enabled = True
+        column_2_sub_2.operator(operator="imagepaste.check_update").timeout = 5
+
+        # New property
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Current version")
+        # Second column
+        column_2 = split.row(align=True)
+        column_2.prop(self, "current_version", text="")
+        button = column_2.operator(operator="wm.url_open", text="Get update")
+        button.url = "https://github.com/Yeetus3141/ImagePaste/releases/latest"
+        column_2.enabled = self.latest_version > self.current_version
+
+        # New box
+        box = layout.box().column()
         box.label(text="Miscellaneous")
 
         # New property
