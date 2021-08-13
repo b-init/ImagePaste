@@ -329,6 +329,14 @@ class IMAGEPASTE_OT_check_update(bpy.types.Operator):
     bl_label = "Check Update"
     bl_options = {"UNDO_GROUPED"}
 
+    timeout: bpy.props.FloatProperty(
+        name="Timeout",
+        description="How long to wait for the server to respond",
+        default=0.5,
+        min=0.0,
+        max=10.0,
+    )
+
     def execute(self, _context):
         from .helper import get_bl_info
 
@@ -349,10 +357,28 @@ class IMAGEPASTE_OT_check_update(bpy.types.Operator):
         """
         import re
         import requests
+        from requests.exceptions import (
+            ConnectionError,
+            HTTPError,
+            Timeout,
+            RequestException,
+        )
+        from .report import Report
 
         default_version = (-1, -1, -1)
         url = "https://api.github.com/repos/Yeetus3141/ImagePaste/releases/latest"
-        response = requests.get(url)
+        try:
+            response = requests.get(url, timeout=self.timeout)
+            response.raise_for_status()
+        except (ConnectionError, HTTPError) as exception:
+            Report(8, exception)
+            return default_version
+        except Timeout as exception:
+            Report.console_log(exception)
+            return default_version
+        except RequestException as exception:
+            Report.console_log(exception)
+            return default_version
         if response.status_code != 200:
             return default_version
         data = response.json()

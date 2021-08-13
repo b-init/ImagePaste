@@ -12,6 +12,7 @@ class Report:
         5: ["INFO", "Copied image"],
         6: ["INFO", "Pasted image"],
         7: ["INFO", "Moved images"],
+        8: ["ERROR", "Request failed"],
     }
 
     def __init__(self, code: int, verbose: str = None) -> None:
