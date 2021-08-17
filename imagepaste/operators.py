@@ -1,4 +1,3 @@
-from __future__ import annotations
 import sys
 
 if sys.platform == "win32":
@@ -263,7 +262,7 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
 
         return os.path.abspath(bpy.path.abspath(path))
 
-    def get_orphaned_images(self, save_directory: str) -> list[bpy.types.Image]:
+    def get_orphaned_images(self, save_directory: str) -> "list[bpy.types.Image]":
         """Get images that are not in the target directory.
 
         Args:
