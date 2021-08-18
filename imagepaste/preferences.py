@@ -84,7 +84,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         from .helper import populate_filename
 
         split_ratio = 0.3
-        layout = self.layout
+        layout = self.layout.column(align=True)
 
         # New box
         box = layout.box().column()
