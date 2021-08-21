@@ -24,15 +24,17 @@ A simple _Blender_ add-on to paste your images from the clipboard to various pla
 
 ## Configuring
 
-![preferences](assets/preferences.png)
-
 ### Customizing the save folder
 
 By default, pasted images will be stored in a temporary folder, this one will be deleted when you close _Blender_. If you want, you can redirect these images to a different directory.
+![Preferences - directory](assets/preferences/directory.png)
 
 On the other hand, after you save the `.blend` file, these pasted images will be saved where the `.blend` file is located - in the `ImagePaste` folder. This folder can also be customized in the preferences.
+![Preferences - subdirectory](assets/preferences/subdirectory.png)
 
 ### Customizing the image filename
+
+![Preferences - filename](assets/preferences/filename.png)
 
 You can customize the filename of the pasted image with the help of some predefined variables:
 
@@ -58,6 +60,8 @@ You can customize the filename of the pasted image with the help of some predefi
 The default filename is `${addonName}-${yearShort}${monthNumber}${day}-${hour24}${minute}${second}`.
 
 ### Choosing the image type to move when saving the file
+
+![Preferences - image type](assets/preferences/image-type.png)
 
 This feature will move (actually copy) pasted images (or all images) you have imported into the save directory after you save the file, so you don't have to worry about missing images anymore. There's also an option in the add-on preferences you can choose the type of images to move:
 
