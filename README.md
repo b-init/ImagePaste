@@ -13,14 +13,53 @@ A simple _Blender_ add-on to paste your images from the clipboard to various pla
 
 ![demo](assets/demo.gif)
 
-| Operator                | Editor type     | Key shortcut                                                            | UI                                                                                                |
-| ----------------------- | --------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Copy Image              | Image Editor    | <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></kbd>                | <kbd><kbd>Image</kbd>&vert;<kbd>Copy to Clipboard</kbd></kbd>                                     |
-| Paste as Images         | Image Editor    | <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>                | <kbd><kbd>Image</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>                                  |
-| Paste as Image Strips   | Sequence Editor | <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd></kbd> | <kbd><kbd>Context Menu</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>                           |
-| Paste as Image Textures | Shader Editor   | <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>                | <kbd><kbd>Context Menu</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>                           |
-| Paste as Planes         | 3D Viewport     | <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd></kbd> | <kbd><kbd>Add</kbd>&vert;<kbd>Image</kbd>&vert;<kbd>Paste from Clipboard as Plane</kbd></kbd>     |
-| Paste as References     | 3D Viewport     | <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>                | <kbd><kbd>Add</kbd>&vert;<kbd>Image</kbd>&vert;<kbd>Paste from Clipboard as Reference</kbd></kbd> |
+The add-on supports copying and pasting images from the clipboard to various places:
+
+### Image Editor
+
+![Image Editor](assets/ui/image-editor.png)
+
+**Copy Image**:
+
+- Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></kbd>
+- UI: <kbd><kbd>Image</kbd>&vert;<kbd>Copy to Clipboard</kbd></kbd>
+
+**Paste as Images**:
+
+- Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>
+- UI: <kbd><kbd>Image</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>
+
+### Video Sequencer
+
+![Video Sequencer](assets/ui/video-sequencer.png)
+
+**Paste as Image Strips**:
+
+- Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd></kbd>
+- UI: <kbd><kbd>Sequencer Context Menu</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>
+
+### Shader Editor
+
+![Shader Editor](assets/ui/shader-editor.png)
+
+**Paste as Image Textures**:
+
+- Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>
+- UI: <kbd><kbd>Node Context Menu</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>
+
+### 3D Viewport
+
+![3D Viewport](assets/ui/3d-viewport.png)
+
+**Paste as Planes**:
+
+- Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd></kbd>
+- UI: <kbd><kbd>Add</kbd>&vert;<kbd>Image</kbd>&vert;<kbd>Paste from Clipboard as Plane</kbd></kbd>
+
+**Paste as References**:
+
+- Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>
+- UI: <kbd><kbd>Add</kbd>&vert;<kbd>Image</kbd>&vert;<kbd>Paste from Clipboard as Reference</kbd></kbd>
 
 ## Configuring
 
