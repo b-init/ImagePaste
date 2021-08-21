@@ -22,12 +22,12 @@ The add-on supports copying and pasting images from the clipboard to various pla
 **Copy Image**:
 
 - Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></kbd>
-- UI: <kbd><kbd>Image</kbd>&vert;<kbd>Copy to Clipboard</kbd></kbd>
+- UI: <kbd><kbd>Image</kbd>|<kbd>Copy to Clipboard</kbd></kbd>
 
 **Paste as Images**:
 
 - Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>
-- UI: <kbd><kbd>Image</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>
+- UI: <kbd><kbd>Image</kbd>|<kbd>Paste from Clipboard</kbd></kbd>
 
 ### Video Sequencer
 
@@ -36,7 +36,7 @@ The add-on supports copying and pasting images from the clipboard to various pla
 **Paste as Image Strips**:
 
 - Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd></kbd>
-- UI: <kbd><kbd>Sequencer Context Menu</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>
+- UI: <kbd><kbd>Sequencer Context Menu</kbd>|<kbd>Paste from Clipboard</kbd></kbd>
 
 ### Shader Editor
 
@@ -45,7 +45,7 @@ The add-on supports copying and pasting images from the clipboard to various pla
 **Paste as Image Textures**:
 
 - Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>
-- UI: <kbd><kbd>Node Context Menu</kbd>&vert;<kbd>Paste from Clipboard</kbd></kbd>
+- UI: <kbd><kbd>Node Context Menu</kbd>|<kbd>Paste from Clipboard</kbd></kbd>
 
 ### 3D Viewport
 
@@ -54,12 +54,12 @@ The add-on supports copying and pasting images from the clipboard to various pla
 **Paste as Planes**:
 
 - Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>V</kbd></kbd>
-- UI: <kbd><kbd>Add</kbd>&vert;<kbd>Image</kbd>&vert;<kbd>Paste from Clipboard as Plane</kbd></kbd>
+- UI: <kbd><kbd>Add</kbd>|<kbd>Image</kbd>|<kbd>Paste from Clipboard as Plane</kbd></kbd>
 
 **Paste as References**:
 
 - Keyboard shortcut: <kbd><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></kbd>
-- UI: <kbd><kbd>Add</kbd>&vert;<kbd>Image</kbd>&vert;<kbd>Paste from Clipboard as Reference</kbd></kbd>
+- UI: <kbd><kbd>Add</kbd>|<kbd>Image</kbd>|<kbd>Paste from Clipboard as Reference</kbd></kbd>
 
 ## Configuring
 
