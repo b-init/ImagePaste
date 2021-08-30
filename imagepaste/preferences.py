@@ -1,6 +1,7 @@
 import bpy
 
 from .helper import ADDON_NAME
+from .helper import remove_empty_subdirectory
 from .operators import (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
@@ -322,6 +323,7 @@ def unregister():
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
+    remove_empty_subdirectory()
     bpy.app.handlers.save_post.remove(move_to_save_directory_handler)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_reference_imageaddmenu_draw)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_plane_imageaddmenu_draw)

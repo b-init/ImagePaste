@@ -207,3 +207,21 @@ def populate_filename(filename_pattern: str) -> str:
         filename_pattern,
     )
     return filename_pattern
+
+
+def remove_empty_subdirectory():
+    import os
+    from .report import Report
+
+    preferences = get_addon_preferences()
+    if not preferences.subdirectory_name:
+        return {"CANCELLED"}
+    directory_path = os.path.dirname(bpy.data.filepath)
+    subdirectory_path = os.path.join(directory_path, preferences.subdirectory_name)
+    if not os.path.isdir(subdirectory_path):
+        return {"CANCELLED"}
+    if os.listdir(subdirectory_path):
+        return {"CANCELLED"}
+    os.rmdir(subdirectory_path)
+    Report.console_log(f"Empty subdirectory '{subdirectory_path}' was removed")
+    return {"FINISHED"}
