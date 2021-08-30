@@ -1,7 +1,7 @@
 import bpy
 
-from .helper import ADDON_NAME
-from .helper import remove_empty_subdirectory
+from .metadata import ADDON_NAME
+from .tree import remove_empty_subdirectory
 from .operators import (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
@@ -81,8 +81,8 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     )
 
     def draw(self, _context):
-        from .helper import is_valid_filename
-        from .helper import populate_filename
+        from .tree import is_valid_filename
+        from .tree import populate_filename
 
         split_ratio = 0.3
         layout = self.layout.column(align=True)

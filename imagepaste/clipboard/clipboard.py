@@ -63,9 +63,9 @@ class Clipboard(ABC):
             str: a string representing the current time in the filename format.
         """
         from time import strftime
-        from ..helper import get_addon_preferences
-        from ..helper import populate_filename
-        from ..helper import is_valid_filename
+        from ..metadata import get_addon_preferences
+        from ..tree import populate_filename
+        from ..tree import is_valid_filename
 
         preferences = get_addon_preferences()
         filename = (

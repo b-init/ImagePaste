@@ -23,8 +23,8 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
 
     def execute(self, context):
         from os.path import join
-        from .helper import get_save_directory
-        from .helper import get_addon_preferences
+        from .metadata import get_addon_preferences
+        from .tree import get_save_directory
 
         active_image = context.area.spaces.active.image
         # If active image is render result, save it first
@@ -58,7 +58,7 @@ class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
-        from .helper import get_save_directory
+        from .tree import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
@@ -83,7 +83,7 @@ class IMAGEPASTE_OT_sequenceeditor_paste(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
-        from .helper import get_save_directory
+        from .tree import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
@@ -114,7 +114,7 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def execute(self, context):
-        from .helper import get_save_directory
+        from .tree import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
@@ -149,7 +149,7 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
 
     def execute(self, _context):
         from addon_utils import enable
-        from .helper import get_save_directory
+        from .tree import get_save_directory
 
         # Enable the "Import Images as Planes" add-on to be used here
         enable("io_import_images_as_planes")
@@ -179,7 +179,7 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def execute(self, _context):
-        from .helper import get_save_directory
+        from .tree import get_save_directory
 
         clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
@@ -206,7 +206,7 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
     bl_options = {"UNDO_GROUPED"}
 
     def __init__(self) -> None:
-        from .helper import get_save_directory
+        from .tree import get_save_directory
 
         super().__init__()
         self.save_directory = get_save_directory()
@@ -274,7 +274,7 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
         """
         from os.path import dirname
         from .image import Image
-        from .helper import get_addon_preferences
+        from .metadata import get_addon_preferences
         from .report import Report
 
         preferences = get_addon_preferences()

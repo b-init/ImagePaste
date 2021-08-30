@@ -1,18 +1,6 @@
 import bpy
 
 
-ADDON_NAME = __package__.split(".")[0]
-
-
-def get_addon_preferences() -> bpy.types.AddonPreferences:
-    """Get the addon preferences.
-
-    Returns:
-        bpy.types.AddonPreferences: The addon preferences.
-    """
-    return bpy.context.preferences.addons[ADDON_NAME].preferences
-
-
 def get_save_directory() -> str:
     """Get the path to the directory where the images are saved.
 
@@ -23,6 +11,7 @@ def get_save_directory() -> str:
     from os.path import exists
     from os.path import dirname
     from os.path import join
+    from .metadata import get_addon_preferences
 
     preferences = get_addon_preferences()
 
@@ -176,7 +165,7 @@ def populate_filename(filename_pattern: str) -> str:
     import re
     from time import strftime
     from .image import Image
-    from .helper import ADDON_NAME
+    from .metadata import ADDON_NAME
 
     image_index = str(Image.image_index + 1)
     # Replace normal variables
@@ -212,6 +201,7 @@ def populate_filename(filename_pattern: str) -> str:
 def remove_empty_subdirectory():
     import os
     from .report import Report
+    from .metadata import get_addon_preferences
 
     preferences = get_addon_preferences()
     if not preferences.subdirectory_name:

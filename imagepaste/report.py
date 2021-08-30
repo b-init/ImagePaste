@@ -44,7 +44,7 @@ class Report:
         Args:
             message (str): The message to be printed to the console.
         """
-        from .helper import get_addon_preferences
+        from .metadata import get_addon_preferences
 
         preferences = get_addon_preferences()
         if not preferences.is_disable_debug:
