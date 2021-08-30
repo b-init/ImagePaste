@@ -24,7 +24,6 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
     def execute(self, context):
         from os.path import join
         from .metadata import get_addon_preferences
-        from .tree import get_save_directory
 
         active_image = context.area.spaces.active.image
         # If active image is render result, save it first
@@ -32,7 +31,7 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
             image_path = active_image.filepath
         else:
             image_extension = get_addon_preferences().image_extension
-            image_path = join(get_save_directory(), active_image.name + image_extension)
+            image_path = join(bpy.app.tempdir, active_image.name + image_extension)
             bpy.ops.image.save_as(save_as_render=True, copy=True, filepath=image_path)
         # Report and log the result
         clipboard = Clipboard.pull(image_path)
