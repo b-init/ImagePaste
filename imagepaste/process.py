@@ -1,5 +1,4 @@
 from __future__ import annotations
-import subprocess
 
 
 class Process:
@@ -41,9 +40,15 @@ class Process:
         Returns:
             Process: A Process instance with the output of the command line.
         """
+        from subprocess import (
+            DEVNULL,
+            PIPE,
+            Popen,
+            STDOUT,
+        )
 
         def comunicate(parameters):
-            popen = subprocess.Popen(**parameters)
+            popen = Popen(**parameters)
             stdout, stderr = popen.communicate()
             return popen, stdout, stderr
 
@@ -52,8 +57,8 @@ class Process:
             {
                 "args": args,
                 "shell": shell,
-                "stdout": subprocess.PIPE if capture_output else subprocess.DEVNULL,
-                "stderr": subprocess.PIPE if capture_output else subprocess.STDOUT,
+                "stdout": PIPE if capture_output else DEVNULL,
+                "stderr": PIPE if capture_output else STDOUT,
             }
         )
         if outpath:

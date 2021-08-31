@@ -162,7 +162,7 @@ def populate_filename(filename_pattern: str) -> str:
     Returns:
         str: a string representing a filename.
     """
-    import re
+    from re import sub
     from time import strftime
     from .image import Image
     from .metadata import ADDON_NAME
@@ -190,7 +190,7 @@ def populate_filename(filename_pattern: str) -> str:
         filename_pattern = filename_pattern.replace(pattern_key, pattern_value)
     # Replace dynamic variables ${index:N}
     # Produce an N-digits-with-zeros-padded number
-    filename_pattern = re.sub(
+    filename_pattern = sub(
         r"\${index\:(\d+)}",
         lambda match: image_index.zfill(int(match.group(1))),
         filename_pattern,
@@ -198,20 +198,26 @@ def populate_filename(filename_pattern: str) -> str:
     return filename_pattern
 
 
-def remove_empty_subdirectory():
-    import os
+def remove_empty_subdirectory() -> None:
+    """Remove empty subdirectories."""
+    from os import listdir
+    from os import rmdir
+    from os.path import (
+        dirname,
+        join,
+        isdir,
+    )
     from .report import Report
     from .metadata import get_addon_preferences
 
     preferences = get_addon_preferences()
     if not preferences.subdirectory_name:
-        return {"CANCELLED"}
-    directory_path = os.path.dirname(bpy.data.filepath)
-    subdirectory_path = os.path.join(directory_path, preferences.subdirectory_name)
-    if not os.path.isdir(subdirectory_path):
-        return {"CANCELLED"}
-    if os.listdir(subdirectory_path):
-        return {"CANCELLED"}
-    os.rmdir(subdirectory_path)
+        return
+    directory_path = dirname(bpy.data.filepath)
+    subdirectory_path = join(directory_path, preferences.subdirectory_name)
+    if not isdir(subdirectory_path):
+        return
+    if listdir(subdirectory_path):
+        return
+    rmdir(subdirectory_path)
     Report.console_log(f"Empty subdirectory '{subdirectory_path}' was removed")
-    return {"FINISHED"}

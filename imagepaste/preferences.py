@@ -1,7 +1,6 @@
 import bpy
 
 from .metadata import ADDON_NAME
-from .tree import remove_empty_subdirectory
 from .operators import (
     IMAGEPASTE_OT_imageeditor_copy,
     IMAGEPASTE_OT_imageeditor_paste,
@@ -10,6 +9,7 @@ from .operators import (
     IMAGEPASTE_OT_view3d_paste_plane,
     IMAGEPASTE_OT_view3d_paste_reference,
 )
+from .tree import remove_empty_subdirectory
 
 
 class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
@@ -81,8 +81,8 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     )
 
     def draw(self, _context):
-        from .tree import is_valid_filename
         from .tree import populate_filename
+        from .tree import is_valid_filename
 
         split_ratio = 0.3
         layout = self.layout.column(align=True)
@@ -192,6 +192,7 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
 
 
 def imageeditor_copy_imagemenu_draw(self, _context):
+    """Draw the Copy operator in the Image Editor toolbar."""
     self.layout.operator(
         IMAGEPASTE_OT_imageeditor_copy.bl_idname,
         icon="COPYDOWN",
@@ -199,6 +200,7 @@ def imageeditor_copy_imagemenu_draw(self, _context):
 
 
 def imageeditor_paste_imagemenu_draw(self, _context):
+    """Draw the Paste operator in the Image Editor toolbar."""
     self.layout.operator(
         IMAGEPASTE_OT_imageeditor_paste.bl_idname,
         icon="FILE_IMAGE",
@@ -206,6 +208,7 @@ def imageeditor_paste_imagemenu_draw(self, _context):
 
 
 def sequenceeditor_paste_contextmenu_draw(self, _context):
+    """Draw the Paste operator in the Sequence Editor context menu."""
     self.layout.separator()
     self.layout.operator(
         IMAGEPASTE_OT_sequenceeditor_paste.bl_idname,
@@ -214,6 +217,7 @@ def sequenceeditor_paste_contextmenu_draw(self, _context):
 
 
 def shadereditor_paste_contextmenu_draw(self, _context):
+    """Draw the Paste operator in the Shader Editor context menu."""
     self.layout.operator(
         IMAGEPASTE_OT_shadereditor_paste.bl_idname,
         icon="FILE_IMAGE",
@@ -221,6 +225,7 @@ def shadereditor_paste_contextmenu_draw(self, _context):
 
 
 def view3d_paste_plane_imageaddmenu_draw(self, _context):
+    """Draw the Paste as Plane operator in the 3D View Add Image menu."""
     self.layout.operator(
         IMAGEPASTE_OT_view3d_paste_plane.bl_idname,
         icon="IMAGE_PLANE",
@@ -228,6 +233,7 @@ def view3d_paste_plane_imageaddmenu_draw(self, _context):
 
 
 def view3d_paste_reference_imageaddmenu_draw(self, _context):
+    """Draw the Paste as Reference operator in the 3D View Add Image menu."""
     self.layout.operator(
         IMAGEPASTE_OT_view3d_paste_reference.bl_idname,
         icon="FILE_IMAGE",
@@ -235,7 +241,8 @@ def view3d_paste_reference_imageaddmenu_draw(self, _context):
 
 
 @bpy.app.handlers.persistent
-def move_to_save_directory_handler(self, _context):
+def move_to_save_directory_handler(_self, _context):
+    """Handler to move the images to the save directory after the file is saved."""
     bpy.ops.imagepaste.move_to_save_directory("INVOKE_DEFAULT")
 
 

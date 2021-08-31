@@ -258,9 +258,9 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
         Returns:
             str: The absolute path of the file or directory.
         """
-        import os
+        from os.path import abspath
 
-        return os.path.abspath(bpy.path.abspath(path))
+        return abspath(bpy.path.abspath(path))
 
     def get_orphaned_images(self, save_directory: str) -> list[bpy.types.Image]:
         """Get images that are not in the target directory.
