@@ -12,6 +12,20 @@ from .operators import (
 from .tree import remove_empty_subdirectory
 
 
+def get_subdirectory_name(self):
+    """Get the subdirectory name."""
+    return self.get("subdirectory_name", ADDON_NAME)
+
+
+def set_subdirectory_name(self, value):
+    """Set the subdirectory name."""
+    from .tree import remove_empty_subdirectory
+
+    # Remove the old subdirectory before setting the new one
+    remove_empty_subdirectory(self.subdirectory_name)
+    self["subdirectory_name"] = value
+
+
 class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     """Add-on preferences for ImagePaste"""
 
@@ -43,7 +57,9 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     subdirectory_name: bpy.props.StringProperty(
         name="Sub directory name",
         description="A name for subdirectory",
-        default="ImagePaste",
+        default=ADDON_NAME,
+        get=get_subdirectory_name,
+        set=set_subdirectory_name,
     )
     image_filename_pattern: bpy.props.StringProperty(
         name="Image filename",

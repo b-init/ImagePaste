@@ -198,8 +198,13 @@ def populate_filename(filename_pattern: str) -> str:
     return filename_pattern
 
 
-def remove_empty_subdirectory() -> None:
-    """Remove empty subdirectories."""
+def remove_empty_subdirectory(subdirectory_name: str = None) -> None:
+    """Remove empty subdirectories.
+
+    Args:
+        subdirectory_name (str, optional): a string representing a subdirectory name.
+            Defaults to None.
+    """
     from os import listdir
     from os import rmdir
     from os.path import (
@@ -210,11 +215,13 @@ def remove_empty_subdirectory() -> None:
     from .report import Report
     from .metadata import get_addon_preferences
 
-    preferences = get_addon_preferences()
-    if not preferences.subdirectory_name:
-        return
+    if not subdirectory_name:
+        preferences = get_addon_preferences()
+        if not preferences.subdirectory_name:
+            return
+        subdirectory_name = preferences.subdirectory_name
     directory_path = dirname(bpy.data.filepath)
-    subdirectory_path = join(directory_path, preferences.subdirectory_name)
+    subdirectory_path = join(directory_path, subdirectory_name)
     if not isdir(subdirectory_path):
         return
     if listdir(subdirectory_path):
