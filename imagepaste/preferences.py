@@ -242,18 +242,11 @@ def move_to_save_directory_handler(self, _context):
 addon_keymaps = []
 
 
-def register():
-    bpy.utils.register_class(IMAGEPASTE_AddonPreferences)
-
-    bpy.types.IMAGE_MT_image.append(imageeditor_copy_imagemenu_draw)
-    bpy.types.IMAGE_MT_image.append(imageeditor_paste_imagemenu_draw)
-    bpy.types.SEQUENCER_MT_context_menu.append(sequenceeditor_paste_contextmenu_draw)
-    bpy.types.NODE_MT_context_menu.append(shadereditor_paste_contextmenu_draw)
-    bpy.types.VIEW3D_MT_image_add.append(view3d_paste_plane_imageaddmenu_draw)
-    bpy.types.VIEW3D_MT_image_add.append(view3d_paste_reference_imageaddmenu_draw)
-    bpy.app.handlers.save_post.append(move_to_save_directory_handler)
-
+def register_keymaps():
+    """Register the keymaps."""
     kc = bpy.context.window_manager.keyconfigs.addon
+    if not kc:
+        return
 
     km = kc.keymaps.new(name="Image Generic", space_type="IMAGE_EDITOR")
     kmi = km.keymap_items.new(
@@ -318,11 +311,27 @@ def register():
     addon_keymaps.append((km, kmi))
 
 
-def unregister():
+def unregister_keymaps():
+    """Unregister the keymaps."""
     for km, kmi in addon_keymaps:
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
+
+def register():
+    bpy.utils.register_class(IMAGEPASTE_AddonPreferences)
+    bpy.types.IMAGE_MT_image.append(imageeditor_copy_imagemenu_draw)
+    bpy.types.IMAGE_MT_image.append(imageeditor_paste_imagemenu_draw)
+    bpy.types.SEQUENCER_MT_context_menu.append(sequenceeditor_paste_contextmenu_draw)
+    bpy.types.NODE_MT_context_menu.append(shadereditor_paste_contextmenu_draw)
+    bpy.types.VIEW3D_MT_image_add.append(view3d_paste_plane_imageaddmenu_draw)
+    bpy.types.VIEW3D_MT_image_add.append(view3d_paste_reference_imageaddmenu_draw)
+    bpy.app.handlers.save_post.append(move_to_save_directory_handler)
+    register_keymaps()
+
+
+def unregister():
+    unregister_keymaps()
     remove_empty_subdirectory()
     bpy.app.handlers.save_post.remove(move_to_save_directory_handler)
     bpy.types.VIEW3D_MT_image_add.remove(view3d_paste_reference_imageaddmenu_draw)
@@ -331,5 +340,4 @@ def unregister():
     bpy.types.SEQUENCER_MT_context_menu.remove(sequenceeditor_paste_contextmenu_draw)
     bpy.types.IMAGE_MT_image.remove(imageeditor_paste_imagemenu_draw)
     bpy.types.IMAGE_MT_image.remove(imageeditor_copy_imagemenu_draw)
-
     bpy.utils.unregister_class(IMAGEPASTE_AddonPreferences)
