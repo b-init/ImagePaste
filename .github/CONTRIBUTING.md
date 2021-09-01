@@ -77,7 +77,8 @@ The add-on code is divided into several modules to make it easier to maintain an
   - [`darwin/darwin.py`](../imagepaste/clipboard/darwin/darwin.py): The module contains the concrete `DarwinClipboard` class of the `Clipboard` for the _macOS_ platform. [_Pasteboard_](https://pypi.org/project/pasteboard/) is shipped with the add-on to be responsible for the clipboard (see pull request [#6](https://github.com/Yeetus3141/ImagePaste/pull/6)).
 - [`operators.py`](../imagepaste/operators.py): The module with the core operators for main functionalities (copy/paste images from/to the _Blender_ editors), which depend mostly on clipboard instances created from `WindowsClipboard`, `LinuxClipboard` and `DarwinClipboard` classes.
 - [`preferences.py`](../imagepaste/preferences.py): The module contains the add-on preferences class, all keymaps and UI-related functions.
-- [`helper.py`](../imagepaste/helper.py): The module contains the utility functions used by other modules.
+- [`tree.py`](../imagepaste/tree.py): The module contains the utilities to work with files, folders, and paths.
+- [`metadata.py`](../imagepaste/metadata.py): The module will cover the add-on metadata related operations.
 
 The docstring in each module is also very helpful to understand what the module does and how to use it. Open the module you need and check them.
 
