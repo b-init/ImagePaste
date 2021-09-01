@@ -6,8 +6,9 @@ A simple _Blender_ add-on to paste your images from the clipboard to various pla
 
 ## Installing
 
-1. Download [the latest release](https://github.com/Yeetus3141/ImagePaste/releases/latest) (you can view the changelog on the [release page](https://github.com/Yeetus3141/ImagePaste/releases)).
-2. Go to <kbd><kbd>Edit</kbd>|<kbd>Preferences</kbd></kbd>. On the <kbd>Add-ons</kbd> tab, choose <kbd>Install</kbd> and select the downloaded `.zip` file, then tick the box beside the add-on name.
+1. Download [the latest release](https://github.com/Yeetus3141/ImagePaste/releases/latest) (you can also view the changelog on [the release page](https://github.com/Yeetus3141/ImagePaste/releases)).
+2. Go to <kbd><kbd>Edit</kbd>|<kbd>Preferences</kbd></kbd>. On the <kbd>Add-ons</kbd> tab, choose <kbd>Install</kbd> and select the downloaded `.zip` file.
+3. Tick the box beside the add-on name.
 
 ## Using
 
@@ -102,7 +103,7 @@ The default filename is `${addonName}-${yearShort}${monthNumber}${day}-${hour24}
 
 ![Preferences - image type](assets/preferences/image-type.png)
 
-This feature will move (actually copy) pasted images (or all images) you have imported into the save directory after you save the file, so you don't have to worry about missing images anymore. There's also an option in the add-on preferences you can choose the type of images to move:
+This feature will move (actually copy) images into the save directory after you save the file, so you can paste images anytime, no need to save it first. There's also an option in the add-on preferences you can choose the type of images to move:
 
 - **Pasted images**: Only images that were pasted using the add-on would be moved to the save directory.
 - **All images**: Images existing in the `.blend` file will be moved.
