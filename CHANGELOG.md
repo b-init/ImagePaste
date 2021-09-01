@@ -2,6 +2,13 @@
 
 # Changelog
 
+## [1.7.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.6.1...v1.7.0) (2021-09-01)
+
+- Now you can customize the filename of the pasted images ([#18](https://github.com/Yeetus3141/ImagePaste/pull/18) by [@thanhph111](https://github.com/thanhph111)).
+- You can paste the images anytime you want, then save the file and all images you need will be in the target folder ([#17](https://github.com/Yeetus3141/ImagePaste/pull/17) by [@thanhph111](https://github.com/thanhph111)).
+- The folder in your `.blend` file will be removed automatically when you quit _Blender_ if it's empty (by [@thanhph111](https://github.com/thanhph111)).
+- Copying images in the **Image Editor** won't save it to your folder anymore.
+
 ## [1.6.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.6.0...v1.6.1) (2021-08-01)
 
 - Fix the logic of getting the save directory.
