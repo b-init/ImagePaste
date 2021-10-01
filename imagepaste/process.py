@@ -6,12 +6,8 @@ class Process:
 
     def __init__(self) -> None:
         """Initialize a Process instance."""
-
-        from locale import getdefaultlocale
-        encoding = getdefaultlocale()[1]
-
         self.parameters = {
-            "encoding": encoding,
+            "encoding": "utf-8",
             "text": True,
         }
         self.stdout = None
