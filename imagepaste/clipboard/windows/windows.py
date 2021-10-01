@@ -103,7 +103,8 @@ class WindowsClipboard(Clipboard):
             "$OutputEncoding = "
             "[System.Console]::OutputEncoding = "
             "[System.Console]::InputEncoding = "
-            "[System.Text.Encoding]::UTF8\n" + script
+            "[System.Text.Encoding]::UTF8\n"
+            "$PSDefaultParameterValues['*:Encoding'] = 'utf8'\n" + script
         )
         args = POWERSHELL + ["& { " + script + " }"]
         return args
