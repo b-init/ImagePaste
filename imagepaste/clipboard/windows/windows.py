@@ -99,5 +99,11 @@ class WindowsClipboard(Clipboard):
             "-WindowStyle",
             "Hidden",
         ]
+        script = (
+            "$OutputEncoding = "
+            "[System.Console]::OutputEncoding = "
+            "[System.Console]::InputEncoding = "
+            "[System.Text.Encoding]::UTF8\n" + script
+        )
         args = POWERSHELL + ["& { " + script + " }"]
         return args
