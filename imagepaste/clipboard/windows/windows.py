@@ -91,8 +91,17 @@ class WindowsClipboard(Clipboard):
         Returns:
             list[str]: A list of PowerShell arguments for operating a process.
         """
-        POWERSHELL = [
-            "powershell",
+        from os import getenv
+        from os.path import join
+
+        powershell_args = [
+            join(
+                getenv("SystemRoot"),
+                "System32",
+                "WindowsPowerShell",
+                "v1.0",
+                "powershell.exe",
+            ),
             "-NoProfile",
             "-NoLogo",
             "-NonInteractive",
@@ -106,5 +115,5 @@ class WindowsClipboard(Clipboard):
             "[System.Text.Encoding]::UTF8\n"
             "$PSDefaultParameterValues['*:Encoding'] = 'utf8'\n" + script
         )
-        args = POWERSHELL + ["& { " + script + " }"]
+        args = powershell_args + ["& { " + script + " }"]
         return args
