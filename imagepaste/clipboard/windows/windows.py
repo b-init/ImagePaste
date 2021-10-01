@@ -36,7 +36,7 @@ class WindowsClipboard(Clipboard):
         filepath = join(save_directory, filename)
 
         image_script = (
-            "$image = Get-Clipboard -Format Image\n"
+            "$image = Get-Clipboard -Format Image; "
             f"if ($image) {{ $image.Save('{filepath}'); Write-Output 0 }}"
         )
         process = Process.execute(cls.get_powershell_args(image_script), split=False)
@@ -48,7 +48,7 @@ class WindowsClipboard(Clipboard):
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
 
         file_script = (
-            "$files = Get-Clipboard -Format FileDropList\n"
+            "$files = Get-Clipboard -Format FileDropList; "
             "if ($files) { $files.fullname }"
         )
         process = Process.execute(cls.get_powershell_args(file_script))
@@ -70,9 +70,9 @@ class WindowsClipboard(Clipboard):
                 information of the pulled image we put its path to the input.
         """
         script = (
-            "Add-Type -Assembly System.Windows.Forms\n"
-            "Add-Type -Assembly System.Drawing\n"
-            f'$image = [Drawing.Image]::FromFile("{image_path}")\n'
+            "Add-Type -Assembly System.Windows.Forms; "
+            "Add-Type -Assembly System.Drawing; "
+            f"$image = [Drawing.Image]::FromFile('{image_path}'); "
             "[Windows.Forms.Clipboard]::SetImage($image)"
         )
         process = Process.execute(cls.get_powershell_args(script))
@@ -112,8 +112,9 @@ class WindowsClipboard(Clipboard):
             "$OutputEncoding = "
             "[System.Console]::OutputEncoding = "
             "[System.Console]::InputEncoding = "
-            "[System.Text.Encoding]::UTF8\n"
-            "$PSDefaultParameterValues['*:Encoding'] = 'utf8'\n" + script
+            "[System.Text.Encoding]::UTF8; "
+            + "$PSDefaultParameterValues['*:Encoding'] = 'utf8'; "
+            + script
         )
         args = powershell_args + ["& { " + script + " }"]
         return args
