@@ -2,6 +2,10 @@
 
 # Changelog
 
+## [1.7.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.7.0...v1.7.1) (2021-10-02)
+
+- Unicode filepaths or filenames such as `👉👈.jpg` or `测试图像.png` should be valid for pasting on _Windows_ ([#21](https://github.com/Yeetus3141/ImagePaste/pull/21) by [@atticus-lv](https://github.com/atticus-lv)).
+
 ## [1.7.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.6.1...v1.7.0) (2021-09-01)
 
 - Now you can customize the filename of the pasted images ([#18](https://github.com/Yeetus3141/ImagePaste/pull/18) by [@thanhph111](https://github.com/thanhph111)).
