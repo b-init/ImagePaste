@@ -19,16 +19,16 @@ class WindowsClipboard(Clipboard):
         super().__init__(report, images)
 
     @classmethod
-    def push(cls, save_directory: str) -> WindowsClipboard:
-        """A class method for pushing images from the Windows Clipboard.
+    def pull(cls, save_directory: str) -> WindowsClipboard:
+        """A class method for pulling images from the Windows Clipboard.
 
         Args:
-            save_directory (str): A path to a directory to save the pushed images.
+            save_directory (str): A path to a directory to save the pulled images.
 
         Returns:
             WindowsClipboard: A WindowsClipboard instance, which contains status of
                 operations under Report object and a list of Image objects holding
-                pushed images information.
+                pulled images information.
         """
         from os.path import join
 
@@ -36,8 +36,13 @@ class WindowsClipboard(Clipboard):
         filepath = join(save_directory, filename)
 
         image_script = (
-            "$image = Get-Clipboard -Format Image; "
-            f"if ($image) {{ $image.Save('{filepath}'); Write-Output 0 }}"
+            "Add-Type -AssemblyName System.Windows.Forms;"
+            "Add-Type -AssemblyName System.Drawing;"
+            "$clipboard = [System.Windows.Forms.Clipboard]::GetDataObject();"
+            "$img_stream = $clipboard.GetData(\"PNG\");"
+            "if ($img_stream){$output_bmp = New-Object System.Drawing.Bitmap($img_stream);"
+            f"    $output_bmp.Save('{filepath}', [System.Drawing.Imaging.ImageFormat]::Png);"
+            "    Write-Output 0}"
         )
         process = Process.execute(cls.get_powershell_args(image_script), split=False)
         if process.stderr:
@@ -58,23 +63,39 @@ class WindowsClipboard(Clipboard):
         return cls(Report(2))
 
     @classmethod
-    def pull(cls, image_path: str) -> WindowsClipboard:
-        """A class method for pulling images to the Windows Clipboard.
+    def push(cls, image_path: str, as_alpha: bool) -> WindowsClipboard:
+        """A class method for push images to the Windows Clipboard.
 
         Args:
-            image_path (str): A path to an image to be pulled to the clipboard.
+            image_path (str): A path to an image to be pushed to the clipboard.
 
         Returns:
             WindowsClipboard: A WindowsClipboard instance, which contains status of
                 operations under Report object and a list of one Image object that holds
-                information of the pulled image we put its path to the input.
+                information of the pushed image we put its path to the input.
         """
-        script = (
-            "Add-Type -Assembly System.Windows.Forms; "
-            "Add-Type -Assembly System.Drawing; "
-            f"$image = [Drawing.Image]::FromFile('{image_path}'); "
-            "[Windows.Forms.Clipboard]::SetImage($image)"
-        )
+
+        if as_alpha:
+            # script that supports transparency. Saves image to clipboard as PNG. However, lot of softwares don't accept this format.
+            script = (
+                "Add-Type -Assembly System.Windows.Forms;"
+                "Add-Type -Assembly System.Drawing;"
+                f"$image = [Drawing.Image]::FromFile('{image_path}');"
+                "$img_stream = New-Object System.IO.MemoryStream;"
+                "$image.Save($img_stream,  [System.Drawing.Imaging.ImageFormat]::Png);"
+                "$data_obj = New-Object System.Windows.Forms.DataObject(\"PNG\", $img_stream);"
+                "[System.Windows.Forms.Clipboard]::SetDataObject($data_obj, $true);"
+            )
+        
+        if not as_alpha:
+            # old script that doesn't support transparency but most softwares do support this format while pasting images onto them.
+            script = (
+                "Add-Type -Assembly System.Windows.Forms; "
+                "Add-Type -Assembly System.Drawing; "
+                f"$image = [Drawing.Image]::FromFile('{image_path}'); "
+                "[Windows.Forms.Clipboard]::SetImage($image)"
+            )
+
         process = Process.execute(cls.get_powershell_args(script))
         if process.stderr:
             return cls(Report(4, f"Cannot load image: {image_path} ({process.stderr})"))
@@ -118,3 +139,4 @@ class WindowsClipboard(Clipboard):
         )
         args = powershell_args + ["& { " + script + " }"]
         return args
+

@@ -95,6 +95,11 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         description="Debug message will not printed in console",
         default=False,
     )
+    is_push_alpha: bpy.props.BoolProperty(
+        name="Copy with transparency",
+        description="Images will be copied as PNG with alpha channel. Warning: Few softwares don't support this format while pasting image in them",
+        default=False,
+    )
 
     def draw(self, _context):
         from .tree import populate_filename
@@ -205,6 +210,16 @@ class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
         # Second column
         column_2 = split.row()
         column_2.prop(self, "is_disable_debug", text="")
+
+        prop = box.row(align=True)
+        split = prop.split(factor=split_ratio)
+        # First column
+        column_1 = split.column()
+        column_1.alignment = "RIGHT"
+        column_1.label(text="Copy with transparency")
+        # Second column
+        column_2 = split.row()
+        column_2.prop(self, "is_push_alpha", text="")
 
 
 def imageeditor_copy_imagemenu_draw(self, _context):
