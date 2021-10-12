@@ -19,16 +19,16 @@ class WindowsClipboard(Clipboard):
         super().__init__(report, images)
 
     @classmethod
-    def pull(cls, save_directory: str) -> WindowsClipboard:
-        """A class method for pulling images from the Windows Clipboard.
+    def push(cls, save_directory: str) -> WindowsClipboard:
+        """A class method for pushing images from the Windows Clipboard.
 
         Args:
-            save_directory (str): A path to a directory to save the pulled images.
+            save_directory (str): A path to a directory to save the pushed images.
 
         Returns:
             WindowsClipboard: A WindowsClipboard instance, which contains status of
                 operations under Report object and a list of Image objects holding
-                pulled images information.
+                pushed images information.
         """
         from os.path import join
 
@@ -39,7 +39,7 @@ class WindowsClipboard(Clipboard):
             "Add-Type -AssemblyName System.Windows.Forms;"
             "Add-Type -AssemblyName System.Drawing;"
             "$clipboard = [System.Windows.Forms.Clipboard]::GetDataObject();"
-            "$img_stream = $clipboard.GetData(\"PNG\");"
+            '$img_stream = $clipboard.GetData("PNG");'
             "if ($img_stream){$output_bmp = New-Object System.Drawing.Bitmap($img_stream);"
             f"    $output_bmp.Save('{filepath}', [System.Drawing.Imaging.ImageFormat]::Png);"
             "    Write-Output 0}"
@@ -63,18 +63,20 @@ class WindowsClipboard(Clipboard):
         return cls(Report(2))
 
     @classmethod
-    def push(cls, image_path: str, as_alpha: bool) -> WindowsClipboard:
-        """A class method for push images to the Windows Clipboard.
+    def pull(cls, image_path: str) -> WindowsClipboard:
+        """A class method for pulling images to the Windows Clipboard.
 
         Args:
-            image_path (str): A path to an image to be pushed to the clipboard.
+            image_path (str): A path to an image to be pulled to the clipboard.
 
         Returns:
             WindowsClipboard: A WindowsClipboard instance, which contains status of
                 operations under Report object and a list of one Image object that holds
-                information of the pushed image we put its path to the input.
+                information of the pulled image we put its path to the input.
         """
+        from ...metadata import get_addon_preferences
 
+        as_alpha = get_addon_preferences().is_push_alpha
         if as_alpha:
             # script that supports transparency. Saves image to clipboard as PNG. However, lot of softwares don't accept this format.
             script = (
@@ -83,10 +85,10 @@ class WindowsClipboard(Clipboard):
                 f"$image = [Drawing.Image]::FromFile('{image_path}');"
                 "$img_stream = New-Object System.IO.MemoryStream;"
                 "$image.Save($img_stream,  [System.Drawing.Imaging.ImageFormat]::Png);"
-                "$data_obj = New-Object System.Windows.Forms.DataObject(\"PNG\", $img_stream);"
+                '$data_obj = New-Object System.Windows.Forms.DataObject("PNG", $img_stream);'
                 "[System.Windows.Forms.Clipboard]::SetDataObject($data_obj, $true);"
             )
-        
+
         if not as_alpha:
             # old script that doesn't support transparency but most softwares do support this format while pasting images onto them.
             script = (
@@ -139,4 +141,3 @@ class WindowsClipboard(Clipboard):
         )
         args = powershell_args + ["& { " + script + " }"]
         return args
-

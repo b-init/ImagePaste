@@ -34,8 +34,7 @@ class IMAGEPASTE_OT_imageeditor_copy(bpy.types.Operator):
             image_path = join(bpy.app.tempdir, active_image.name + image_extension)
             bpy.ops.image.save_as(save_as_render=True, copy=True, filepath=image_path)
         # Report and log the result
-        as_alpha = get_addon_preferences().is_push_alpha
-        clipboard = Clipboard.push(image_path, as_alpha)
+        clipboard = Clipboard.pull(image_path)
         clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
@@ -60,7 +59,7 @@ class IMAGEPASTE_OT_imageeditor_paste(bpy.types.Operator):
     def execute(self, context):
         from .tree import get_save_directory
 
-        clipboard = Clipboard.pull(get_save_directory())
+        clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
@@ -85,7 +84,7 @@ class IMAGEPASTE_OT_sequenceeditor_paste(bpy.types.Operator):
     def execute(self, context):
         from .tree import get_save_directory
 
-        clipboard = Clipboard.pull(get_save_directory())
+        clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
@@ -116,7 +115,7 @@ class IMAGEPASTE_OT_shadereditor_paste(bpy.types.Operator):
     def execute(self, context):
         from .tree import get_save_directory
 
-        clipboard = Clipboard.pull(get_save_directory())
+        clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
@@ -154,7 +153,7 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
         # Enable the "Import Images as Planes" add-on to be used here
         enable("io_import_images_as_planes")
 
-        clipboard = Clipboard.pull(get_save_directory())
+        clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
@@ -181,7 +180,7 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
     def execute(self, _context):
         from .tree import get_save_directory
 
-        clipboard = Clipboard.pull(get_save_directory())
+        clipboard = Clipboard.push(get_save_directory())
         clipboard.report.log(self)
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
