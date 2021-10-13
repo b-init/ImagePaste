@@ -76,27 +76,18 @@ class WindowsClipboard(Clipboard):
         """
         from ...metadata import get_addon_preferences
 
-        as_alpha = get_addon_preferences().is_push_alpha
-        if as_alpha:
-            # script that supports transparency. Saves image to clipboard as PNG. However, lot of softwares don't accept this format.
-            script = (
-                "Add-Type -Assembly System.Windows.Forms;"
-                "Add-Type -Assembly System.Drawing;"
-                f"$image = [Drawing.Image]::FromFile('{image_path}');"
-                "$img_stream = New-Object System.IO.MemoryStream;"
-                "$image.Save($img_stream,  [System.Drawing.Imaging.ImageFormat]::Png);"
-                '$data_obj = New-Object System.Windows.Forms.DataObject("PNG", $img_stream);'
-                "[System.Windows.Forms.Clipboard]::SetDataObject($data_obj, $true);"
-            )
-
-        if not as_alpha:
-            # old script that doesn't support transparency but most softwares do support this format while pasting images onto them.
-            script = (
-                "Add-Type -Assembly System.Windows.Forms; "
-                "Add-Type -Assembly System.Drawing; "
-                f"$image = [Drawing.Image]::FromFile('{image_path}'); "
-                "[Windows.Forms.Clipboard]::SetImage($image)"
-            )
+        # script that supports transparency. Saves image to clipboard as PNG and Bitmap.
+        # populating clibpard with Bitmap data is equivalent to using Clipboard.SetImage method.
+        script = (
+            "Add-Type -Assembly System.Windows.Forms;"
+            "Add-Type -Assembly System.Drawing;"
+            f"$image = [Drawing.Image]::FromFile('{image_path}');"
+            "$img_stream = New-Object System.IO.MemoryStream;"
+            "$image.Save($img_stream,  [System.Drawing.Imaging.ImageFormat]::Png);"
+            '$data_obj = New-Object System.Windows.Forms.DataObject("Bitmap", $image);'
+            '$data_obj.SetData("PNG", $img_stream);'
+            "[System.Windows.Forms.Clipboard]::SetDataObject($data_obj, $true);"
+        )
 
         process = Process.execute(cls.get_powershell_args(script))
         if process.stderr:
