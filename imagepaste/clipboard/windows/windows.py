@@ -36,13 +36,15 @@ class WindowsClipboard(Clipboard):
         filepath = join(save_directory, filename)
 
         image_script = (
-            "Add-Type -AssemblyName System.Windows.Forms;"
-            "Add-Type -AssemblyName System.Drawing;"
-            "$clipboard = [System.Windows.Forms.Clipboard]::GetDataObject();"
-            '$img_stream = $clipboard.GetData("PNG");'
-            "if ($img_stream){$output_bmp = New-Object System.Drawing.Bitmap($img_stream);"
-            f"    $output_bmp.Save('{filepath}', [System.Drawing.Imaging.ImageFormat]::Png);"
-            "    Write-Output 0}"
+            "Add-Type -AssemblyName System.Windows.Forms; "
+            "Add-Type -AssemblyName System.Drawing; "
+            "$clipboard = [System.Windows.Forms.Clipboard]::GetDataObject(); "
+            "$imageStream = $clipboard.GetData('PNG'); "
+            "if ($imageStream) {"
+            "$bitmap = New-Object System.Drawing.Bitmap($imageStream); "
+            f"$bitmap.Save('{filepath}', [System.Drawing.Imaging.ImageFormat]::Png); "
+            "Write-Output 0"
+            "}"
         )
         process = Process.execute(cls.get_powershell_args(image_script), split=False)
         if process.stderr:
@@ -74,19 +76,18 @@ class WindowsClipboard(Clipboard):
                 operations under Report object and a list of one Image object that holds
                 information of the pulled image we put its path to the input.
         """
-        from ...metadata import get_addon_preferences
-
-        # script that supports transparency. Saves image to clipboard as PNG and Bitmap.
-        # populating clibpard with Bitmap data is equivalent to using Clipboard.SetImage method.
+        # Script that supports transparency. Save images to clipboard as PNG and Bitmap.
+        # Populating the clipboard with Bitmap data which is equivalent to using the
+        # `Clipboard.SetImage` method.
         script = (
-            "Add-Type -Assembly System.Windows.Forms;"
-            "Add-Type -Assembly System.Drawing;"
-            f"$image = [Drawing.Image]::FromFile('{image_path}');"
-            "$img_stream = New-Object System.IO.MemoryStream;"
-            "$image.Save($img_stream,  [System.Drawing.Imaging.ImageFormat]::Png);"
-            '$data_obj = New-Object System.Windows.Forms.DataObject("Bitmap", $image);'
-            '$data_obj.SetData("PNG", $img_stream);'
-            "[System.Windows.Forms.Clipboard]::SetDataObject($data_obj, $true);"
+            "Add-Type -Assembly System.Windows.Forms; "
+            "Add-Type -Assembly System.Drawing; "
+            f"$image = [Drawing.Image]::FromFile('{image_path}'); "
+            "$imageStream = New-Object System.IO.MemoryStream; "
+            "$image.Save($imageStream, [System.Drawing.Imaging.ImageFormat]::Png); "
+            "$dataObj = New-Object System.Windows.Forms.DataObject('Bitmap', $image); "
+            "$dataObj.SetData('PNG', $imageStream); "
+            "[System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true); "
         )
 
         process = Process.execute(cls.get_powershell_args(script))
