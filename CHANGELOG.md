@@ -2,6 +2,10 @@
 
 # Changelog
 
+## [1.8.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.7.1...v1.8.0) (2021-10-15)
+
+- Now works with transparent images without losing alpha data while pasting or copying. Alpha copying only supported as `PNG` (not `DIB`) [#22](https://github.com/Yeetus3141/ImagePaste/pull/22)
+
 ## [1.7.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.7.0...v1.7.1) (2021-10-02)
 
 - Unicode filepaths or filenames such as `👉👈.jpg` or `测试图像.png` should be valid for pasting on _Windows_ ([#21](https://github.com/Yeetus3141/ImagePaste/pull/21) by [@atticus-lv](https://github.com/atticus-lv)).
