@@ -1,0 +1,80 @@
+# @format
+
+name: Bug Report
+description: Create a report to help us improve
+title: "BUG: "
+labels:
+  - bug
+assignees:
+  - thanhph111
+  - Yeetus3141
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: Tell us what annoys you. Include the picture of the ugly bug if you can.
+    validations:
+      required: true
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Step to reproduce
+      description: How we make the bug reveals?
+      placeholder: |
+        1. Go to …
+        2. Click on …
+        3. Get a Kit Kat
+        4. Scroll down to …
+        5. See error
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: What it should actually be?
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: What OS you running on?
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: input
+    id: platform_version
+    attributes:
+      label: Platform version
+      description: What version of the above platform?
+      placeholder: 20H2
+    validations:
+      required: true
+  - type: dropdown
+    id: blender_version
+    attributes:
+      label: Blender version
+      description: What version of Blender are you using?
+      multiple: true
+      options:
+        - "2.83"
+        - "2.90"
+        - "2.91"
+        - "2.92"
+        - "2.93"
+        - "3.0"
+        - Other
+    validations:
+      required: true
