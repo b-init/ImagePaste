@@ -1,0 +1,33 @@
+# @format
+
+name: Feature Request
+description: Suggest an idea for this add-on
+title: "FEATURE: "
+labels:
+  - enhancement
+assignees:
+  - thanhph111
+  - Yeetus3141
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Is your feature request related to a problem?
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: And you've got an idea to make it change?
+    validations:
+      required: true
+  - type: textarea
+    id: images
+    attributes:
+      label: Images
+      description: We know the feature's not presented yet but if you have any images to help us imagine, please paste them here.
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: And you want to tell us more?
