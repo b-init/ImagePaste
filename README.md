@@ -111,6 +111,6 @@ This feature will move (actually copy) images into the save directory after you 
 
 ## Contributing and getting support
 
-This is only a small project and we're happy to know it helped some of you. I just want to say that all this wouldn't have been possible without these [great contributors](https://github.com/Yeetus3141/ImagePaste/graphs/congittributors) and everybody who comes with new ideas and bug reports! So thank you all!
+This is only a small project and we're happy to know it helped some of you. I just want to say that all this wouldn't have been possible without these [great contributors](https://github.com/Yeetus3141/ImagePaste/graphs/contributors) and everybody who comes with new ideas and bug reports! So thank you all!
 
 It will be great if you have an idea and turn it into visible. Tell us how amazing they are by [suggesting a feature](https://github.com/Yeetus3141/ImagePaste/issues/new/choose), or you can make it yourself by creating [a pull request](https://github.com/Yeetus3141/ImagePaste/compare). And if you encounter a problem, let us know by [opening an issue](https://github.com/Yeetus3141/ImagePaste/issues/new/choose). But before doing anything, let's take a look at [our contributing guide](.github/CONTRIBUTING.md), it will show you how to start with all of that.
