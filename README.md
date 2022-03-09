@@ -109,6 +109,12 @@ This feature will move (actually copy) images into the save directory after you 
 - **All images**: Images existing in the `.blend` file will be moved.
 - **No moving**: Don't do anything when saving the file.
 
+## Troubleshooting
+
+If ImagePaste doesn't work, try:
+- Running Blender as adminstrator
+- Using an earlier version of ImagePaste, particularly [v1.4.0](https://github.com/Yeetus3141/ImagePaste/releases/tag/v1.4.0) and [v1.3.2](https://github.com/Yeetus3141/ImagePaste/releases/tag/v1.3.2) (Windows 7 doesn't seem to work with the newer versions)
+
 ## Contributing and getting support
 
 This is only a small project and we're happy to know it helped some of you. I just want to say that all this wouldn't have been possible without these [great contributors](https://github.com/Yeetus3141/ImagePaste/graphs/contributors) and everybody who comes with new ideas and bug reports! So thank you all!
