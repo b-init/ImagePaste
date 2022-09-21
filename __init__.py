@@ -2,7 +2,7 @@ bl_info = {
     "name": "ImagePaste",
     "author": "Binit",
     "blender": (2, 80, 0),
-    "version": (1, 8, 0),
+    "version": (1, 8, 1),
     "category": "Import-Export",
     "support": "COMMUNITY",
     "doc_url": "https://github.com/Yeetus3141/ImagePaste#readme",
