@@ -40,6 +40,8 @@ class WindowsClipboard(Clipboard):
             "Add-Type -AssemblyName System.Drawing; "
             "$clipboard = [System.Windows.Forms.Clipboard]::GetDataObject(); "
             "$imageStream = $clipboard.GetData('PNG'); "
+            "if ($null -eq $imageStream) { $imageStream = $clipboard.GetData('image/png') }; "
+            "if ($null -eq $imageStream) { $imageStream = $clipboard.GetData('System.Drawing.Bitmap') }; "
             "if ($imageStream) {"
             "$bitmap = New-Object System.Drawing.Bitmap($imageStream); "
             f"$bitmap.Save('{filepath}', [System.Drawing.Imaging.ImageFormat]::Png); "
