@@ -1,4 +1,5 @@
 from __future__ import annotations
+from posixpath import abspath
 
 from ..clipboard import Clipboard
 from ...report import Report
@@ -30,38 +31,34 @@ class WindowsClipboard(Clipboard):
                 operations under Report object and a list of Image objects holding
                 pushed images information.
         """
-        from os.path import join
+        from os.path import join, splitext
+        from . import clipette
 
         filename = cls.get_filename()
         filepath = join(save_directory, filename)
 
-        image_script = (
-            "Add-Type -AssemblyName System.Windows.Forms; "
-            "Add-Type -AssemblyName System.Drawing; "
-            "$clipboard = [System.Windows.Forms.Clipboard]::GetDataObject(); "
-            "$imageStream = $clipboard.GetData('PNG'); "
-            "if ($imageStream) {"
-            "$bitmap = New-Object System.Drawing.Bitmap($imageStream); "
-            f"$bitmap.Save('{filepath}', [System.Drawing.Imaging.ImageFormat]::Png); "
-            "Write-Output 0"
-            "}"
-        )
-        process = Process.execute(cls.get_powershell_args(image_script), split=False)
-        if process.stderr:
+        clipette.open_clipboard()
+
+        # load multiple images first if filepaths are available (as CF_HDROP, id 15)
+        if clipette.is_format_available(15):
+            filepaths = clipette.get_FILEPATHS()
+            clipette.close_clipboard()
+
+            images = [Image(filepath) for filepath in filepaths]
+            return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
+
+        # get image if available as 'PNG' or 'image/png' which covers pretty much all software.
+        # Ditched BITMAP support because blender doesn't completely support all Bitmap sub-formats
+        # and I couldn't find any software that copies only as a bitmap.
+        output = clipette.get_PNG(save_directory, splitext(filename)[0])
+        clipette.close_clipboard()
+        if output != 1:
             image = Image(filepath)
             return cls(Report(3, f"Cannot save image: {image} ({process.stderr})"))
-        if process.stdout == "0":
+        else:
             image = Image(filepath, pasted=True)
             return cls(Report(6, f"Saved and pasted 1 image: {image}"), [image])
 
-        file_script = (
-            "$files = Get-Clipboard -Format FileDropList; "
-            "if ($files) { $files.fullname }"
-        )
-        process = Process.execute(cls.get_powershell_args(file_script))
-        if process.stdout[0] != "":
-            images = [Image(filepath) for filepath in process.stdout]
-            return cls(Report(6, f"Pasted {len(images)} image files: {images}"), images)
         return cls(Report(2))
 
     @classmethod
@@ -76,60 +73,82 @@ class WindowsClipboard(Clipboard):
                 operations under Report object and a list of one Image object that holds
                 information of the pulled image we put its path to the input.
         """
-        # Script that supports transparency. Save images to clipboard as PNG and Bitmap.
-        # Populating the clipboard with Bitmap data which is equivalent to using the
-        # `Clipboard.SetImage` method.
-        script = (
-            "Add-Type -Assembly System.Windows.Forms; "
-            "Add-Type -Assembly System.Drawing; "
-            f"$image = [Drawing.Image]::FromFile('{image_path}'); "
-            "$imageStream = New-Object System.IO.MemoryStream; "
-            "$image.Save($imageStream, [System.Drawing.Imaging.ImageFormat]::Png); "
-            "$dataObj = New-Object System.Windows.Forms.DataObject('Bitmap', $image); "
-            "$dataObj.SetData('PNG', $imageStream); "
-            "[System.Windows.Forms.Clipboard]::SetDataObject($dataObj, $true); "
-        )
+        from . import clipette 
+        from bpy.path import abspath
 
-        process = Process.execute(cls.get_powershell_args(script))
-        if process.stderr:
-            return cls(Report(4, f"Cannot load image: {image_path} ({process.stderr})"))
+        clipette.open_clipboard()
+        clipette.empty_cliboard()
+        
+        image_path = abspath(image_path)
+        image_format = image_path[-3:].lower()
+        # bmp (as DIB, DIBV5, BITMAP) and png (as PNG) should be enough formats to work with most applications
+        if image_format != 'bmp':
+            clipette.set_DIB(cls.convert_image(image_path, 'BMP'))
+        else:
+            clipette.set_DIB(image_path)
+
+        if image_format != 'png':
+            clipette.set_PNG(cls.convert_image(image_path, 'PNG'))
+        else:
+            clipette.set_PNG(image_path)
+            
+        clipette.close_clipboard()
+
         image = Image(image_path)
         return cls(Report(5, f"Copied 1 image: {image}"), [image])
 
+
     @staticmethod
-    def get_powershell_args(script: str) -> list[str]:
-        """A static method to get PowerShell arguments from a script for a process.
+    def convert_image(image_path: str, format: str) -> str:
+        """A static method to convert image format and get new image filepath. 
+        Saves converted image in ImagePaste's working directory.
 
         Args:
-            script (str): A script to be executed.
+            image_path (str): Filepath of source image.
+            format (str): Format to convert image to as in the image extension ('png', 'bmp', etc)
 
         Returns:
-            list[str]: A list of PowerShell arguments for operating a process.
+            str: Filepath of converted image.
         """
-        from os import getenv
-        from os.path import join
+        # should probably incorpoate this function into the Image class or something
+        from ...tree import get_save_directory
+        from os.path import join, basename, splitext
+        from bpy_extras.image_utils import load_image
+        import bpy
+        
+        RGBA_unsupported = ['BMP', 'JPEG']
+        format_ext = {
+            'BMP': '.bmp',
+            'IRIS': '.rgb',
+            'PNG': '.png',
+            'JPEG': '.jpg',
+            'JPEG2000': '.jp2',
+            'TARGA': '.tga',
+            'TARGA_RAW': '.tga',
+            'CINEON': '.cin',
+            'DPX': '.dpx',
+            'OPEN_EXR_MULTILAYER': '.exr',
+            'OPEN_EXR': '.exr',
+            'HDR': '.hdr',
+            'TIFF': '.tif',
+            'WEBP': '.webp'
+        }
 
-        powershell_args = [
-            join(
-                getenv("SystemRoot"),
-                "System32",
-                "WindowsPowerShell",
-                "v1.0",
-                "powershell.exe",
-            ),
-            "-NoProfile",
-            "-NoLogo",
-            "-NonInteractive",
-            "-WindowStyle",
-            "Hidden",
-        ]
-        script = (
-            "$OutputEncoding = "
-            "[System.Console]::OutputEncoding = "
-            "[System.Console]::InputEncoding = "
-            "[System.Text.Encoding]::UTF8; "
-            + "$PSDefaultParameterValues['*:Encoding'] = 'utf8'; "
-            + script
-        )
-        args = powershell_args + ["& { " + script + " }"]
-        return args
+        img_settings = bpy.context.scene.render.image_settings
+        prev_file_format = img_settings.file_format
+        prev_color_mode = img_settings.color_mode
+        prev_quality = img_settings.quality
+
+        img_settings.file_format = format
+        img_settings.quality = 100
+        img_settings.color_mode = 'RGB' if format in RGBA_unsupported else 'RGBA'
+
+        image = load_image(image_path)
+        image_path_c = join(get_save_directory(), splitext(basename(image_path))[0] + format_ext[format])
+        image.save_render(image_path_c)
+
+        img_settings.file_format = prev_file_format
+        img_settings.color_mode = prev_color_mode
+        img_settings.quality = prev_quality
+
+        return image_path_c
