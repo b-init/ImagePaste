@@ -4,7 +4,7 @@
 #               Designed to run on the continuous integration server.
 #
 # INPUT
-#     $1: The version number of the release.
+#     $1: The suffix for the ZIP file name.
 #
 # OUTPUT
 #     Name of the release ZIP file.
@@ -16,18 +16,31 @@ set -e
 cd "$(dirname "$BASH_SOURCE")/.."
 
 # Set some variables for ZIP file name
-version="$1"
 components=("__init__.py" "imagepaste" "LICENSE")
+
+suffix="$1"
 addon_name="ImagePaste"
-if [ -z "$version" ]; then zip_name=$addon_name;
-else zip_name="$addon_name-$version.zip"; fi
+if [[ -z "$suffix" ]]; then
+    zip_name=$addon_name
+else
+    zip_name="$addon_name-$suffix.zip"
+fi
+
+# Create a temporary directories
+temporary_directory="$(mktemp -d)"
+addon_directory="$temporary_directory/$addon_name"
+mkdir "$addon_directory"
+
+# Copy the required components to the created directory
+for component in "${components[@]}"; do
+    cp -r "$component" "$addon_directory"
+done
 
 # Generate ZIP file
-[ -d "$addon_name" ] && rm -rf "$addon_name"
-mkdir "$addon_name"
-cp -r $(echo ${components[@]} | xargs) "$addon_name"
-[ -f "$zip_name" ] && rm -f "$zip_name"
-zip -rmqq "$zip_name" "$addon_name"
+root_directory="$(pwd)"
+cd "$temporary_directory"
+zip -rmqq "$root_directory/$zip_name" "$addon_name"
+rm -rf "$temporary_directory"
 
 # Return the name of the ZIP file
 echo "$zip_name"
