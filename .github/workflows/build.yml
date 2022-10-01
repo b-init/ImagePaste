@@ -1,0 +1,28 @@
+# @format
+
+name: Build
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "**.py"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v3
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ImagePaste
+          path: |
+            __init__.py
+            imagepaste
+            LICENSE
+          retention-days: 1

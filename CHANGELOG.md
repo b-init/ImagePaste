@@ -2,6 +2,10 @@
 
 # Changelog
 
+## [1.8.1](https://github.com/Yeetus3141/ImagePaste/compare/v1.8.0...v1.8.1) (2022-09-21)
+
+- Now works with both `PNG` and `DIB` formats on _Windows_ ([#33](https://github.com/Yeetus3141/ImagePaste/pull/33) by [@teetow](https://github.com/teetow)).
+
 ## [1.8.0](https://github.com/Yeetus3141/ImagePaste/compare/v1.7.1...v1.8.0) (2021-10-15)
 
 - Now works with transparent images without losing alpha data while pasting or copying. Alpha copying only supported as `PNG` (not `DIB`) [#22](https://github.com/Yeetus3141/ImagePaste/pull/22)
