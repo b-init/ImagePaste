@@ -7,7 +7,7 @@ labels:
   - bug
 assignees:
   - thanhph111
-  - Yeetus3141
+  - b-init
 body:
   - type: textarea
     id: description
@@ -76,5 +76,12 @@ body:
         - "2.93"
         - "3.0"
         - Other
+    validations:
+      required: true
+  - type: input
+    id: imagepaste_version
+    attributes:
+      label: ImagePaste Version
+      description: What version of ImagePaste are you using?
     validations:
       required: true
