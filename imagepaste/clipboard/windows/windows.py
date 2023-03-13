@@ -138,21 +138,49 @@ class WindowsClipboard(Clipboard):
             'WEBP': '.webp'
         }
 
-        img_settings = bpy.context.scene.render.image_settings
+        image = load_image(image_path)
+        image_path_c = join(get_save_directory(), splitext(basename(image_path))[0] + format_ext[format])
+
+        # setting view_settings according to scene settings since we're working with render results
+        # and rest according to the image format
+        scene = bpy.context.scene
+        img_settings = scene.render.image_settings
+        i_view_settings = img_settings.view_settings
+        i_disp_settings = img_settings.display_settings
+
         prev_file_format = img_settings.file_format
         prev_color_mode = img_settings.color_mode
         prev_quality = img_settings.quality
+        prev_color_management = img_settings.color_management
+        prev_view_transform = i_view_settings.view_transform
+        prev_look = i_view_settings.look
+        prev_gamma = i_view_settings.gamma
+        prev_exposure = i_view_settings.exposure
+        prev_use_curve_mapping = i_view_settings.use_curve_mapping
+        prev_disp_device = i_disp_settings.display_device
 
         img_settings.file_format = format
         img_settings.quality = 100
         img_settings.color_mode = 'RGB' if format in RGBA_unsupported else 'RGBA'
-
-        image = load_image(image_path)
-        image_path_c = join(get_save_directory(), splitext(basename(image_path))[0] + format_ext[format])
+        img_settings.color_management = 'OVERRIDE'
+        i_view_settings.view_transform = 'Standard'
+        i_view_settings.look = 'None'
+        i_view_settings.gamma = 1.0
+        i_view_settings.exposure = 0.0
+        i_view_settings.use_curve_mapping = False
+        i_disp_settings.display_device = 'sRGB'
+        
         image.save_render(image_path_c)
 
         img_settings.file_format = prev_file_format
         img_settings.color_mode = prev_color_mode
         img_settings.quality = prev_quality
+        img_settings.color_management = prev_color_management
+        i_view_settings.view_transform = prev_view_transform
+        i_view_settings.look = prev_look
+        i_view_settings.gamma = prev_gamma
+        i_view_settings.exposure = prev_exposure
+        i_view_settings.use_curve_mapping = prev_use_curve_mapping
+        i_disp_settings.display_device = prev_disp_device
 
         return image_path_c

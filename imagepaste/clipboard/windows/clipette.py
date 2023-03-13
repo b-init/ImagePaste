@@ -546,5 +546,6 @@ if __name__ == '__main__':
     if open_clipboard():
         # empty_cliboard()
         print(get_available_formats())
+        # print(get_UNICODETEXT())
         # set_UNICODETEXT('pasta pasta pasta pasta pasta pasta')
         close_clipboard()
