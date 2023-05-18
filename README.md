@@ -2,7 +2,7 @@
 
 # ImagePaste
 
-A simple _Blender_ add-on to paste your images from the clipboard to various places in the _Blender_ and vice versa, copy them to the clipboard so you can take them anywhere. It works with _Blender_ 2.80 and above.
+A simple _Blender_ add-on to paste images from the clipboard to various places in _Blender_ and copy them to the clipboard to be pasted anywhere. Works with _Blender_ 2.80 and above.
 
 ## Installing
 
@@ -14,7 +14,7 @@ A simple _Blender_ add-on to paste your images from the clipboard to various pla
 
 ![demo](assets/demo.gif)
 
-The add-on supports copying and pasting images from the clipboard to various places:
+The add-on supports copying images to the clipboard and pasting them from various places:
 
 ### Image Editor
 
