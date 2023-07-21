@@ -4,6 +4,8 @@
 
 A simple _Blender_ add-on to paste images from the clipboard to various places in _Blender_ and copy them to the clipboard to be pasted anywhere. Works with _Blender_ 2.80 and above.
 
+**This Addon is soon to be deprecated as the functionality is being integrated into Blender itself!**
+
 ## Installing
 
 1. Download [the latest release](https://github.com/Yeetus3141/ImagePaste/releases/latest) (you can also view the changelog on [the release page](https://github.com/Yeetus3141/ImagePaste/releases)).
