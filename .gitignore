@@ -55,6 +55,7 @@ __pycache__/
 !_native.cpython-37m-darwin.so
 !_native.cpython-39-darwin.so
 !_native.cpython-310-darwin.so
+!_native.cpython-311-darwin.so
 
 # Distribution / packaging
 .Python
