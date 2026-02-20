@@ -185,7 +185,10 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         for image in clipboard.images:
-            bpy.ops.object.load_reference_image(filepath=image.filepath)
+            bpy.ops.object.empty_image_add(filepath=image.filepath)
+            obj = bpy.context.active_object
+            obj.use_empty_image_alpha = True
+            obj.empty_image_side = "FRONT"
         return {"FINISHED"}
 
     @classmethod
