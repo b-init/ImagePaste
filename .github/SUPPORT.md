@@ -2,8 +2,10 @@
 
 # Other ways to get support
 
-For any questions, suggestions or bug reports:
+ImagePaste is no longer actively maintained.
 
-- 📢 Join [my discord server](https://discord.gg/G8ajxwQuYT).
-- 🐦 Contact me via twitter [@YeetusBlenditus](https://twitter.com/YeetusBlenditus).
-- 📬 E-mail me at [binitnew@gmail.com](mailto:binitnew@gmail.com).
+For _Blender_ 4.2 and newer, use [Pasty](https://github.com/thanhph111/blender-pasty).
+
+Open new bugs and feature requests in the [Pasty issue tracker](https://github.com/thanhph111/blender-pasty/issues).
+
+This ImagePaste repository is kept as project history for existing users.

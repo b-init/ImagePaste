@@ -1,10 +1,10 @@
 # @format
 
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
-  - name: 📥 Download the latest version
-    url: https://github.com/Yeetus3141/ImagePaste/releases/latest
-    about: Make sure you're running the latest version, your bugs may already be fixed.
-  - name: 📢 Open a new discussion
-    url: https://github.com/Yeetus3141/ImagePaste/discussions/new
-    about: If you haven't ready to open an issue yet, question here.
+  - name: Use Pasty for Blender 4.2+
+    url: https://github.com/thanhph111/blender-pasty
+    about: ImagePaste is no longer actively maintained. Pasty carries the main workflow forward for modern Blender.
+  - name: Report a Pasty issue
+    url: https://github.com/thanhph111/blender-pasty/issues/new
+    about: Open new bugs and feature requests in the Pasty repository.
