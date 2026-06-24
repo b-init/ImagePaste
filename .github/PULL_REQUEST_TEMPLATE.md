@@ -1,11 +1,13 @@
-<!-- Thanks for sending a pull request! It's really great that you make it here. Please make sure you follow our contribution guidelines. -->
+<!-- ImagePaste is no longer actively maintained. -->
+<!-- New work should usually go to Pasty instead: https://github.com/thanhph111/blender-pasty -->
+<!-- Please open an ImagePaste pull request only if a maintainer asked for one. -->
 
 ## Proposed changes
-<!-- Describe your changes here to communicate to the maintainers (using a list of changes might be a great idea). If your pull request is connected to an open issue, add a line in your PR's description that says `Fixes #123`, where `#123` is the number of the issue you're fixing. -->
+<!-- Explain why this still belongs in ImagePaste instead of Pasty. -->
 
 
 ## Screenshots/Screencasts
-<!-- It'd be even better if you showed us how your changes work. You can fill out the table below or do as you see fit. -->
+<!-- Add screenshots or a short recording if the change affects Blender UI behavior. -->
 
 | Original          | Updated              |
 | ----------------- | -------------------- |
@@ -13,6 +15,6 @@
 
 
 ## Further comments
-<!-- Is there anything else you didn't tell us (the story about how the idea came to you, why you chose this method, or anything you still cannot overcome…)? -->
+<!-- Add compatibility notes, tested Blender versions, and tested operating systems. -->
 
 <!-- 💗 Thank you! -->
