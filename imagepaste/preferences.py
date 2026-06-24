@@ -14,7 +14,7 @@ from .tree import remove_empty_subdirectory
 
 def get_subdirectory_name(self):
     """Get the subdirectory name."""
-    return self.get("subdirectory_name", ADDON_NAME)
+    return self.subdirectory_name_internal if self.subdirectory_name_internal else ADDON_NAME
 
 
 def set_subdirectory_name(self, value):
@@ -22,14 +22,16 @@ def set_subdirectory_name(self, value):
     from .tree import remove_empty_subdirectory
 
     # Remove the old subdirectory before setting the new one
-    remove_empty_subdirectory(self.subdirectory_name)
-    self["subdirectory_name"] = value
+    remove_empty_subdirectory(self.subdirectory_name_internal)
+    self.subdirectory_name_internal = value
 
 
 class IMAGEPASTE_AddonPreferences(bpy.types.AddonPreferences):
     """Add-on preferences for ImagePaste"""
 
     bl_idname = ADDON_NAME
+    
+    subdirectory_name_internal: bpy.props.StringProperty(default="")
 
     is_use_another_directory: bpy.props.BoolProperty(
         name="Use a directory",
@@ -259,7 +261,7 @@ def view3d_paste_reference_imageaddmenu_draw(self, _context):
 @bpy.app.handlers.persistent
 def move_to_save_directory_handler(_self, _context):
     """Handler to move the images to the save directory after the file is saved."""
-    bpy.ops.imagepaste.move_to_save_directory("INVOKE_DEFAULT")
+    bpy.ops.imagepaste.move_to_save_directory("EXEC_DEFAULT")
 
 
 addon_keymaps = []

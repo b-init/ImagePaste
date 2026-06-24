@@ -158,7 +158,7 @@ class IMAGEPASTE_OT_view3d_paste_plane(bpy.types.Operator):
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         for image in clipboard.images:
-            bpy.ops.import_image.to_plane(files=[{"name": image.filepath}])
+            bpy.ops.image.import_as_mesh_planes(files=[{"name": image.filepath}])
         return {"FINISHED"}
 
     @classmethod
@@ -185,7 +185,10 @@ class IMAGEPASTE_OT_view3d_paste_reference(bpy.types.Operator):
         if clipboard.report.type != "INFO":
             return {"CANCELLED"}
         for image in clipboard.images:
-            bpy.ops.object.load_reference_image(filepath=image.filepath)
+            bpy.ops.object.empty_image_add(filepath=image.filepath)
+            obj = bpy.context.active_object
+            obj.use_empty_image_alpha = True
+            obj.empty_image_side = "FRONT"
         return {"FINISHED"}
 
     @classmethod
@@ -204,23 +207,23 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
     bl_label = "Move to Target Directory"
     bl_options = {"UNDO_GROUPED"}
 
-    def __init__(self) -> None:
-        from .tree import get_save_directory
-
-        super().__init__()
-        self.save_directory = get_save_directory()
-        self.orphaned_images = self.get_orphaned_images(self.save_directory)
-
     def execute(self, _context):
         from .image import Image
         from .report import Report
+        from .tree import get_save_directory
+
+        save_directory = get_save_directory()
+        orphaned_images = self.get_orphaned_images(save_directory)
+
+        if not orphaned_images:
+            return {"CANCELLED"}
 
         pasted_images = Image.pasted_images
         orphaned_image_filepaths = []
         # Change the paths the images refers to with the new one
-        for orphaned_image in self.orphaned_images:
+        for orphaned_image in orphaned_images:
             old_filepath = self.get_abspath(orphaned_image.filepath)
-            self.change_image_directory(orphaned_image, self.save_directory)
+            self.change_image_directory(orphaned_image, save_directory)
             new_filepath = self.get_abspath(orphaned_image.filepath)
             # Also change in the dictionary
             if old_filepath in pasted_images:
@@ -239,11 +242,6 @@ class IMAGEPASTE_OT_move_to_save_directory(bpy.types.Operator):
         Report(7, f"Pasted images after: {list(pasted_images.keys())}").log(self)
         Report.console_log(f"Blend images after: {existing_images}")
         return {"FINISHED"}
-
-    def invoke(self, context, _event):
-        if self.orphaned_images:
-            self.execute(context)
-        return {"CANCELLED"}
 
     @classmethod
     def poll(_cls, _context):
