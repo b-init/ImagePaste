@@ -2,11 +2,18 @@
 
 # ImagePaste
 
+> [!IMPORTANT]
+> ImagePaste is no longer actively maintained.
+>
+> For _Blender_ 4.2 and newer, use [Pasty](https://github.com/thanhph111/blender-pasty) instead. Pasty carries the main ImagePaste workflow forward with a smaller design that relies more on _Blender_'s own clipboard support.
+
 A simple _Blender_ add-on to paste images from the clipboard to various places in _Blender_ and copy them to the clipboard to be pasted anywhere. Works with _Blender_ 2.80 and above.
 
-**This Addon is soon to be deprecated as the functionality is being integrated into Blender itself!**
+This repository is kept as project history for existing ImagePaste users. New bug reports, feature requests, and compatibility work should go to [Pasty](https://github.com/thanhph111/blender-pasty).
 
 ## Installing
+
+ImagePaste is not recommended for new installs. Use [Pasty](https://github.com/thanhph111/blender-pasty) if you are on _Blender_ 4.2 or newer.
 
 1. Download [the latest release](https://github.com/b-init/ImagePaste/releases/latest) (you can also view the changelog on [the release page](https://github.com/b-init/ImagePaste/releases)).
 2. Go to <kbd><kbd>Edit</kbd>|<kbd>Preferences</kbd></kbd>. On the <kbd>Add-ons</kbd> tab, choose <kbd>Install</kbd> and select the downloaded `.zip` file.
@@ -119,6 +126,8 @@ If ImagePaste doesn't work, try:
 
 ## Contributing and getting support
 
-This is only a small project and we're happy to know it helped some of you. I just want to say that all this wouldn't have been possible without these [great contributors](https://github.com/b-init/ImagePaste/graphs/contributors) and everybody who comes with new ideas and bug reports! So thank you all!
+This project is no longer accepting new ImagePaste maintenance work.
 
-It will be great if you have an idea and turn it into visible. Tell us how amazing they are by [suggesting a feature](https://github.com/b-init/ImagePaste/issues/new/choose), or you can make it yourself by creating [a pull request](https://github.com/b-init/ImagePaste/compare). And if you encounter a problem, let us know by [opening an issue](https://github.com/b-init/ImagePaste/issues/new/choose). But before doing anything, let's take a look at [our contributing guide](.github/CONTRIBUTING.md), it will show you how to start with all of that.
+If you need the same workflow in modern _Blender_, use [Pasty](https://github.com/thanhph111/blender-pasty). New bug reports and feature requests should be opened in the [Pasty issue tracker](https://github.com/thanhph111/blender-pasty/issues).
+
+Thank you to all [ImagePaste contributors](https://github.com/b-init/ImagePaste/graphs/contributors) and everyone who shared ideas, reports, fixes, and testing over the years.
