@@ -2,6 +2,12 @@
 
 # Changelog
 
+## Maintenance status - 2026-06-24
+
+- ImagePaste is no longer actively maintained.
+- The main paste workflow is moving to [Pasty](https://github.com/thanhph111/blender-pasty), a smaller add-on for _Blender_ 4.2 and newer.
+- New bug reports, feature requests, and compatibility work should be opened in the [Pasty issue tracker](https://github.com/thanhph111/blender-pasty/issues).
+
 ## [1.8.2](https://github.com/b-init/ImagePaste/compare/v1.8.1...v1.8.2) (2024-03-08)
 
 - Add pasteboard module for python 3.11 ([#53](https://github.com/b-init/ImagePaste/commit/050a8aa5324f36ea9a031f5d63132e583862da45))
